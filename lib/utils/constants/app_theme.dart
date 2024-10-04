@@ -38,39 +38,38 @@ class AppTheme {
           ),
           displayMedium: TextStyle(
             fontSize: 16,
-            color: Color(0xFFA8A8AA),
-
-            fontWeight: FontWeight.w500,
+            color: Color(0xFF242529),
+            fontWeight: FontWeight.w300,
             fontFamily: "Inter",
           ),
           displaySmall: TextStyle(
-            fontSize: 24,
-            color: Color(0xffFFFFFF),
-            fontWeight: FontWeight.w500,
+            fontSize: 16,
+            color: Color(0xff0A93E1),
+            fontWeight: FontWeight.w300,
             fontFamily: "Inter",
           ),
           headlineLarge: TextStyle(
-            fontSize: 24,
-            color: Color(0xFF173D3D),
+            fontSize: 16,
+            color: Color(0xFF242529),
             fontWeight: FontWeight.w700,
             fontFamily: "Inter",
           ),
           headlineMedium: TextStyle(
-            fontSize: 22,
-            color: Color(0xFFFFFFFF),
-            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            color: Color(0xFF242529),
+            fontWeight: FontWeight.w700,
             fontFamily: "Inter",
           ),
           headlineSmall: TextStyle(
-            fontSize: 20,
-            color: Color(0xFF545454),
-            fontWeight: FontWeight.w400,
+            fontSize: 14,
+            color: Color(0xFF4E4E4E),
+            fontWeight: FontWeight.w300,
             fontFamily: "Inter",
           ),
           titleLarge: TextStyle(
             fontSize: 18,
-            color: Color(0xFFF7F0DF),
-            fontWeight: FontWeight.w700,
+            color: Color(0xFF000000),
+            fontWeight: FontWeight.w600,
             fontFamily: "Inter",
           ),
           titleMedium: TextStyle(
@@ -87,20 +86,20 @@ class AppTheme {
           ),
           labelSmall: TextStyle(
             fontSize: 16,
-            color: Color(0xFF545454),
-            fontWeight: FontWeight.w500,
+            color: Color(0xFF0F3BAA),
+            fontWeight: FontWeight.w600,
             fontFamily: "Inter",
           ),
           labelMedium: TextStyle(
             fontSize: 16,
-            color: Color(0xFF333333),
+            color: Color(0xFF242529),
             fontWeight: FontWeight.w400,
             fontFamily: "Inter",
           ),
           labelLarge: TextStyle(
             fontSize: 14,
-            color: Color(0xFFD1AC70),
-            fontWeight: FontWeight.w700,
+            color: Color(0xFF848587),
+            fontWeight: FontWeight.w400,
             fontFamily: "Inter",
           ),
           bodySmall: TextStyle(
@@ -124,17 +123,25 @@ class AppTheme {
         ),
         radioTheme: RadioThemeData(
           splashRadius: 20,
-          fillColor: MaterialStateProperty.all(const Color(0xFF926824)),
+          fillColor: WidgetStateProperty.all(const Color(0xFF926824)),
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          elevation: 5,
+          backgroundColor: Color(0xFFFFFFFF),
           showSelectedLabels: true,
-          showUnselectedLabels: false,
-          selectedItemColor: const Color(0xFFFFFFFF),
-          // backgroundColor: const Color(0xFF173D3D),
-          unselectedItemColor: const Color(0xFFFFFFFF).withOpacity(0.4),
-          selectedLabelStyle: const TextStyle(
+          showUnselectedLabels: true,
+          selectedItemColor: Color(0xFF4468C1),
+          unselectedItemColor: Color(0xFFA6A9B4),
+          selectedLabelStyle: TextStyle(
             fontSize: 12,
-            color: Color(0xFFFFFFFF),
+            color: Color(0xFF4468C1),
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w500,
+            fontFamily: "Inter",
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontSize: 12,
+            color: Color(0xFFA6A9B4),
             fontStyle: FontStyle.normal,
             fontWeight: FontWeight.w500,
             fontFamily: "Inter",
@@ -150,15 +157,10 @@ class AppTheme {
         ),
         appBarTheme: const AppBarTheme(
           elevation: 3,
-          centerTitle: true,
+          centerTitle: false,
           foregroundColor: Color(0xFFFFFFFF),
           backgroundColor: Color(0xFFFFFFFF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20.0),
-              bottomRight: Radius.circular(20.0),
-            ),
-          ),
+          
           iconTheme: IconThemeData(color: Color(0xFF173D3D), size: 20),
           actionsIconTheme: IconThemeData(color: Color(0xFF173D3D), size: 20),
           titleTextStyle: TextStyle(
@@ -174,45 +176,44 @@ class AppTheme {
           filled: true,
           fillColor: Color(0xFFFFFFFF),
           hintStyle: TextStyle(
+            fontSize: 16,
+            color: Color(0xFFA8A8AA),
+            fontWeight: FontWeight.w400,
+            fontFamily: "Inter",
+          ),
+          labelStyle: TextStyle(
             fontSize: 18,
-            color: Color(0xFF888E94),
+            color: Color(0xFF545454),
             fontWeight: FontWeight.w400,
             fontFamily: "Inter",
           ),
           errorStyle: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
             fontFamily: "Inter",
           ),
           border: OutlineInputBorder(
             borderSide: BorderSide(
-              // width: 1,
-              style: BorderStyle.solid,
-              // color: Color(0xFFD1AC70),
+              color: Color(0xFFBFC2CD), // Border color
+              width: 1.0, // Border width
             ),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
             borderSide: BorderSide(
-              // width: 1,
-              style: BorderStyle.solid,
-              // color: Color(0xFFD1AC70),
-              color: Color(0xFFFFFFFF),
+              color: Color(0xFFBFC2CD), // Border color
+              width: 1.0, // Border width
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
             borderSide: BorderSide(
-              width: 1,
-              style: BorderStyle.solid,
-              color: Color(0xFFD1AC70),
+              color: Color(0xFFBFC2CD), // Border color
+              width: 1.0, // Border width
             ),
           ),
         ),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          foregroundColor: Color(0xFF000000),
-          backgroundColor: Color(0xFFFFD000),
+          // foregroundColor: Color(0xFF000000),
+          backgroundColor: Color(0xFF5884F0),
           extendedTextStyle: TextStyle(
             fontSize: 18,
             color: Color(0xFF000000),
@@ -223,15 +224,21 @@ class AppTheme {
         ),
         outlinedButtonTheme: const OutlinedButtonThemeData(
           style: ButtonStyle(
-            foregroundColor: MaterialStatePropertyAll(Color(0xFF000000)),
-            backgroundColor: MaterialStatePropertyAll(Color(0xFFFFFFFF)),
-            shape: MaterialStatePropertyAll(ContinuousRectangleBorder(
-                side: BorderSide(color: Color(0xFF000000), width: 2))),
-            textStyle: MaterialStatePropertyAll(
+            foregroundColor: WidgetStatePropertyAll(Color(0xFF34519A)),
+            backgroundColor: WidgetStatePropertyAll(Color(0xFFFFFFFF)),
+            shape: WidgetStatePropertyAll(
+              ContinuousRectangleBorder(
+                side: BorderSide(color: Color(0xFF34519A), width: 5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
+                ),
+              ),
+            ),
+            textStyle: WidgetStatePropertyAll(
               TextStyle(
-                fontSize: 14,
-                color: Color(0xFF000000),
-                fontStyle: FontStyle.normal,
+                fontSize: 16,
+                color: Color(0xFF34519A),
+                fontWeight: FontWeight.w700,
                 fontFamily: "Inter",
               ),
             ),
@@ -239,15 +246,15 @@ class AppTheme {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
-            foregroundColor: const MaterialStatePropertyAll(Color(0xFFFFFFFF)),
-            backgroundColor: const MaterialStatePropertyAll(Color(0xFF173D3D)),
-            shadowColor: const MaterialStatePropertyAll(Color(0xFF000000)),
-            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(26.0))),
-            elevation: const MaterialStatePropertyAll(5),
-            textStyle: const MaterialStatePropertyAll(
+            foregroundColor: const WidgetStatePropertyAll(Color(0xFFFFFFFF)),
+            backgroundColor: const WidgetStatePropertyAll(Color(0xFF34519A)),
+            shadowColor: const WidgetStatePropertyAll(Color(0xFF000000)),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0))),
+            elevation: const WidgetStatePropertyAll(5),
+            textStyle: const WidgetStatePropertyAll(
               TextStyle(
-                fontSize: 18,
+                fontSize: 16,
                 fontFamily: "Inter",
                 fontWeight: FontWeight.w700,
                 color: Color(0xFFFFFFFF),
@@ -256,24 +263,26 @@ class AppTheme {
           ),
         ),
         tabBarTheme: const TabBarTheme(
-          labelColor: Color(0xFF000000),
+          labelColor: Color(0xFF242529),
           labelStyle: TextStyle(
-            fontSize: 14,
-            letterSpacing: 0.78,
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF3A4046),
+            fontSize: 16,
+            // letterSpacing: 0.78,
+            fontWeight: FontWeight.w500,
+            color: Color(0xFF242529),
             fontFamily: "Inter",
           ),
+          
           indicator: UnderlineTabIndicator(
               borderSide: BorderSide(width: 3, color: Color(0xFF000000))),
           unselectedLabelColor: Color.fromRGBO(81, 88, 93, 100),
           unselectedLabelStyle: TextStyle(
-            fontSize: 14,
-            letterSpacing: 0.78,
-            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            // letterSpacing: 0.78,
+            fontWeight: FontWeight.w500,
             fontFamily: "Inter",
           ),
         ),
+
       );
 
   ThemeData get dark => ThemeData(brightness: Brightness.dark);

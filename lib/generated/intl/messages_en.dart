@@ -21,6 +21,70 @@ class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
   final messages = _notInlinedMessages(_notInlinedMessages);
-  static Map<String, Function> _notInlinedMessages(_) =>
-      <String, Function>{"home": MessageLookupByLibrary.simpleMessage("Home")};
+  static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "back": MessageLookupByLibrary.simpleMessage("Back"),
+        "backto": MessageLookupByLibrary.simpleMessage("Back to"),
+        "cellphone": MessageLookupByLibrary.simpleMessage("Cell phone"),
+        "changeUnion": MessageLookupByLibrary.simpleMessage("Change Union"),
+        "changepassword":
+            MessageLookupByLibrary.simpleMessage("Change password"),
+        "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
+        "dateofbirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
+        "documents": MessageLookupByLibrary.simpleMessage("Documents"),
+        "email": MessageLookupByLibrary.simpleMessage("Email"),
+        "employmentStatus":
+            MessageLookupByLibrary.simpleMessage("Employment status"),
+        "enteryourEmail":
+            MessageLookupByLibrary.simpleMessage("Enter your Email"),
+        "executives": MessageLookupByLibrary.simpleMessage("Executives"),
+        "feed": MessageLookupByLibrary.simpleMessage("Feed"),
+        "findMyUnionLocal":
+            MessageLookupByLibrary.simpleMessage("Find My Union Local"),
+        "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
+        "forgetPassword":
+            MessageLookupByLibrary.simpleMessage("Forget Password?"),
+        "grievances": MessageLookupByLibrary.simpleMessage("Grievances"),
+        "grievancetopic":
+            MessageLookupByLibrary.simpleMessage("Grievance topic"),
+        "here": MessageLookupByLibrary.simpleMessage("Here"),
+        "home": MessageLookupByLibrary.simpleMessage("Home"),
+        "ifyoudonthaveanaccountyoucansignup":
+            MessageLookupByLibrary.simpleMessage(
+                "If you don’t have an account you can sign up "),
+        "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
+        "localNumber": MessageLookupByLibrary.simpleMessage("Local number"),
+        "logOut": MessageLookupByLibrary.simpleMessage("Log out"),
+        "login": MessageLookupByLibrary.simpleMessage("Login"),
+        "logintoyouraccount":
+            MessageLookupByLibrary.simpleMessage("Log into your account"),
+        "messages": MessageLookupByLibrary.simpleMessage("Messages"),
+        "mobile": MessageLookupByLibrary.simpleMessage("Mobile"),
+        "newpasword": MessageLookupByLibrary.simpleMessage("New pasword"),
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+        "office": MessageLookupByLibrary.simpleMessage("Office"),
+        "password": MessageLookupByLibrary.simpleMessage("Password"),
+        "perks": MessageLookupByLibrary.simpleMessage("Perks"),
+        "personalEmail": MessageLookupByLibrary.simpleMessage("Personal Email"),
+        "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "qr": MessageLookupByLibrary.simpleMessage("QR"),
+        "readall": MessageLookupByLibrary.simpleMessage("Read all"),
+        "repeatnewpassword":
+            MessageLookupByLibrary.simpleMessage("Repeat new password"),
+        "repeatpassword":
+            MessageLookupByLibrary.simpleMessage("Repeat password"),
+        "requestpasswordreset":
+            MessageLookupByLibrary.simpleMessage("Request password reset"),
+        "save": MessageLookupByLibrary.simpleMessage("Save"),
+        "services": MessageLookupByLibrary.simpleMessage("Services"),
+        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+        "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
+        "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
+        "signuptojoinyourUnioncommunity": MessageLookupByLibrary.simpleMessage(
+            "Sign up to join your Union community"),
+        "status": MessageLookupByLibrary.simpleMessage("Status"),
+        "union": MessageLookupByLibrary.simpleMessage("Union"),
+        "unionPosition": MessageLookupByLibrary.simpleMessage("Union position"),
+        "unit": MessageLookupByLibrary.simpleMessage("Unit"),
+        "username": MessageLookupByLibrary.simpleMessage("Username")
+      };
 }
