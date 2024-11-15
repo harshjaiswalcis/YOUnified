@@ -5,8 +5,9 @@ class ExecutiveScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ExecutiveModel> executiveListData = HomeController.executiveListData;
+    List<ExecutiveModel> executiveListData = HomeProvider.executiveListData;
     return Scaffold(
+        backgroundColor: AppColors.backGround,
       appBar: AppBar(
         title: Text(
           context.strings.executives,

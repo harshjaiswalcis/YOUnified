@@ -120,6 +120,36 @@ class S {
     );
   }
 
+  /// `Open`
+  String get open {
+    return Intl.message(
+      'Open',
+      name: 'open',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `days`
+  String get days {
+    return Intl.message(
+      'days',
+      name: 'days',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vote`
+  String get vote {
+    return Intl.message(
+      'Vote',
+      name: 'vote',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Perks`
   String get perks {
     return Intl.message(
@@ -160,6 +190,46 @@ class S {
     );
   }
 
+  /// `Call:  `
+  String get call {
+    return Intl.message(
+      'Call:  ',
+      name: 'call',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Finish`
+  String get finish {
+    return Intl.message(
+      'Finish',
+      name: 'finish',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Voting`
+  String get voting {
+    return Intl.message(
+      'Voting',
+      name: 'voting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Closed`
+  String get closed {
+    return Intl.message(
+      'Closed',
+      name: 'closed',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Status`
   String get status {
     return Intl.message(
@@ -185,6 +255,16 @@ class S {
     return Intl.message(
       'Mobile',
       name: 'mobile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ends in`
+  String get endsIn {
+    return Intl.message(
+      'Ends in',
+      name: 'endsIn',
       desc: '',
       args: [],
     );
@@ -235,6 +315,16 @@ class S {
     return Intl.message(
       'Profile',
       name: 'profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ends on:`
+  String get endsOn {
+    return Intl.message(
+      'Ends on:',
+      name: 'endsOn',
       desc: '',
       args: [],
     );
@@ -300,6 +390,26 @@ class S {
     );
   }
 
+  /// `Contacts`
+  String get contacts {
+    return Intl.message(
+      'Contacts',
+      name: 'contacts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All Done!`
+  String get allDone {
+    return Intl.message(
+      'All Done!',
+      name: 'allDone',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Last Name`
   String get lastName {
     return Intl.message(
@@ -310,11 +420,31 @@ class S {
     );
   }
 
+  /// `Starts on:`
+  String get startsOn {
+    return Intl.message(
+      'Starts on:',
+      name: 'startsOn',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Documents`
   String get documents {
     return Intl.message(
       'Documents',
       name: 'documents',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Email`
+  String get sendEmail {
+    return Intl.message(
+      'Send Email',
+      name: 'sendEmail',
       desc: '',
       args: [],
     );
@@ -380,6 +510,36 @@ class S {
     );
   }
 
+  /// `Receipt ID: `
+  String get receiptID {
+    return Intl.message(
+      'Receipt ID: ',
+      name: 'receiptID',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scan QR Code`
+  String get scanQRCode {
+    return Intl.message(
+      'Scan QR Code',
+      name: 'scanQRCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow emails`
+  String get allowEmails {
+    return Intl.message(
+      'Allow emails',
+      name: 'allowEmails',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Change Union`
   String get changeUnion {
     return Intl.message(
@@ -405,6 +565,26 @@ class S {
     return Intl.message(
       'Date of birth',
       name: 'dateofbirth',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Submitted on:`
+  String get submittedOn {
+    return Intl.message(
+      'Submitted on:',
+      name: 'submittedOn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Click to call`
+  String get clickToCall {
+    return Intl.message(
+      'Click to call',
+      name: 'clickToCall',
       desc: '',
       args: [],
     );
@@ -440,6 +620,36 @@ class S {
     );
   }
 
+  /// `Share as a link`
+  String get shareAsALink {
+    return Intl.message(
+      'Share as a link',
+      name: 'shareAsALink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to profile`
+  String get backToProfile {
+    return Intl.message(
+      'Back to profile',
+      name: 'backToProfile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last updated on:`
+  String get lastUpdatedOn {
+    return Intl.message(
+      'Last updated on:',
+      name: 'lastUpdatedOn',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Grievance topic`
   String get grievancetopic {
     return Intl.message(
@@ -465,6 +675,16 @@ class S {
     return Intl.message(
       'Repeat password',
       name: 'repeatpassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow call drops`
+  String get allowCallDrops {
+    return Intl.message(
+      'Allow call drops',
+      name: 'allowCallDrops',
       desc: '',
       args: [],
     );
@@ -510,11 +730,41 @@ class S {
     );
   }
 
+  /// `Your receipt ID is:`
+  String get yourReceiptIDIs {
+    return Intl.message(
+      'Your receipt ID is:',
+      name: 'yourReceiptIDIs',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Repeat new password`
   String get repeatnewpassword {
     return Intl.message(
       'Repeat new password',
       name: 'repeatnewpassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow text messages`
+  String get allowTextMessages {
+    return Intl.message(
+      'Allow text messages',
+      name: 'allowTextMessages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Union Notifications`
+  String get unionNotifications {
+    return Intl.message(
+      'Union Notifications',
+      name: 'unionNotifications',
       desc: '',
       args: [],
     );
@@ -535,6 +785,26 @@ class S {
     return Intl.message(
       'Request password reset',
       name: 'requestpasswordreset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow push notifications`
+  String get allowPushNotifications {
+    return Intl.message(
+      'Allow push notifications',
+      name: 'allowPushNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Allow registration emails`
+  String get allowRegistrationEmails {
+    return Intl.message(
+      'Allow registration emails',
+      name: 'allowRegistrationEmails',
       desc: '',
       args: [],
     );

@@ -73,11 +73,13 @@ class AppTheme {
             fontFamily: "Inter",
           ),
           titleMedium: TextStyle(
-            fontSize: 18,
-            color: Color(0xFF545454),
-            fontWeight: FontWeight.w400,
+            height: 1.21,
+            fontSize: 16,
+            color: Color(0xFF0B0B0B),
+            fontWeight: FontWeight.w500,
             fontFamily: "Inter",
           ),
+          //Change kr sackte h
           titleSmall: TextStyle(
             fontSize: 16,
             color: Color(0xFF545454),
@@ -91,6 +93,7 @@ class AppTheme {
             fontFamily: "Inter",
           ),
           labelMedium: TextStyle(
+            height: 1.21,
             fontSize: 16,
             color: Color(0xFF242529),
             fontWeight: FontWeight.w400,
@@ -98,32 +101,33 @@ class AppTheme {
           ),
           labelLarge: TextStyle(
             fontSize: 14,
-            color: Color(0xFF848587),
+            color: Color(0xFF4A4A4A),
             fontWeight: FontWeight.w400,
             fontFamily: "Inter",
+            height: 16.94 / 14,
           ),
           bodySmall: TextStyle(
             fontSize: 14,
-            color: Color(0xFF7A7A7A),
+            color: Color(0xFFA6A9B4),
             fontWeight: FontWeight.w500,
             fontFamily: "Inter",
           ),
           bodyMedium: TextStyle(
             fontSize: 12,
-            color: Color(0xFF545458),
-            fontWeight: FontWeight.w400,
+            color: Color(0xFF696666),
+            fontWeight: FontWeight.w600,
             fontFamily: "Inter",
           ),
           bodyLarge: TextStyle(
             fontSize: 18,
-            color: Color(0xFFF7F0DF),
+            color: Color(0xFF242529),
             fontWeight: FontWeight.w700,
             fontFamily: "Inter",
           ),
         ),
         radioTheme: RadioThemeData(
           splashRadius: 20,
-          fillColor: WidgetStateProperty.all(const Color(0xFF926824)),
+          fillColor: WidgetStateProperty.all(const Color(0xFFA6A9B4)),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           elevation: 5,
@@ -160,7 +164,6 @@ class AppTheme {
           centerTitle: false,
           foregroundColor: Color(0xFFFFFFFF),
           backgroundColor: Color(0xFFFFFFFF),
-          
           iconTheme: IconThemeData(color: Color(0xFF173D3D), size: 20),
           actionsIconTheme: IconThemeData(color: Color(0xFF173D3D), size: 20),
           titleTextStyle: TextStyle(
@@ -271,7 +274,6 @@ class AppTheme {
             color: Color(0xFF242529),
             fontFamily: "Inter",
           ),
-          
           indicator: UnderlineTabIndicator(
               borderSide: BorderSide(width: 3, color: Color(0xFF000000))),
           unselectedLabelColor: Color.fromRGBO(81, 88, 93, 100),
@@ -282,7 +284,6 @@ class AppTheme {
             fontFamily: "Inter",
           ),
         ),
-
       );
 
   ThemeData get dark => ThemeData(brightness: Brightness.dark);

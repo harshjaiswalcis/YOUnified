@@ -1,4 +1,3 @@
-
 export 'package:http/http.dart';
 export 'dart:developer' hide Flow;
 export 'package:younified/utils/env.dart';
@@ -23,15 +22,21 @@ export 'package:younified/utils/widgets/custom_dropdown.dart';
 export 'package:younified/utils/app_provider_state_mixin.dart';
 export 'package:younified/features/feed/view/feed_screen.dart';
 export 'package:younified/features/home/view/home_screen.dart';
+export 'package:younified/features/home/model/perk_model.dart';
+export 'package:younified/features/feed/model/feed_model.dart';
 export 'package:younified/app_services/navigation_service.dart';
 export 'package:younified/features/home/model/executive_model.dart';
 export 'package:younified/features/home/model/home_list_model.dart';
 export 'package:younified/utils/widgets/app_bar_action_button.dart';
+export 'package:younified/features/services/model/voting_model.dart';
 export 'package:younified/features/setting/view/setting_screen.dart';
 export 'package:younified/utils/widgets/app_bar_leading_button.dart';
+export 'package:younified/features/services/model/calling_model.dart';
+export 'package:younified/features/feed/controller/feed_provider.dart';
 export 'package:younified/features/services/view/services_screen.dart';
 export 'package:younified/utils/widgets/app_bottom_navigation_bar.dart';
 export 'package:younified/features/home/controller/home_controller.dart';
+export 'package:younified/features/services/controller/services_provider.dart';
 export 'package:younified/features/authentication/controller/union_provider.dart';
 export 'package:younified/features/app_bar_screens/controller/message_provider.dart';
 export 'package:younified/features/app_bar_screens/controller/notification_provider.dart';

@@ -6,7 +6,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<HomeListModel> homeListData = HomeController.homeListData;
+    List<HomeListModel> homeListData = HomeProvider.homeListData;
     // return SizedBox(
     //   height: 200,
     //   child: ColoredBox(

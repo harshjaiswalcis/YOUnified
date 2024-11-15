@@ -1,105 +1,44 @@
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:younified/app_services/queries.dart';
 import 'package:younified/features/authentication/model/union_model.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 
 class UnionProvider extends ChangeNotifier {
-  final GraphQLService _graphqlService = GraphQLService(endpoint: 'http://192.168.1.208:8080/graphql');
-  // final GraphQLService _graphQLService = GraphQLService();
-  UnionModel? _unionData;
-  bool _loading = false;
-  String? _error;
+  UnionModel? unionData;
+  String? accessToken;
+  bool isLoading = false;
+  String? errorMessage;
 
-  UnionModel? get unionData => _unionData;
-  bool get loading => _loading;
-  String? get error => _error;
+  Future<UnionModel?> fetchUnionByName(String name) async {
+    isLoading = true;
 
-  // GraphQL query
-  final String unionByNameQuery = """
-    query UnionByName {
-    unionByName(name: "sumiran biswas") {
-        id
-        name
-        status
-        bargainingUnits
-        bannerURL
-        callDropNumber
-        domain
-        bannedDomains
-        theme
-        twitter
-        twitterLinks
-        facebook
-        facebookLinks
-        instagram
-        instagramLinks
-        themeImage
-        zoomID
-        hostEmail
-        defaultEmailPassword
-    }
-}
-  """;
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(Queries.unionByName),
+          variables: {
+            'name': name,
+          },
+        ),
+      );
 
-  // Fetch union by name
-  // Future<void> fetchUnionByName(String name) async {
-  //   _loading = true;
-  //   _error = null;
-  //   notifyListeners();
+      if (result.hasException) {
+        errorMessage = result.exception.toString();
+        isLoading = false;
+        return null;
+      }
 
-  //   // try {
-  //         log("0 ${_graphqlService.performQuery(unionByNameQuery)}");
-  //     final result = await _graphqlService.performQuery(unionByNameQuery);
-      
-  //         log("1 $result");
-  //     if (result.hasException) {
-  //       _error = result.exception.toString();
-  //         log("2 $_error");
-        
-  //     } else {
-  //         log("3 ${_graphqlService.performQuery(unionByNameQuery)}");
-
-  //       final data = result.data?['unionByName'];
-  //       if (data != null) {
-  //         _unionData = UnionModel.fromJson(data);
-  //         log("000000000 ${_unionData.toString()}");
-  //       }
-  //     }
-  //   // } catch (e) {
-  //   //   _error = e.toString();
-  //   // }
-
-  //   _loading = false;
-  //   notifyListeners();
-  // }
-
-  // Fetch union by name
-Future<void> fetchUnionByName(String name) async {
-  _loading = true;
-  _error = null;
-  notifyListeners();
-
-  try {
-    final result = await _graphqlService.performQuery(
-      unionByNameQuery
-    ).timeout(const Duration(seconds: 30));
-
-    if (result.hasException) {
-      _error = result.exception.toString();
-      log("121 ${result.source!.name} ${result.exception}");
-      log("GraphQL Error: $_error");
-    } else {
       final data = result.data?['unionByName'];
       if (data != null) {
-        _unionData = UnionModel.fromJson(data);
-        log("Union Data: $_unionData");
+        unionData = UnionModel.fromJson(data);
+        isLoading = false;
+        return unionData!;
       }
+    } catch (e) {
+      errorMessage = e.toString();
+      isLoading = false;
     }
-  } catch (e) {
-    _error = e.toString();
-    log("Exception: $_error");
+    notifyListeners();
+    return null;
   }
-
-  _loading = false;
-  notifyListeners();
-}
-
 }

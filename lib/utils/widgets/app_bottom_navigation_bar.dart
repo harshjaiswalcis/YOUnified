@@ -5,10 +5,14 @@ class AppBottomNavigationBar extends StatelessWidget {
 
   Widget returnBottomNavIcon(String icon, Color colors) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 4),
-        child: SvgPicture.asset(
+        child: Image.asset(
           icon,
           color: colors,
         ),
+        // SvgPicture.asset(
+        //   icon,
+        //   color: colors,
+        // ),
       );
 
   @override
@@ -29,7 +33,7 @@ class AppBottomNavigationBar extends StatelessWidget {
             elevation: 5,
             showSelectedLabels: true,
             currentIndex: currentIndex,
-          
+
             // backgroundColor: AppColors.darkGreen,
             onTap: (index) {
               context.read<AppProvider>().appNavIndex.value = index;
@@ -47,31 +51,31 @@ class AppBottomNavigationBar extends StatelessWidget {
             items: [
               BottomNavigationBarItem(
                 label: context.strings.home,
-                icon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.greyIconColor),
-                activeIcon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.blueIconColor),
+                icon:
+                    returnBottomNavIcon(AppIcons.home, AppColors.greyIconColor),
+                activeIcon:
+                    returnBottomNavIcon(AppIcons.home, AppColors.blueIconColor),
               ),
               BottomNavigationBarItem(
-                label: context.strings.home,
+                label: context.strings.feed,
                 icon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.greyIconColor),
+                    AppIcons.feedIcon, AppColors.greyIconColor),
                 activeIcon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.blueIconColor),
+                    AppIcons.feedIcon, AppColors.blueIconColor),
               ),
               BottomNavigationBarItem(
-                label: context.strings.home,
+                label: context.strings.services,
                 icon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.greyIconColor),
+                    AppIcons.servicesIcon, AppColors.greyIconColor),
                 activeIcon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.blueIconColor),
+                    AppIcons.servicesIcon, AppColors.blueIconColor),
               ),
               BottomNavigationBarItem(
-                label: context.strings.home,
+                label: context.strings.settings,
                 icon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.greyIconColor),
+                    AppIcons.settingIcon, AppColors.greyIconColor),
                 activeIcon: returnBottomNavIcon(
-                    AppIcons.home, AppColors.blueIconColor),
+                    AppIcons.settingIcon, AppColors.blueIconColor),
               ),
             ],
           ),

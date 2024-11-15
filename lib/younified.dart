@@ -14,14 +14,18 @@ class _YounifiedState extends State<Younified> {
 
     /// FIRST INITIALIZE THE PROVIDERS
     appProvider = context.read();
+    homeProvider = context.read();
+    feedProvider = context.read();
     unionProvider = context.read();
     messageProvider = context.read();
+    servicesProvider = context.read();
     notificationProvider = context.read();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.backGround,
       // backgroundColor: AppColors.cardBgColor,
       extendBody: true,
       appBar: PreferredSize(
@@ -39,6 +43,7 @@ class _YounifiedState extends State<Younified> {
           ),
           child: AppBar(
             leadingWidth: 0,
+            elevation: 0,
             automaticallyImplyLeading: false,
             title: Image.asset(
               width: 164,

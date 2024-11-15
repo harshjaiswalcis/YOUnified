@@ -1,6 +1,6 @@
 import 'package:younified/utils/exports/common_exports.dart';
 
-class HomeController {
+class HomeProvider extends ChangeNotifier {
 
   // HOME LIST DATA
   static final List<Map<String, String>> homeList = [
@@ -36,7 +36,7 @@ class HomeController {
     .toList();
 
 
-  // HOME LIST DATA
+  // EXECUTIVE LIST DATA
   static final List<Map<String, String>> executiveList = [
   {
     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
@@ -92,4 +92,50 @@ class HomeController {
   static final List<ExecutiveModel> executiveListData = executiveList
     .map((mapData) => ExecutiveModel.fromJson(mapData))
     .toList();
+
+  // PERK LIST DATA
+  static final List<Map<String, dynamic>> perkList = [
+  {
+    "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
+    "title": "Lorem ipsum HOTEL",
+    "subtitle": "Dolor sit amet consectetur",
+    "price": "\$15",
+    "duration": "/hour",
+    "rating": 4,
+    "category": "New & Local"
+  },
+  {
+    "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
+    "title": "Salon & Spa",
+    "subtitle": "Dolor sit amet conse",
+    "price": "\$20",
+    "duration": "/hour",
+    "rating": 4,
+    "category": "Health + Fitness"
+  },
+  {
+    "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
+    "title": "Gym membership",
+    "subtitle": "Dolor sit amet conse",
+    "price": "\$50",
+    "duration": "/week",
+    "rating": 4,
+    "category": "Health + Fitness"
+  },
+  {
+    "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
+    "title": "Travel Package",
+    "subtitle": "Dolor sit amet conse",
+    "price": "\$100",
+    "duration": "/day",
+    "rating": 4,
+    "category": "Travel"
+  }
+];
+
+//MAPPING
+  static final List<PerkModel> perkListData = perkList
+    .map((mapData) => PerkModel.fromJson(mapData))
+    .toList();
+
 }

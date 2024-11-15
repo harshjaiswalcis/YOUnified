@@ -50,7 +50,8 @@ class UnionEnterance extends StatelessWidget {
                   child: TextFormField(
                     // controller: emailController,
                     style: context.textTheme.titleMedium,
-                    decoration: InputDecoration(hintText: context.strings.union),
+                    decoration:
+                        InputDecoration(hintText: context.strings.union),
                     // textCapitalization: TextCapitalization.none,
                     textInputAction: TextInputAction.next,
                     inputFormatters: [
@@ -74,7 +75,8 @@ class UnionEnterance extends StatelessWidget {
                   child: TextFormField(
                     // controller: emailController,
                     style: context.textTheme.titleMedium,
-                    decoration: InputDecoration(hintText: context.strings.localNumber),
+                    decoration:
+                        InputDecoration(hintText: context.strings.localNumber),
                     // textCapitalization: TextCapitalization.none,
                     textInputAction: TextInputAction.next,
                     inputFormatters: [
@@ -102,11 +104,32 @@ class UnionEnterance extends StatelessWidget {
                         child: SizedBox(
                           height: 50.0,
                           child: ElevatedButton(
-                              onPressed: () {
-                                // unionProvider.fetchUnionByName("ankita");
-                                context.pushNamedAndRemoveUntil(
-                                    Routes.loginScreen);
-                              },
+                              onPressed: unionProvider.isLoading
+                                  ? () => const Center(
+                                      child: CircularProgressIndicator())
+                                  : () {
+                                      context.pushNamedAndRemoveUntil(
+                                          Routes.loginScreen);
+                                      // unionProvider
+                                      //     .fetchUnionByName("downsyndrome.ca")
+                                      //     .then(
+                                      //   (value) {
+                                      //     if (value != null &&
+                                      //         value.id.isNotEmpty) {
+                                      //       log(value.id);
+                                      //       context.pushNamedAndRemoveUntil(
+                                      //           Routes.loginScreen);
+                                      //     } else {
+                                      //       context.showAppSnackBar(
+                                      //         title: "Error in login",
+                                      //         // textColor: AppColors.redText
+                                      //       );
+                                      //       // authenticationProvider.errorMessage =
+                                      //       null;
+                                      //     }
+                                      //   },
+                                      // );
+                                    },
                               child: Text(context.strings.continueText)),
                         ),
                       ),

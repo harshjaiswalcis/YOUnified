@@ -7,6 +7,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.backGround,
       appBar: AppBar(
         title: Text(
           context.strings.profile,
@@ -32,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 12.0, bottom: 16),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => context.pushNamed(Routes.qrScreen),
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.circular(50), // This maintains circular shape
