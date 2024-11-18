@@ -61,12 +61,6 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const ForgetPassword());
       case Routes.documentScreen:
         return MaterialPageRoute(builder: (_) => const DocumentScreen());
-      case Routes.electionStepperFirst:
-        return MaterialPageRoute(builder: (_) => ElectionStepperFirst());
-      case Routes.electionStepperThird:
-        return MaterialPageRoute(builder: (_) => ElectionStepperThird());
-      case Routes.electionStepperSecond:
-        return MaterialPageRoute(builder: (_) => ElectionStepperSecond());
       case Routes.executiveScreen:
         return MaterialPageRoute(builder: (_) => const ExecutiveScreen());
       case Routes.grievanceScreen:
@@ -75,6 +69,12 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const FeedDetailScreen());
       case Routes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationScreen());
+      case Routes.electionStepperFirst:
+        return MaterialPageRoute(builder: (_) => const ElectionStepperFirst());
+      case Routes.electionStepperThird:
+        return MaterialPageRoute(builder: (_) => const ElectionStepperThird());
+      case Routes.electionStepperSecond:
+        return MaterialPageRoute(builder: (_) => const ElectionStepperSecond());
       case Routes.electionSummaryScreen:
         return MaterialPageRoute(builder: (_) => const ElectionSummaryScreen());
       default:

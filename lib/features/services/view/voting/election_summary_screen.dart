@@ -1,3 +1,4 @@
+// lib/features/election/screens/election_summary_screen.dart
 import 'package:younified/utils/exports/common_exports.dart';
 
 class ElectionSummaryScreen extends StatelessWidget {
@@ -5,124 +6,140 @@ class ElectionSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backGround,
-      appBar: AppBar(
-        title: Text(
-          "Election Name",
-          style: context.textTheme.headlineLarge,
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pop(),
+    return Consumer<ServicesProvider>(
+      builder: (context, provider, _) {
+        return Scaffold(
+          backgroundColor: AppColors.backGround,
+          appBar: AppBar(
+            title: Text(
+              "Election Name",
+              style: context.textTheme.headlineLarge,
+            ),
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                onPressed: () => context.pop(),
+              ),
+            ),
+            leadingWidth: 30,
+            elevation: 0,
           ),
-        ),
-        leadingWidth: 30,
-        elevation: 0,
-      ),
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          body: Stack(
             children: [
-              ColoredBox(
-                color: const Color(0xFFF1F2F6),
-                child: SizedBox(
-                  width: 1.0.getScreenWidth,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24.0, horizontal: 24.0),
-                    child: Text(
-                      'Summary',
-                      style: context.textTheme.headlineMedium!.copyWith(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ColoredBox(
+                    color: const Color(0xFFF1F2F6),
+                    child: SizedBox(
+                      width: 1.0.getScreenWidth,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 24.0,
+                          horizontal: 24.0,
+                        ),
+                        child: Text(
+                          'Summary',
+                          style: context.textTheme.headlineMedium!.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
+                  ),
+                  const SizedBox(height: 16),
+                  colorListTile(
+                    context: context,
+                    title: '1. Favourite color?',
+                    data: provider.selectedColor ?? '',
+                  ),
+                  const SizedBox(height: 16),
+                  colorListTile(
+                    context: context,
+                    title: '2. Favourite Season?',
+                    data: provider.selectedSeason ?? '',
+                  ),
+                  const SizedBox(height: 16),
+                  colorListTile(
+                    context: context,
+                    title: '3. Favourite color combo?',
+                    data: provider.selectedColorCombo.join(', '),
+                  ),
+                ],
+              ),
+              Positioned(
+                bottom: 0,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        offset: const Offset(0, -2),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                      ),
+                    ],
+                    color: AppColors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 66,
+                        width: 1.0.getScreenWidth,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(24.0, 14.0, 24.0, 0),
+                          child: ElevatedButton(
+                            style: const ButtonStyle(
+                              backgroundColor: WidgetStatePropertyAll(
+                                AppColors.greenContainerbg,
+                              ),
+                            ),
+                            onPressed: () {
+                              context.pushNamed(Routes.receiptScreen);
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 80,
+                        width: 1.0.getScreenWidth,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(24.0, 14.0, 24.0, 16),
+                          child: OutlinedButton(
+                            onPressed: () {
+                              provider.resetSelections();
+                              context.pushNamed(Routes.electionStepperFirst);
+                            },
+                            style: ButtonStyle(
+                              side: WidgetStateProperty.all(
+                                const BorderSide(color: AppColors.themeColor),
+                              ),
+                            ),
+                            child: const Text('Change Selection'),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
-              colorListTile(
-                  context: context, title: '1. Favourite color?', data: 'Blue'),
-              const SizedBox(height: 16),
-              colorListTile(
-                  context: context,
-                  title: '2. Favourite Season?',
-                  data: 'Winter'),
-              const SizedBox(height: 16),
-              colorListTile(
-                  context: context,
-                  title: '3. Favourite color combo?',
-                  data: 'yellow'),
-              const SizedBox(height: 16),
             ],
           ),
-          Positioned(
-            bottom: 0,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    offset: const Offset(0, -2),
-                    blurRadius: 6,
-                    spreadRadius: 1,
-                  ),
-                ],
-                color: AppColors.white,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 66,
-                    width: 1.0.getScreenWidth,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 14.0, 24.0, 0),
-                      child: ElevatedButton(
-                        style: const ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                                AppColors.greenContainerbg)),
-                        onPressed: () {
-                          // Handle back button press
-                          context.pushNamed(Routes.receiptScreen);
-                        },
-                        child: const Text('Submit'),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 80,
-                    width: 1.0.getScreenWidth,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 14.0, 24.0, 16),
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Handle back button press
-                        },
-                        style: ButtonStyle(
-                          side: WidgetStateProperty.all(
-                              const BorderSide(color: AppColors.themeColor)),
-                        ),
-                        child: const Text('Change Selection'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  Column colorListTile(
-      {required BuildContext context,
-      required String title,
-      required String data}) {
+  Widget colorListTile({
+    required BuildContext context,
+    required String title,
+    required String data,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -112,7 +112,7 @@ class ReceiptScreen extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () {
                           // Handle back button press
-                          // context.pushNamed(Routes.electionStepperSecond);
+                          context.pushNamed(Routes.app);
                         },
                         child: Text(context.strings.finish),
                       ),
