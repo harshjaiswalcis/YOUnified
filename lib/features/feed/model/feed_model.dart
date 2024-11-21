@@ -1,4 +1,5 @@
 class Feed {
+  final String id;
   final String fullName;
   final DateTime postedTime;
   final String feedProfileImage;
@@ -8,6 +9,7 @@ class Feed {
   final int numberOfComments;
 
   Feed({
+    required this.id,
     required this.fullName,
     required this.postedTime,
     required this.feedProfileImage,
@@ -20,6 +22,7 @@ class Feed {
   // Factory constructor to create a Feed instance from JSON
   factory Feed.fromJson(Map<String, dynamic> json) {
     return Feed(
+      id: json['id'],
       fullName: json['fullName'],
       postedTime: DateTime.parse(json['postedTime']),
       feedProfileImage: json['feedProfileImage'],
@@ -33,6 +36,7 @@ class Feed {
   // Method to convert a Feed instance back to JSON
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'fullName': fullName,
       'postedTime': postedTime.toIso8601String(),
       'feedProfileImage': feedProfileImage,

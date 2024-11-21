@@ -21,6 +21,7 @@ class Routes {
   static const String notificationScreen = "/notificationScreen";
   static const String electionStepperThird = "/electionStepperThird";
   static const String electionStepperFirst = "/electionStepperFirst";
+  static const String grievanceDetailScreen = "/grievanceDetailScreen";
   static const String electionStepperSecond = "/electionStepperSecond";
   static const String electionSummaryScreen = "/electionSummaryScreen";
 }

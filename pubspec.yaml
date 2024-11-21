@@ -23,7 +23,8 @@ dependencies:
   pretty_qr_code: ^3.3.0
   path_provider: ^2.0.11
   flutter_svg: ^2.0.10+1
-  flutter_dialpad: ^1.0.5
+  url_launcher: ^6.3.1
+  stepper_list_view: ^0.0.2
   graphql_flutter: ^5.1.2
   flutter_slidable: ^3.1.1
   intl_phone_field: ^3.2.0

@@ -1,4 +1,5 @@
 import 'package:younified/utils/exports/common_exports.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CallingScreen extends StatelessWidget {
   const CallingScreen({super.key});
@@ -6,6 +7,16 @@ class CallingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<CallingModel> callingListData = ServicesProvider.callingListData;
+
+    makingPhoneCall(String phone) async {
+      var url = Uri.parse("tel:$phone");
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url);
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+
     return Scaffold(
       backgroundColor: AppColors.backGround,
       appBar: AppBar(
@@ -158,6 +169,8 @@ class CallingScreen extends StatelessWidget {
                             child: ElevatedButton(
                                 onPressed: () {
                                   // context.pushNamed(Routes.app);
+                                  makingPhoneCall(
+                                      callingListData[index].phoneNumber);
                                 },
                                 child: Text(
                                     "${context.strings.call} ${callingListData[index].phoneNumber}")),

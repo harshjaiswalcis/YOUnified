@@ -7,6 +7,7 @@ import 'package:younified/features/authentication/view/union_enterance.dart';
 import 'package:younified/features/feed/view/feed_detail_screen.dart';
 import 'package:younified/features/home/view/document_screen.dart';
 import 'package:younified/features/home/view/executive_screen.dart';
+import 'package:younified/features/home/view/grievance_screen/grievance_topic_screen.dart';
 import 'package:younified/features/home/view/grievance_screen/grievance_screen.dart';
 import 'package:younified/features/home/view/perk_screen.dart';
 import 'package:younified/features/home/view/profile_screen.dart';
@@ -73,6 +74,8 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const ElectionStepperFirst());
       case Routes.electionStepperThird:
         return MaterialPageRoute(builder: (_) => const ElectionStepperThird());
+      case Routes.grievanceDetailScreen:
+        return MaterialPageRoute(builder: (_) => const GrievanceTopicScreen());
       case Routes.electionStepperSecond:
         return MaterialPageRoute(builder: (_) => const ElectionStepperSecond());
       case Routes.electionSummaryScreen:

@@ -4,6 +4,7 @@ class FeedProvider extends ChangeNotifier {
   // PERK LIST DATA
   static final List<Map<String, dynamic>> feedList = [
     {
+      "id": "1",
       "fullName": "John Doe",
       "postedTime": "2024-11-10T14:30:00Z",
       "feedProfileImage": "https://picsum.photos/200",
@@ -13,6 +14,7 @@ class FeedProvider extends ChangeNotifier {
       "numberOfComments": 23
     },
     {
+      "id": "2",
       "fullName": "Jane Smith",
       "postedTime": "2024-11-10T12:45:00Z",
       "feedProfileImage": "https://picsum.photos/200",
@@ -22,6 +24,7 @@ class FeedProvider extends ChangeNotifier {
       "numberOfComments": 10
     },
     {
+      "id": "3",
       "fullName": "Emily Johnson",
       "postedTime": "2024-11-09T16:20:00Z",
       "feedProfileImage": "https://picsum.photos/200",
@@ -31,6 +34,7 @@ class FeedProvider extends ChangeNotifier {
       "numberOfComments": 45
     },
     {
+      "id": "4",
       "fullName": "Chris Lee",
       "postedTime": "2024-11-09T08:00:00Z",
       "feedProfileImage": "https://picsum.photos/200",
@@ -40,6 +44,7 @@ class FeedProvider extends ChangeNotifier {
       "numberOfComments": 7
     },
     {
+      "id": "5",
       "fullName": "Alex Morgan",
       "postedTime": "2024-11-08T21:15:00Z",
       "feedProfileImage": "https://picsum.photos/200",
@@ -53,4 +58,21 @@ class FeedProvider extends ChangeNotifier {
 //MAPPING
   static final List<Feed> feedListData =
       feedList.map((mapData) => Feed.fromJson(mapData)).toList();
+
+// For Expansion
+  final Map<int, bool> _expandedStates = {};
+
+  bool isExpanded(int index) {
+    return _expandedStates[index] ?? false;
+  }
+
+  void toggleExpanded(int index) {
+    _expandedStates[index] = !(_expandedStates[index] ?? false);
+    notifyListeners();
+  }
+
+  void setExpanded(int index, bool value) {
+    _expandedStates[index] = value;
+    notifyListeners();
+  }
 }
