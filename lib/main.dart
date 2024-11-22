@@ -1,6 +1,4 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -57,7 +55,8 @@ StatelessWidget mainApp = MultiProvider(
           GlobalCupertinoLocalizations.delegate,
         ],
         builder: (context, widget) => MediaQuery(
-          data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+          data: MediaQuery.of(context)
+              .copyWith(textScaler: const TextScaler.linear(1.0)),
           child: widget!,
         ),
       );

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 
 class DocumentScreen extends StatelessWidget {
@@ -156,7 +155,11 @@ class DocumentScreen extends StatelessWidget {
                   //     ? SvgPicture.asset(doc['icon'], width: 40, height: 40)
                   //     : Image.asset(doc['icon'], width: 40, height: 40),
                   leading: SvgPicture.asset(AppIcons.jpg),
-                  title: Text("Screenshot_2365.jpg", style: context.textTheme.labelMedium!.copyWith(color: AppColors.documentListTileColor),),
+                  title: Text(
+                    "Screenshot_2365.jpg",
+                    style: context.textTheme.labelMedium!
+                        .copyWith(color: AppColors.documentListTileColor),
+                  ),
                 ),
               ),
             ),

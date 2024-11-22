@@ -5,6 +5,7 @@ class AppIcons {
   static const String jpg = 'assets/icons/jpg.svg';
   static const String pin = 'assets/icons/pin.png';
   static const String down = 'assets/icons/down.png';
+  static const String send = 'assets/icons/send.png';
   // static const String home = 'assets/icons/home.svg';
   static const String home = 'assets/icons/home.png';
   static const String bell = 'assets/icons/bell.svg';
