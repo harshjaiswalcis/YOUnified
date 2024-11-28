@@ -10,26 +10,28 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
-  // void initState() {
-  //   super.initState();
-  //   final bool isLogin = authenticationProvider.isLogged();
-  //   // checkIsActive();
-  //   Timer(const Duration(seconds: 3), () {
-  //     if (isLogin) {
-  //       checkIsActive()
-  //           .then((_) => context.pushNamedAndRemoveUntil(Routes.app));
-  //     } else {
-  //       context.pushNamedAndRemoveUntil(Routes.languageScreen);
-  //     }
-  //   });
-  // }
-  @override
   void initState() {
     super.initState();
+    final unionId = StorageServices.getString('unionId');
+    final token = StorageServices.getString('token');
+    // checkIsActive();
     Timer(const Duration(seconds: 3), () {
-      context.pushNamedAndRemoveUntil(Routes.unionEnterance);
+      if (unionId != null && token != null) {
+        context.pushNamedAndRemoveUntil(Routes.app);
+      } else if (unionId != null) {
+        context.pushNamedAndRemoveUntil(Routes.loginScreen);
+      } else {
+        context.pushNamedAndRemoveUntil(Routes.unionEnterance);
+      }
     });
   }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Timer(const Duration(seconds: 3), () {
+  //     context.pushNamedAndRemoveUntil(Routes.unionEnterance);
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

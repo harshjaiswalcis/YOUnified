@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
+  static const Color redText = Color(0xFFB00020);
   static const Color backGround = Color(0xFFF9FAFC);
   static const Color themeColor = Color(0xFF34519A);
   static const Color radioColor = Color(0xFFD9D9D9);

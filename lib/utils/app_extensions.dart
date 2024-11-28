@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 
 extension ScreenSize on double {
@@ -273,4 +274,36 @@ extension MapParsing<T> on Map<T, T> {
 
 extension FormValidation on String {
   bool? get emailValidation => RegExp(Validations.emailPattern).hasMatch(this);
+}
+
+extension DateFormattingExtensions on String {
+  String toFormattedDateAccordingToBackend() {
+    try {
+      // Parse the input date string
+      DateTime dateTime = DateTime.parse(this);
+
+      // Set the time to 18:00:00 (6:00 PM)
+      dateTime =
+          DateTime(dateTime.year, dateTime.month, dateTime.day, 18, 0, 0);
+
+      // Format the DateTime object to ISO 8601 format with 'Z' for UTC
+      return DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(dateTime.toUtc());
+    } catch (e) {
+      // Handle parsing errors gracefully
+      return "Invalid date format";
+    }
+  }
+
+  String toDateOnly() {
+    try {
+      // Parse the input date string
+      DateTime dateTime = DateTime.parse(this);
+
+      // Format the DateTime object to extract only the date part
+      return DateFormat("yyyy-MM-dd").format(dateTime);
+    } catch (e) {
+      // Handle parsing errors gracefully
+      return "Invalid date format";
+    }
+  }
 }

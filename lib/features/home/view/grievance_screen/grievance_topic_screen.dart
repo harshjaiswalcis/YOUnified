@@ -266,7 +266,7 @@ class GrievanceTopicScreen extends StatelessWidget {
 
   Widget _buildDetailItem(BuildContext context, String label, String value) {
     return SizedBox(
-      width: value.length > 22 ? 300 : 150,
+      width: value.length > 22 ? 300 : 130,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

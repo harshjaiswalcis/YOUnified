@@ -66,7 +66,16 @@ class SettingScreen extends StatelessWidget {
               children: [
                 systemItem(context: context, label: "System notifications"),
                 const Divider(thickness: 1, color: AppColors.commentBgColor),
-                systemItem(context: context, label: "Version - 1.6.17"),
+                GestureDetector(
+                    onTap: () {
+                      StorageServices.delete('token');
+                      StorageServices.delete('userId');
+                      StorageServices.delete('unionId');
+                      StorageServices.delete('imageURL');
+                      StorageServices.delete('unionName');
+                    },
+                    child: systemItem(
+                        context: context, label: "Version - 1.6.17")),
               ],
             ),
             const SizedBox(height: 60),
@@ -123,9 +132,11 @@ class SettingScreen extends StatelessWidget {
           children: [
             Image.asset(icon),
             const SizedBox(width: 20),
-            Text(
-              text,
-              style: context.textTheme.labelMedium,
+            Expanded(
+              child: Text(
+                text,
+                style: context.textTheme.labelMedium,
+              ),
             ),
           ],
         ),

@@ -3,6 +3,11 @@ import 'package:younified/utils/exports/common_exports.dart';
 class UnionEnterance extends StatelessWidget {
   const UnionEnterance({super.key});
 
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final TextEditingController unionController = TextEditingController();
+  static final TextEditingController localNumberController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,109 +40,107 @@ class UnionEnterance extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const SizedBox(height: 36),
-                Text(
-                  context.strings.findMyUnionLocal,
-                  style: context.textTheme.displayLarge,
-                ),
-                const SizedBox(height: 24),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextFormField(
-                    // controller: emailController,
-                    style: context.textTheme.titleMedium,
-                    decoration:
-                        InputDecoration(hintText: context.strings.union),
-                    // textCapitalization: TextCapitalization.none,
-                    textInputAction: TextInputAction.next,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp(' ')),
-                    ],
-                    // validator: (value) {
-                    //   if (value == null) {
-                    //     return context.strings.pleaseEnterEmail;
-                    //   } else if (!RegExp(Validations.emailPattern)
-                    //       .hasMatch(value)) {
-                    //     return context
-                    //         .strings.pleaseEnterValidEmail;
-                    //   }
-                    //   return null;
-                    // },
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 36),
+                  Text(
+                    context.strings.findMyUnionLocal,
+                    style: context.textTheme.displayLarge,
                   ),
-                ),
-                const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: TextFormField(
-                    // controller: emailController,
-                    style: context.textTheme.titleMedium,
-                    decoration:
-                        InputDecoration(hintText: context.strings.localNumber),
-                    // textCapitalization: TextCapitalization.none,
-                    textInputAction: TextInputAction.next,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.deny(RegExp(' ')),
-                    ],
-                    // validator: (value) {
-                    //   if (value == null) {
-                    //     return context.strings.pleaseEnterEmail;
-                    //   } else if (!RegExp(Validations.emailPattern)
-                    //       .hasMatch(value)) {
-                    //     return context
-                    //         .strings.pleaseEnterValidEmail;
-                    //   }
-                    //   return null;
-                    // },
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: TextFormField(
+                      controller: unionController,
+                      style: context.textTheme.titleMedium,
+                      decoration:
+                          InputDecoration(hintText: context.strings.union),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.strings.pleaseEnterUnion;
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 50.0,
-                          child: ElevatedButton(
-                              onPressed: unionProvider.isLoading
-                                  ? () => const Center(
-                                      child: CircularProgressIndicator())
-                                  : () {
-                                      context.pushNamedAndRemoveUntil(
-                                          Routes.loginScreen);
-                                      // unionProvider
-                                      //     .fetchUnionByName("downsyndrome.ca")
-                                      //     .then(
-                                      //   (value) {
-                                      //     if (value != null &&
-                                      //         value.id.isNotEmpty) {
-                                      //       log(value.id);
-                                      //       context.pushNamedAndRemoveUntil(
-                                      //           Routes.loginScreen);
-                                      //     } else {
-                                      //       context.showAppSnackBar(
-                                      //         title: "Error in login",
-                                      //         // textColor: AppColors.redText
-                                      //       );
-                                      //       // authenticationProvider.errorMessage =
-                                      //       null;
-                                      //     }
-                                      //   },
-                                      // );
-                                    },
-                              child: Text(context.strings.continueText)),
-                        ),
+                  const SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: TextFormField(
+                      controller: localNumberController,
+                      style: context.textTheme.titleMedium,
+                      decoration: InputDecoration(
+                          hintText: context.strings.localNumber),
+                      // textCapitalization: TextCapitalization.none,
+                      textInputAction: TextInputAction.next,
+                      // inputFormatters: [
+                      //   FilteringTextInputFormatter.deny(RegExp(' ')),
+                      // ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.strings.pleaseEnterLocalNumber;
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                    child: Consumer<UnionProvider>(
+                      builder: (context, state, child) => Row(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50.0,
+                              child: ElevatedButton(
+                                onPressed: state.isLoading
+                                    ? null // Disable button while loading
+                                    : () {
+                                        if (_formKey.currentState!.validate()) {
+                                          state
+                                              .fetchUnionByName(
+                                                  unionController.text)
+                                              .then(
+                                            (value) {
+                                              if (value != null &&
+                                                  value.id.isNotEmpty) {
+                                                log(value.id);
+                                                context.pushNamedAndRemoveUntil(
+                                                    Routes.loginScreen);
+                                              } else {
+                                                context.showAppSnackBar(
+                                                  title: state.errorMessage ??
+                                                      'Unknown error',
+                                                  textColor: AppColors.redText,
+                                                );
+                                                state.errorMessage = null;
+                                              }
+                                            },
+                                          );
+                                        }
+                                      },
+                                child: state.isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: AppColors.white,
+                                      )
+                                    : Text(context.strings.continueText),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 24),
-              ],
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
           ),
         ],

@@ -20,6 +20,7 @@ class _YounifiedState extends State<Younified> {
     messageProvider = context.read();
     servicesProvider = context.read();
     notificationProvider = context.read();
+    authenticationProvider = context.read();
   }
 
   @override

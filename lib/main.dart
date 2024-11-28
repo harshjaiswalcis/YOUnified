@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:younified/features/authentication/controller/authentication_provider.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await StorageServices.initSharedPreferences();
   await initHiveForFlutter();
@@ -32,6 +36,7 @@ StatelessWidget mainApp = MultiProvider(
     ChangeNotifierProvider(create: (_) => UnionProvider()),
     ChangeNotifierProvider(create: (_) => MessageProvider()),
     ChangeNotifierProvider(create: (_) => ServicesProvider()),
+    ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
     ChangeNotifierProvider(create: (context) => NotificationProvider())
   ],
   child: ValueListenableBuilder(
@@ -63,3 +68,12 @@ StatelessWidget mainApp = MultiProvider(
     },
   ),
 );
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}

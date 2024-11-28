@@ -22,6 +22,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
+        "PasswordsDoNotMatch":
+            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
         "allDone": MessageLookupByLibrary.simpleMessage("All Done!"),
         "allowCallDrops":
             MessageLookupByLibrary.simpleMessage("Allow call drops"),
@@ -88,6 +90,20 @@ class MessageLookup extends MessageLookupByLibrary {
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "perks": MessageLookupByLibrary.simpleMessage("Perks"),
         "personalEmail": MessageLookupByLibrary.simpleMessage("Personal Email"),
+        "pleaseEnterConfirmPassword": MessageLookupByLibrary.simpleMessage(
+            "Please enter confirm password"),
+        "pleaseEnterEmail":
+            MessageLookupByLibrary.simpleMessage("Please enter email"),
+        "pleaseEnterFirstName":
+            MessageLookupByLibrary.simpleMessage("Please enter first name"),
+        "pleaseEnterLastName":
+            MessageLookupByLibrary.simpleMessage("Please enter last name"),
+        "pleaseEnterLocalNumber":
+            MessageLookupByLibrary.simpleMessage("Please enter local number"),
+        "pleaseEnterPassword":
+            MessageLookupByLibrary.simpleMessage("Please enter password"),
+        "pleaseEnterUnion":
+            MessageLookupByLibrary.simpleMessage("Please enter Union"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
         "qr": MessageLookupByLibrary.simpleMessage("QR"),
         "readall": MessageLookupByLibrary.simpleMessage("Read all"),

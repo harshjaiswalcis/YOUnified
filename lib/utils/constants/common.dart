@@ -7,3 +7,4 @@ late UnionProvider unionProvider;
 late MessageProvider messageProvider;
 late ServicesProvider servicesProvider;
 late NotificationProvider notificationProvider;
+late AuthenticationProvider authenticationProvider;

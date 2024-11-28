@@ -720,11 +720,11 @@ class S {
     );
   }
 
-  /// `Find My Union Local`
-  String get findMyUnionLocal {
+  /// `Please enter Union`
+  String get pleaseEnterUnion {
     return Intl.message(
-      'Find My Union Local',
-      name: 'findMyUnionLocal',
+      'Please enter Union',
+      name: 'pleaseEnterUnion',
       desc: '',
       args: [],
     );
@@ -735,6 +735,26 @@ class S {
     return Intl.message(
       'Your receipt ID is:',
       name: 'yourReceiptIDIs',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter email`
+  String get pleaseEnterEmail {
+    return Intl.message(
+      'Please enter email',
+      name: 'pleaseEnterEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Find My Union Local`
+  String get findMyUnionLocal {
+    return Intl.message(
+      'Find My Union Local',
+      name: 'findMyUnionLocal',
       desc: '',
       args: [],
     );
@@ -780,11 +800,51 @@ class S {
     );
   }
 
+  /// `Please enter password`
+  String get pleaseEnterPassword {
+    return Intl.message(
+      'Please enter password',
+      name: 'pleaseEnterPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter last name`
+  String get pleaseEnterLastName {
+    return Intl.message(
+      'Please enter last name',
+      name: 'pleaseEnterLastName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get PasswordsDoNotMatch {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'PasswordsDoNotMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Request password reset`
   String get requestpasswordreset {
     return Intl.message(
       'Request password reset',
       name: 'requestpasswordreset',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter first name`
+  String get pleaseEnterFirstName {
+    return Intl.message(
+      'Please enter first name',
+      name: 'pleaseEnterFirstName',
       desc: '',
       args: [],
     );
@@ -800,11 +860,31 @@ class S {
     );
   }
 
+  /// `Please enter local number`
+  String get pleaseEnterLocalNumber {
+    return Intl.message(
+      'Please enter local number',
+      name: 'pleaseEnterLocalNumber',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Allow registration emails`
   String get allowRegistrationEmails {
     return Intl.message(
       'Allow registration emails',
       name: 'allowRegistrationEmails',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter confirm password`
+  String get pleaseEnterConfirmPassword {
+    return Intl.message(
+      'Please enter confirm password',
+      name: 'pleaseEnterConfirmPassword',
       desc: '',
       args: [],
     );

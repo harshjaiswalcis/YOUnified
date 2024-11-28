@@ -1,44 +1,16 @@
 class UnionModel {
   final String id;
-  final String name;
   final int status;
-  final String? bargainingUnits;
-  final String bannerURL;
-  final String callDropNumber;
-  final String domain;
-  final String? bannedDomains;
-  final String theme;
-  final String twitter;
-  final String? twitterLinks;
-  final String facebook;
-  final String? facebookLinks;
-  final String instagram;
-  final String? instagramLinks;
-  final String themeImage;
-  final String zoomID;
-  final String? hostEmail;
-  final String defaultEmailPassword;
+  final String name;
+  final String unionID;
+  final UnionInformation? information;
 
   UnionModel({
     required this.id,
     required this.name,
     required this.status,
-    this.bargainingUnits,
-    required this.bannerURL,
-    required this.callDropNumber,
-    required this.domain,
-    this.bannedDomains,
-    required this.theme,
-    required this.twitter,
-    this.twitterLinks,
-    required this.facebook,
-    this.facebookLinks,
-    required this.instagram,
-    this.instagramLinks,
-    required this.themeImage,
-    required this.zoomID,
-    this.hostEmail,
-    required this.defaultEmailPassword,
+    required this.unionID,
+    required this.information,
   });
 
   // Factory method to create UnionModel from JSON
@@ -47,22 +19,10 @@ class UnionModel {
       id: json['id'],
       name: json['name'],
       status: json['status'],
-      bargainingUnits: json['bargainingUnits'],
-      bannerURL: json['bannerURL'],
-      callDropNumber: json['callDropNumber'],
-      domain: json['domain'],
-      bannedDomains: json['bannedDomains'],
-      theme: json['theme'],
-      twitter: json['twitter'],
-      twitterLinks: json['twitterLinks'],
-      facebook: json['facebook'],
-      facebookLinks: json['facebookLinks'],
-      instagram: json['instagram'],
-      instagramLinks: json['instagramLinks'],
-      themeImage: json['themeImage'],
-      zoomID: json['zoomID'],
-      hostEmail: json['hostEmail'],
-      defaultEmailPassword: json['defaultEmailPassword'],
+      unionID: json['unionID'],
+      information: json['information'] != null
+          ? UnionInformation.fromJson(json['information'])
+          : null,
     );
   }
 
@@ -72,22 +32,26 @@ class UnionModel {
       'id': id,
       'name': name,
       'status': status,
-      'bargainingUnits': bargainingUnits,
-      'bannerURL': bannerURL,
-      'callDropNumber': callDropNumber,
-      'domain': domain,
-      'bannedDomains': bannedDomains,
-      'theme': theme,
-      'twitter': twitter,
-      'twitterLinks': twitterLinks,
-      'facebook': facebook,
-      'facebookLinks': facebookLinks,
-      'instagram': instagram,
-      'instagramLinks': instagramLinks,
-      'themeImage': themeImage,
-      'zoomID': zoomID,
-      'hostEmail': hostEmail,
-      'defaultEmailPassword': defaultEmailPassword,
+      'unionID': unionID,
+      'information': information?.toJson(),
+    };
+  }
+}
+
+class UnionInformation {
+  final String? imageURL;
+
+  UnionInformation({this.imageURL});
+
+  factory UnionInformation.fromJson(Map<String, dynamic> json) {
+    return UnionInformation(
+      imageURL: json['imageURL'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'imageURL': imageURL,
     };
   }
 }

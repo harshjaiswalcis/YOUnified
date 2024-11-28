@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 
