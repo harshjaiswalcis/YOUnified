@@ -43,5 +43,6 @@ export 'package:younified/features/authentication/model/union_model.dart';
 export 'package:younified/features/services/controller/services_provider.dart';
 export 'package:younified/features/authentication/controller/union_provider.dart';
 export 'package:younified/features/app_bar_screens/controller/message_provider.dart';
+export 'package:younified/utils/graphql_utils/graphql_queries/home_modules_queries.dart';
 export 'package:younified/features/app_bar_screens/controller/notification_provider.dart';
 export 'package:younified/features/authentication/controller/authentication_provider.dart';
