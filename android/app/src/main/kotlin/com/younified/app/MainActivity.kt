@@ -1,4 +1,4 @@
-package com.example.younified
+package com.younified.app
 
 import io.flutter.embedding.android.FlutterActivity
 

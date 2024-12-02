@@ -63,11 +63,11 @@ class FeedProvider extends ChangeNotifier {
   final Map<int, bool> _expandedStates = {};
 
   bool isExpanded(int index) {
-    return _expandedStates[index] ?? false;
+    return _expandedStates[index] ?? true;
   }
 
   void toggleExpanded(int index) {
-    _expandedStates[index] = !(_expandedStates[index] ?? false);
+    _expandedStates[index] = !(_expandedStates[index] ?? true);
     notifyListeners();
   }
 
