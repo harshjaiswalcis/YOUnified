@@ -1,4 +1,6 @@
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:younified/utils/exports/common_exports.dart';
+import 'package:younified/utils/graphql_utils/graphql_queries/feed_queries.dart';
 
 class FeedProvider extends ChangeNotifier {
   // PERK LIST DATA
@@ -56,8 +58,8 @@ class FeedProvider extends ChangeNotifier {
   ];
 
 //MAPPING
-  static final List<Feed> feedListData =
-      feedList.map((mapData) => Feed.fromJson(mapData)).toList();
+  // static final List<Feed> feedListData =
+  //     feedList.map((mapData) => Feed.fromJson(mapData)).toList();
 
 // For Expansion
   final Map<int, bool> _expandedStates = {};
@@ -74,5 +76,61 @@ class FeedProvider extends ChangeNotifier {
   void setExpanded(int index, bool value) {
     _expandedStates[index] = value;
     notifyListeners();
+  }
+
+  //FETCH FEEDS DATA
+  bool isLoading = false;
+  String? errorMessage;
+  void notify() => notifyListeners();
+  ValueNotifier<List<Post>> newsFeedListElement = ValueNotifier([]);
+  int totalPage = 0;
+  int currentPage = 0;
+
+  Future<NewsFeed?> fetchFeeds(int pageNumber) async {
+    isLoading = true;
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(FeedQueries.feeds),
+          variables: {
+            'unionId': StorageServices.getString('unionId'),
+            'page': pageNumber,
+            'limit': 4,
+          },
+        ),
+      );
+      if (result.hasException) {
+        List<String> errorMessages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception);
+        errorMessage = errorMessages.isNotEmpty
+            ? errorMessages.first
+            : "Unknown error occurred.";
+        log(errorMessage!);
+        return null;
+      }
+
+      if (result.data != null) {
+        final newsFeed = NewsFeed.fromJson(result.data!);
+        totalPage = newsFeed.total;
+        currentPage = pageNumber;
+
+        if (newsFeed.data != null) {
+          newsFeedListElement.value = [
+            ...newsFeedListElement.value,
+            ...newsFeed.data!
+          ];
+        }
+
+        return newsFeed;
+      }
+
+      return null;
+    } catch (e) {
+      errorMessage = e.toString();
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

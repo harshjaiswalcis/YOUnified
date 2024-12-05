@@ -40,6 +40,7 @@ export 'package:younified/features/services/view/services_screen.dart';
 export 'package:younified/utils/widgets/app_bottom_navigation_bar.dart';
 export 'package:younified/features/home/controller/home_controller.dart';
 export 'package:younified/features/authentication/model/union_model.dart';
+export 'package:younified/utils/graphql_utils/graphql_error_handler.dart';
 export 'package:younified/features/services/controller/services_provider.dart';
 export 'package:younified/features/authentication/controller/union_provider.dart';
 export 'package:younified/features/app_bar_screens/controller/message_provider.dart';

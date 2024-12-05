@@ -101,7 +101,7 @@ class Display {
 }
 
 class MemberData {
-  final Profile profile;
+  final ExecutiveProfile profile;
   final String firstName;
   final String lastName;
   final String unionPosition;
@@ -115,7 +115,7 @@ class MemberData {
 
   factory MemberData.fromJson(Map<String, dynamic> json) {
     return MemberData(
-      profile: Profile.fromJson(json['profile']),
+      profile: ExecutiveProfile.fromJson(json['profile']),
       firstName: json['firstName'],
       lastName: json['lastName'],
       unionPosition: json['unionPosition'],
@@ -132,21 +132,21 @@ class MemberData {
   }
 }
 
-class Profile {
+class ExecutiveProfile {
   final String email;
   final String phone;
   final String mobile;
   final String imageURL;
 
-  Profile({
+  ExecutiveProfile({
     required this.email,
     required this.phone,
     required this.mobile,
     required this.imageURL,
   });
 
-  factory Profile.fromJson(Map<String, dynamic> json) {
-    return Profile(
+  factory ExecutiveProfile.fromJson(Map<String, dynamic> json) {
+    return ExecutiveProfile(
       email: json['email'],
       phone: json['phone'],
       mobile: json['mobile'],

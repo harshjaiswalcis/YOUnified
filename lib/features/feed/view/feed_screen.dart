@@ -1,28 +1,82 @@
 import 'package:younified/utils/exports/common_exports.dart';
 
-class FeedScreen extends StatelessWidget {
+class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
 
   @override
+  State<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
+  int pageNumber = 2;
+  final ScrollController _scrollController = ScrollController();
+  bool _infiniteScrollLoader = false;
+
+  set _setInfiniteScrollLoader(bool scrollLoaderValue) {
+    _infiniteScrollLoader = scrollLoaderValue;
+    feedProvider.notify();
+  }
+
+  void _onScroll() async {
+    log("Scroll triggered");
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    log("maxScroll: $maxScroll, currentScroll: $currentScroll");
+    if (currentScroll == maxScroll &&
+        feedProvider.currentPage < feedProvider.totalPage) {
+      log("Loading more data");
+      _setInfiniteScrollLoader = true;
+      await feedProvider.fetchFeeds(pageNumber);
+      setState(() {
+        pageNumber += 1; // Fixed increment
+      });
+      _setInfiniteScrollLoader = false;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    feedProvider.fetchFeeds(1);
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Feed> feedListData = FeedProvider.feedListData;
+    // List<Feed> feedListData = FeedProvider.feedListData;
     return Scaffold(
       backgroundColor: AppColors.cardBgColor,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: ListView.builder(
-            itemCount: feedListData.length,
-            shrinkWrap: true, // Allows ListView inside SingleChildScrollView
-            physics:
-                const NeverScrollableScrollPhysics(), // Prevents ListView from scrolling independently
-            itemBuilder: (context, index) {
-              return PostSection(
-                feed: feedListData[index],
-                index: index,
-              );
-            },
-          ),
+      body: SafeArea(
+        child: ValueListenableBuilder(
+          valueListenable: feedProvider.newsFeedListElement,
+          builder: (context, snapshot, child) => feedProvider
+                  .newsFeedListElement.value.isEmpty
+              ? const Center(child: Text("Please go back, No Data is found"))
+              : SizedBox(
+                  height: 0.8.getScreenHeight,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          controller: _scrollController,
+                          itemCount: snapshot.length,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return PostSection(
+                              feed: snapshot[index],
+                              index: index,
+                            );
+                          },
+                        ),
+                      ),
+                      if (_infiniteScrollLoader)
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 40, top: 20),
+                          child: AppLoader(),
+                        ),
+                    ],
+                  ),
+                ),
         ),
       ),
     );
@@ -30,7 +84,7 @@ class FeedScreen extends StatelessWidget {
 }
 
 class PostSection extends StatelessWidget {
-  final Feed feed;
+  final Post feed;
   final int index;
 
   const PostSection({super.key, required this.feed, required this.index});
@@ -74,20 +128,23 @@ class PostSection extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage:
-                                NetworkImage(feed.feedProfileImage),
+                            backgroundImage: feed
+                                        .creator.profile.imageURL.isNotEmpty &&
+                                    feed.creator.profile.imageURL != ""
+                                ? NetworkImage(feed.creator.profile.imageURL)
+                                : const AssetImage(AppIcons.profile),
                           ),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                feed.fullName,
+                                '${feed.creator.firstName} ${feed.creator.lastName}',
                                 style: context.textTheme.labelMedium!
                                     .copyWith(fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                'posted ${_timeAgo(feed.postedTime)}',
+                                'posted ${_timeAgo(feed.createdOn)}',
                                 style: context.textTheme.labelLarge!.copyWith(
                                     height: 0, fontWeight: FontWeight.w200),
                               ),
@@ -98,7 +155,7 @@ class PostSection extends StatelessWidget {
                       const SizedBox(height: 10),
                       if (!feedProvider.isExpanded(index))
                         Text(
-                          feed.postDetails,
+                          feed.content,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: context.textTheme.labelMedium,
@@ -135,35 +192,37 @@ class PostSection extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: Text(
-                        feed.postDetails,
+                        feed.content,
                         style: context.textTheme.labelMedium,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                      child: CachedNetworkImage(
-                        imageUrl: feed.postImages,
-                        placeholder: (context, url) => const SizedBox(
-                            height: 244,
-                            width: double.infinity,
-                            child: Center(child: CircularProgressIndicator())),
-                        errorWidget: (context, url, error) => const SizedBox(
-                            height: 244,
-                            width: double.infinity,
-                            child: Center(child: Icon(Icons.error))),
-                        imageBuilder: (context, imageProvider) => ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            feed.postImages,
-                            scale: 1,
-                            height: 244,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                    ),
+                    if (feed.images != null && feed.images!.isNotEmpty)
+                      Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                          child: CachedNetworkImage(
+                            imageUrl: feed.images!.first,
+                            placeholder: (context, url) => const SizedBox(
+                                height: 244,
+                                width: double.infinity,
+                                child:
+                                    Center(child: CircularProgressIndicator())),
+                            errorWidget: (context, url, error) =>
+                                const SizedBox(
+                                    height: 244,
+                                    width: double.infinity,
+                                    child: Center(child: Icon(Icons.error))),
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                feed.images!.first,
+                                scale: 1,
+                                height: 244,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 22.0),
@@ -172,14 +231,16 @@ class PostSection extends StatelessWidget {
                           SvgPicture.asset(AppIcons.heart),
                           const SizedBox(width: 5),
                           Text(
-                            feed.numberOfLikes.toString(),
+                            feed.likes.length.toString(),
                             style: context.textTheme.labelMedium,
                           ),
                           const SizedBox(width: 20),
                           SvgPicture.asset(AppIcons.comment),
                           const SizedBox(width: 5),
                           Text(
-                            feed.numberOfComments.toString(),
+                            feed.comments != null && feed.comments!.isNotEmpty
+                                ? feed.comments!.length.toString()
+                                : '0',
                             style: context.textTheme.labelMedium,
                           ),
                         ],

@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:younified/features/home/model/executive_model.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:younified/utils/graphql_utils/graphql_error_handler.dart';
 
