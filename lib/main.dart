@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:younified/features/authentication/controller/authentication_provider.dart';
+import 'package:younified/features/setting/controller/setting_controller.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -21,12 +22,19 @@ void main() async {
 //             ? StorageServices.getString("langId").toString()
 //             : "1"
 //         : "1");
-final ValueNotifier<String> currentLanguage =
-    ValueNotifier(StorageServices.contains("lang")
-        ? StorageServices.getString("lang").toString().isNotEmpty
-            ? StorageServices.getString("lang").toString()
-            : "en"
-        : "en");
+// final ValueNotifier<String> currentLanguage =
+//     ValueNotifier(StorageServices.contains("lang")
+//         ? StorageServices.getString("lang").toString().isNotEmpty
+//             ? StorageServices.getString("lang").toString()
+//             : "en"
+//         : "en");
+final ValueNotifier<String> currentLanguage = ValueNotifier(
+  StorageServices.contains("lang")
+      ? StorageServices.getString("lang").toString().isNotEmpty
+          ? StorageServices.getString("lang").toString()
+          : "en"
+      : "en",
+);
 
 StatelessWidget mainApp = MultiProvider(
   providers: [
@@ -36,6 +44,7 @@ StatelessWidget mainApp = MultiProvider(
     ChangeNotifierProvider(create: (_) => UnionProvider()),
     ChangeNotifierProvider(create: (_) => MessageProvider()),
     ChangeNotifierProvider(create: (_) => ServicesProvider()),
+    ChangeNotifierProvider(create: (_) => SettingController()),
     ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
     ChangeNotifierProvider(create: (context) => NotificationProvider())
   ],

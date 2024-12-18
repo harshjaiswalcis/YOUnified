@@ -7,7 +7,9 @@ class Younified extends StatefulWidget {
   State<Younified> createState() => _YounifiedState();
 }
 
-class _YounifiedState extends State<Younified> {
+class _YounifiedState extends State<Younified> with TickerProviderStateMixin {
+  late TabController _tabController;
+
   @override
   void initState() {
     super.initState();
@@ -19,8 +21,25 @@ class _YounifiedState extends State<Younified> {
     unionProvider = context.read();
     messageProvider = context.read();
     servicesProvider = context.read();
+    settingController = context.read();
     notificationProvider = context.read();
     authenticationProvider = context.read();
+
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    if (_tabController.index == 1) {
+      // Index 1 is FeedScreen
+      Provider.of<FeedProvider>(context, listen: false).resetAndRefetchFeeds();
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override

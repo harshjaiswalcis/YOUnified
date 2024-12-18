@@ -330,6 +330,16 @@ class S {
     );
   }
 
+  /// `Version`
+  String get Version {
+    return Intl.message(
+      'Version',
+      name: 'Version',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Read all`
   String get readall {
     return Intl.message(
@@ -405,6 +415,16 @@ class S {
     return Intl.message(
       'All Done!',
       name: 'allDone',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Language`
+  String get language {
+    return Intl.message(
+      'Language',
+      name: 'language',
       desc: '',
       args: [],
     );
@@ -590,6 +610,16 @@ class S {
     );
   }
 
+  /// `Accessibility`
+  String get accessibility {
+    return Intl.message(
+      'Accessibility',
+      name: 'accessibility',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Notifications`
   String get notifications {
     return Intl.message(
@@ -675,6 +705,16 @@ class S {
     return Intl.message(
       'Repeat password',
       name: 'repeatpassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System settings`
+  String get systemSettings {
+    return Intl.message(
+      'System settings',
+      name: 'systemSettings',
       desc: '',
       args: [],
     );
@@ -785,6 +825,16 @@ class S {
     return Intl.message(
       'Union Notifications',
       name: 'unionNotifications',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System notifications`
+  String get systemNotifications {
+    return Intl.message(
+      'System notifications',
+      name: 'systemNotifications',
       desc: '',
       args: [],
     );
@@ -917,6 +967,7 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   List<Locale> get supportedLocales {
     return const <Locale>[
       Locale.fromSubtags(languageCode: 'en'),
+      Locale.fromSubtags(languageCode: 'fr'),
     ];
   }
 

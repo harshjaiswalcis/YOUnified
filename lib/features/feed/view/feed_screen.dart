@@ -34,49 +34,61 @@ class _FeedScreenState extends State<FeedScreen> {
     }
   }
 
+  // bool get wantKeepAlive => false;
+
   @override
   void initState() {
     super.initState();
     feedProvider.fetchFeeds(1);
+
+    log(feedProvider.newsFeedListElement.value.length.toString());
     _scrollController.addListener(_onScroll);
   }
 
   @override
   Widget build(BuildContext context) {
+    log(feedProvider.newsFeedListElement.value.length.toString());
     // List<Feed> feedListData = FeedProvider.feedListData;
     return Scaffold(
       backgroundColor: AppColors.cardBgColor,
-      body: SafeArea(
-        child: ValueListenableBuilder(
-          valueListenable: feedProvider.newsFeedListElement,
-          builder: (context, snapshot, child) => feedProvider
-                  .newsFeedListElement.value.isEmpty
-              ? const Center(child: Text("Please go back, No Data is found"))
-              : SizedBox(
-                  height: 0.8.getScreenHeight,
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView.builder(
-                          controller: _scrollController,
-                          itemCount: snapshot.length,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return PostSection(
-                              feed: snapshot[index],
-                              index: index,
-                            );
-                          },
+      body: WillPopScope(
+        onWillPop: () async {
+          log(feedProvider.newsFeedListElement.value.length.toString());
+          feedProvider.newsFeedListElement.value = [];
+          return true;
+        },
+        child: SafeArea(
+          child: ValueListenableBuilder(
+            valueListenable: feedProvider.newsFeedListElement,
+            builder: (context, snapshot, child) => feedProvider
+                    .newsFeedListElement.value.isEmpty
+                ? const Center(child: Text("Please go back, No Data is found"))
+                : SizedBox(
+                    height: 0.8.getScreenHeight,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: snapshot.length,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return PostSection(
+                                feed: snapshot[index],
+                                index: index,
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      if (_infiniteScrollLoader)
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 40, top: 20),
-                          child: AppLoader(),
-                        ),
-                    ],
+                        if (_infiniteScrollLoader)
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 40, top: 20),
+                            child: AppLoader(),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
+          ),
         ),
       ),
     );
@@ -105,8 +117,11 @@ class PostSection extends StatelessWidget {
           ],
           color: AppColors.white,
         ),
-        child: Consumer<FeedProvider>(
-          builder: (context, feedProvider, child) => ExpansionTile(
+        child: Consumer<FeedProvider>(builder: (context, feedProvider, child) {
+          bool isUserLiked =
+              feed.likes.contains(StorageServices.getString('userId'));
+          final isLoading = feedProvider.isLoadingPost(feed.id);
+          return ExpansionTile(
             initiallyExpanded: feedProvider.isExpanded(index),
             tilePadding: const EdgeInsets.only(left: 16),
 
@@ -120,7 +135,7 @@ class PostSection extends StatelessWidget {
             title: Stack(
               children: [
                 InkWell(
-                  onTap: () => context.pushNamed(Routes.feedDetailScreen),
+                  // onTap: () => context.pushNamed(Routes.feedDetailScreen),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -132,7 +147,7 @@ class PostSection extends StatelessWidget {
                                         .creator.profile.imageURL.isNotEmpty &&
                                     feed.creator.profile.imageURL != ""
                                 ? NetworkImage(feed.creator.profile.imageURL)
-                                : const AssetImage(AppIcons.profile),
+                                : const AssetImage(AppIcons.home),
                           ),
                           const SizedBox(width: 10),
                           Column(
@@ -228,21 +243,33 @@ class PostSection extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 22.0),
                       child: Row(
                         children: [
-                          SvgPicture.asset(AppIcons.heart),
-                          const SizedBox(width: 5),
-                          Text(
-                            feed.likes.length.toString(),
-                            style: context.textTheme.labelMedium,
+                          GestureDetector(
+                            onTap: isLoading
+                                ? null // Disable tap while loading
+                                : () => feedProvider.fetchLikes(feed.id),
+                            child: Opacity(
+                              opacity: isLoading ? 0.5 : 1.0, // Visual feedback
+                              child: SvgPicture.asset(
+                                isUserLiked ? AppIcons.liked : AppIcons.heart,
+                              ),
+                            ),
                           ),
+                          const SizedBox(width: 5),
+                          if (feed.showLikes)
+                            Text(
+                              feed.likes.length.toString(),
+                              style: context.textTheme.labelMedium,
+                            ),
                           const SizedBox(width: 20),
                           SvgPicture.asset(AppIcons.comment),
                           const SizedBox(width: 5),
-                          Text(
-                            feed.comments != null && feed.comments!.isNotEmpty
-                                ? feed.comments!.length.toString()
-                                : '0',
-                            style: context.textTheme.labelMedium,
-                          ),
+                          if (feed.showComments)
+                            Text(
+                              feed.comments != null && feed.comments!.isNotEmpty
+                                  ? feed.comments!.length.toString()
+                                  : '0',
+                              style: context.textTheme.labelMedium,
+                            ),
                         ],
                       ),
                     ),
@@ -251,8 +278,8 @@ class PostSection extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
+          );
+        }),
       ),
     );
   }

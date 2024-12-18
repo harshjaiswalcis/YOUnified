@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "PasswordsDoNotMatch":
             MessageLookupByLibrary.simpleMessage("Passwords do not match"),
+        "Version": MessageLookupByLibrary.simpleMessage("Version"),
+        "accessibility": MessageLookupByLibrary.simpleMessage("Accessibility"),
         "allDone": MessageLookupByLibrary.simpleMessage("All Done!"),
         "allowCallDrops":
             MessageLookupByLibrary.simpleMessage("Allow call drops"),
@@ -73,6 +75,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "ifyoudonthaveanaccountyoucansignup":
             MessageLookupByLibrary.simpleMessage(
                 "If you don’t have an account you can sign up "),
+        "language": MessageLookupByLibrary.simpleMessage("Language"),
         "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
         "lastUpdatedOn":
             MessageLookupByLibrary.simpleMessage("Last updated on:"),
@@ -127,6 +130,10 @@ class MessageLookup extends MessageLookupByLibrary {
         "startsOn": MessageLookupByLibrary.simpleMessage("Starts on:"),
         "status": MessageLookupByLibrary.simpleMessage("Status"),
         "submittedOn": MessageLookupByLibrary.simpleMessage("Submitted on:"),
+        "systemNotifications":
+            MessageLookupByLibrary.simpleMessage("System notifications"),
+        "systemSettings":
+            MessageLookupByLibrary.simpleMessage("System settings"),
         "union": MessageLookupByLibrary.simpleMessage("Union"),
         "unionNotifications":
             MessageLookupByLibrary.simpleMessage("Union Notifications"),

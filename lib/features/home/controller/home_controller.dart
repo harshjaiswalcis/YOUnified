@@ -1,7 +1,8 @@
+import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:younified/features/home/model/executive_model.dart';
+import 'package:younified/features/home/model/login_with_token.dart';
 import 'package:younified/utils/exports/common_exports.dart';
-import 'package:younified/utils/graphql_utils/graphql_error_handler.dart';
+import 'package:younified/utils/graphql_utils/graphql_mutations/home_mutations.dart';
 
 class HomeProvider extends ChangeNotifier {
   // HOME LIST DATA
@@ -140,6 +141,7 @@ class HomeProvider extends ChangeNotifier {
   // UnionModel? unionData;
   bool isLoading = false;
   String? errorMessage;
+  UserData? userData;
 
   Future<ExecutiveData?> fetchExecutive() async {
     isLoading = true;
@@ -180,6 +182,165 @@ class HomeProvider extends ChangeNotifier {
       notifyListeners();
     }
     notifyListeners();
+    return null;
+  }
+
+  Future<UserData?> fetchProfile() async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(HomeModulesQueries.profile),
+          variables: {
+            'token': StorageServices.getString('token'),
+            'device': 'mobile',
+          },
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      );
+
+      if (result.hasException) {
+        List<String> errorMessages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception);
+        errorMessage = errorMessages.isNotEmpty
+            ? errorMessages.first
+            : "Unknown error occurred.";
+        log(errorMessage!);
+        isLoading = false;
+        notifyListeners();
+        return null;
+      }
+
+      if (result.data != null) {
+        log(result.data.toString());
+        final data =
+            GenericResponse.fromJson(result.data!['loginWithToken'], 'user');
+        userData = data.user;
+        log(userData!.firstName.toString());
+        isLoading = false;
+        notifyListeners();
+        return userData;
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      log(errorMessage!);
+      isLoading = false;
+      notifyListeners();
+    }
+
+    return null;
+  }
+
+  Future<UserData?> updateUser(
+    String firstname,
+    String lastname,
+    String username,
+    String status,
+    String unit,
+    String employmentStatus,
+    String unionPosition,
+  ) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(HomeMutations.updateUser),
+          variables: {
+            "unionId": StorageServices.getString('unionId'),
+            "modifyUserId": StorageServices.getString('userId'),
+            "input": {
+              "firstName": firstname,
+              "lastName": lastname,
+              "username": username,
+              "status": status,
+              "unit": unit,
+              "employmentStatus": employmentStatus,
+              "unionPosition": unionPosition,
+            },
+          },
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      );
+
+      if (result.hasException) {
+        List<String> errorMessages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception);
+        errorMessage = errorMessages.isNotEmpty
+            ? errorMessages.first
+            : "Unknown error occurred.";
+        log(errorMessage!);
+        isLoading = false;
+        notifyListeners();
+        return null;
+      }
+
+      if (result.data != null) {
+        log(result.data.toString());
+        final data = UserData.fromJson(result.data!['modifyUser']);
+        userData = data;
+        log(userData!.firstName.toString());
+        isLoading = false;
+        notifyListeners();
+        return userData;
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      log(errorMessage!);
+      isLoading = false;
+      notifyListeners();
+    }
+
+    return null;
+  }
+
+  Future<String?> uploadProfile(
+    File image,
+  ) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(HomeMutations.uploadProfile),
+          variables: {
+            "unionId": StorageServices.getString('unionId'),
+            "userId": StorageServices.getString('userId'),
+            "file": image,
+          },
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      );
+
+      if (result.hasException) {
+        List<String> errorMessages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception);
+        errorMessage = errorMessages.isNotEmpty
+            ? errorMessages.first
+            : "Unknown error occurred.";
+        log(errorMessage!);
+        isLoading = false;
+        notifyListeners();
+        return null;
+      }
+
+      if (result.data != null) {
+        log(result.data.toString());
+        isLoading = false;
+        notifyListeners();
+        return "Profile Picture upload successfully";
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      log(errorMessage!);
+      isLoading = false;
+      notifyListeners();
+    }
+
     return null;
   }
 }

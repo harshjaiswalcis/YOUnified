@@ -32,4 +32,12 @@ class FeedQueries {
       }
     }
   ''';
+
+  static const String likes = '''
+     mutation LikeNewsItem(\$unionId: UnifiedID!, \$newsId: UnifiedID!, \$userId: UnifiedID!) {
+        likeNewsItem(unionID: \$unionId, newsID: \$newsId, userID: \$userId) {
+          likes
+        }
+      }
+  ''';
 }

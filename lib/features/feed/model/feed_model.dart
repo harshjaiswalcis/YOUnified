@@ -1,94 +1,40 @@
-// class Feed {
-//   final String id;
-//   final String fullName;
-//   final DateTime postedTime;
-//   final String feedProfileImage;
-//   final String postDetails;
-//   final String postImages;
-//   final int numberOfLikes;
-//   final int numberOfComments;
+// class NewsFeedResponse {
+//   final NewsFeedResponseData data;
 
-//   Feed({
-//     required this.id,
-//     required this.fullName,
-//     required this.postedTime,
-//     required this.feedProfileImage,
-//     required this.postDetails,
-//     required this.postImages,
-//     required this.numberOfLikes,
-//     required this.numberOfComments,
-//   });
+//   NewsFeedResponse({required this.data});
 
-//   // Factory constructor to create a Feed instance from JSON
-//   factory Feed.fromJson(Map<String, dynamic> json) {
-//     return Feed(
-//       id: json['id'],
-//       fullName: json['fullName'],
-//       postedTime: DateTime.parse(json['postedTime']),
-//       feedProfileImage: json['feedProfileImage'],
-//       postDetails: json['postDetails'],
-//       postImages: json['postImages'],
-//       numberOfLikes: json['numberOfLikes'],
-//       numberOfComments: json['numberOfComments'],
+//   factory NewsFeedResponse.fromJson(Map<String, dynamic> json) {
+//     return NewsFeedResponse(
+//       data: NewsFeedResponseData.fromJson(json['data']),
 //     );
 //   }
 
-//   // Method to convert a Feed instance back to JSON
 //   Map<String, dynamic> toJson() {
 //     return {
-//       'id': id,
-//       'fullName': fullName,
-//       'postedTime': postedTime.toIso8601String(),
-//       'feedProfileImage': feedProfileImage,
-//       'postDetails': postDetails,
-//       'postImages': postImages,
-//       'numberOfLikes': numberOfLikes,
-//       'numberOfComments': numberOfComments,
+//       'data': data.toJson(),
 //     };
 //   }
 // }
 
-// // Helper function to parse a List of Feeds from JSON
-// List<Feed> parseFeeds(List<dynamic> jsonList) {
-//   return jsonList.map((json) => Feed.fromJson(json)).toList();
+// class NewsFeedResponseData {
+//   final NewsFeed newsFeed;
+
+//   NewsFeedResponseData({required this.newsFeed});
+
+//   factory NewsFeedResponseData.fromJson(Map<String, dynamic> json) {
+//     return NewsFeedResponseData(
+//       newsFeed: NewsFeed.fromJson(json['newsFeed']),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'newsFeed': newsFeed.toJson(),
+//     };
+//   }
 // }
 
-class NewsFeedResponse {
-  final NewsFeedResponseData data;
-
-  NewsFeedResponse({required this.data});
-
-  factory NewsFeedResponse.fromJson(Map<String, dynamic> json) {
-    return NewsFeedResponse(
-      data: NewsFeedResponseData.fromJson(json['data']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data.toJson(),
-    };
-  }
-}
-
-class NewsFeedResponseData {
-  final NewsFeed newsFeed;
-
-  NewsFeedResponseData({required this.newsFeed});
-
-  factory NewsFeedResponseData.fromJson(Map<String, dynamic> json) {
-    return NewsFeedResponseData(
-      newsFeed: NewsFeed.fromJson(json['newsFeed']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'newsFeed': newsFeed.toJson(),
-    };
-  }
-}
-
+// // NewsFeed model
 // class NewsFeed {
 //   final List<Post>? data;
 //   final int total;
@@ -96,12 +42,14 @@ class NewsFeedResponseData {
 //   NewsFeed({this.data, required this.total});
 
 //   factory NewsFeed.fromJson(Map<String, dynamic> json) {
-//     var list = json['data'] as List;
+//     // The data is nested inside newsFeed.data
+//     var newsFeedData = json['newsFeed'];
+//     var list = newsFeedData['data'] as List;
 //     List<Post> postsList = list.map((i) => Post.fromJson(i)).toList();
 
 //     return NewsFeed(
 //       data: postsList,
-//       total: json['total'],
+//       total: newsFeedData['total'],
 //     );
 //   }
 
@@ -113,27 +61,28 @@ class NewsFeedResponseData {
 //   }
 // }
 
+// // Post model
 // class Post {
 //   final String id;
 //   final List<String>? images;
 //   final String content;
 //   final List<String> likes;
 //   final DateTime createdOn;
-//   final Creator creator;
+//   final UnionDefaultUser creator;
 //   final bool showComments;
 //   final bool showLikes;
 //   final List<Comment>? comments;
 
 //   Post({
 //     required this.id,
-//     required this.images,
+//     this.images,
 //     required this.content,
 //     required this.likes,
 //     required this.createdOn,
 //     required this.creator,
 //     required this.showComments,
 //     required this.showLikes,
-//     required this.comments,
+//     this.comments,
 //   });
 
 //   factory Post.fromJson(Map<String, dynamic> json) {
@@ -143,7 +92,7 @@ class NewsFeedResponseData {
 //       content: json['content'],
 //       likes: List<String>.from(json['likes']),
 //       createdOn: DateTime.parse(json['createdOn']),
-//       creator: Creator.fromJson(json['creator']),
+//       creator: UnionDefaultUser.fromJson(json['creator']),
 //       showComments: json['showComments'],
 //       showLikes: json['showLikes'],
 //       comments: json['comments'] != null
@@ -167,6 +116,61 @@ class NewsFeedResponseData {
 //   }
 // }
 
+// // UnionDefaultUser model
+// class UnionDefaultUser {
+//   final String id;
+//   final String firstName;
+//   final String lastName;
+//   final Profile profile;
+
+//   UnionDefaultUser({
+//     required this.id,
+//     required this.firstName,
+//     required this.lastName,
+//     required this.profile,
+//   });
+
+//   factory UnionDefaultUser.fromJson(Map<String, dynamic> json) {
+//     return UnionDefaultUser(
+//       id: json['id'] as String? ?? '',
+//       firstName: json['firstName'] as String? ?? '',
+//       lastName: json['lastName'] as String? ?? '',
+//       profile: Profile.fromJson(json['profile'] ?? {}),
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'id': id,
+//       'firstName': firstName,
+//       'lastName': lastName,
+//       'profile': profile.toJson(),
+//     };
+//   }
+// }
+
+// //Profile model
+// class Profile {
+//   final String imageURL;
+
+//   Profile({required this.imageURL});
+
+//   // Factory constructor for creating a Profile instance from JSON
+//   factory Profile.fromJson(Map<String, dynamic> json) {
+//     return Profile(
+//       imageURL: json['imageURL'] as String? ?? '',
+//     );
+//   }
+
+//   // Method for converting Profile instance to JSON
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'imageURL': imageURL,
+//     };
+//   }
+// }
+
+// // Comment model
 // class Comment {
 //   final String id;
 //   final String content;
@@ -174,7 +178,7 @@ class NewsFeedResponseData {
 //   final String userID;
 //   final List<String> likes;
 //   final List<String> dislikes;
-//   final Creator creator;
+//   final CommentCreator creator;
 
 //   Comment({
 //     required this.id,
@@ -195,7 +199,7 @@ class NewsFeedResponseData {
 //       userID: json['userID'],
 //       likes: List<String>.from(json['likes']),
 //       dislikes: List<String>.from(json['dislikes']),
-//       creator: Creator.fromJson(json['creator']),
+//       creator: CommentCreator.fromJson(json['creator']),
 //     );
 //   }
 
@@ -212,21 +216,22 @@ class NewsFeedResponseData {
 //   }
 // }
 
-// class Creator {
+// // CommentCreator model
+// class CommentCreator {
 //   final String id;
 //   final String unionID;
 //   final String lastName;
 //   final String firstName;
 
-//   Creator({
+//   CommentCreator({
 //     required this.id,
 //     required this.unionID,
 //     required this.lastName,
 //     required this.firstName,
 //   });
 
-//   factory Creator.fromJson(Map<String, dynamic> json) {
-//     return Creator(
+//   factory CommentCreator.fromJson(Map<String, dynamic> json) {
+//     return CommentCreator(
 //       id: json['id'],
 //       unionID: json['unionID'],
 //       lastName: json['lastName'],
@@ -243,7 +248,36 @@ class NewsFeedResponseData {
 //     };
 //   }
 // }
-// NewsFeed model
+
+// Response wrapper class
+class NewsFeedResponse {
+  final NewsFeedResponseData data;
+
+  NewsFeedResponse({required this.data});
+
+  factory NewsFeedResponse.fromJson(Map<String, dynamic> json) {
+    return NewsFeedResponse(
+      data: NewsFeedResponseData.fromJson(json['data']),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'data': data.toJson()};
+}
+
+class NewsFeedResponseData {
+  final NewsFeed newsFeed;
+
+  NewsFeedResponseData({required this.newsFeed});
+
+  factory NewsFeedResponseData.fromJson(Map<String, dynamic> json) {
+    return NewsFeedResponseData(
+      newsFeed: NewsFeed.fromJson(json['newsFeed']),
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'newsFeed': newsFeed.toJson()};
+}
+
 class NewsFeed {
   final List<Post>? data;
   final int total;
@@ -251,26 +285,22 @@ class NewsFeed {
   NewsFeed({this.data, required this.total});
 
   factory NewsFeed.fromJson(Map<String, dynamic> json) {
-    // The data is nested inside newsFeed.data
-    var newsFeedData = json['newsFeed'];
-    var list = newsFeedData['data'] as List;
-    List<Post> postsList = list.map((i) => Post.fromJson(i)).toList();
+    final newsFeedData = json['newsFeed'];
+    final list = newsFeedData['data'] as List?;
+    final postsList = list?.map((i) => Post.fromJson(i)).toList() ?? [];
 
     return NewsFeed(
       data: postsList,
-      total: newsFeedData['total'],
+      total: newsFeedData['total'] ?? 0,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data!.map((post) => post.toJson()).toList(),
-      'total': total,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'data': data?.map((post) => post.toJson()).toList() ?? [],
+        'total': total,
+      };
 }
 
-// Post model
 class Post {
   final String id;
   final List<String>? images;
@@ -296,36 +326,68 @@ class Post {
 
   factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: json['id'],
+      id: json['id'] ?? '',
       images: json['images'] != null ? List<String>.from(json['images']) : null,
-      content: json['content'],
-      likes: List<String>.from(json['likes']),
-      createdOn: DateTime.parse(json['createdOn']),
-      creator: UnionDefaultUser.fromJson(json['creator']),
-      showComments: json['showComments'],
-      showLikes: json['showLikes'],
+      content: json['content'] ?? '',
+      likes: List<String>.from(json['likes'] ?? []),
+      createdOn:
+          DateTime.parse(json['createdOn'] ?? DateTime.now().toIso8601String()),
+      creator: UnionDefaultUser.fromJson(json['creator'] ?? {}),
+      showComments: json['showComments'] ?? false,
+      showLikes: json['showLikes'] ?? false,
       comments: json['comments'] != null
           ? (json['comments'] as List).map((i) => Comment.fromJson(i)).toList()
           : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'images': images,
-      'content': content,
-      'likes': likes,
-      'createdOn': createdOn.toIso8601String(),
-      'creator': creator.toJson(),
-      'showComments': showComments,
-      'showLikes': showLikes,
-      'comments': comments?.map((comment) => comment.toJson()).toList(),
-    };
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'images': images,
+        'content': content,
+        'likes': likes,
+        'createdOn': createdOn.toIso8601String(),
+        'creator': creator.toJson(),
+        'showComments': showComments,
+        'showLikes': showLikes,
+        'comments': comments?.map((comment) => comment.toJson()).toList(),
+      };
+
+  // Equality comparison
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Post && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  /// `copyWith` method
+  Post copyWith({
+    String? id,
+    List<String>? images,
+    String? content,
+    List<String>? likes,
+    DateTime? createdOn,
+    UnionDefaultUser? creator,
+    bool? showComments,
+    bool? showLikes,
+    List<Comment>? comments,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      images: images ?? this.images,
+      content: content ?? this.content,
+      likes: likes ?? this.likes,
+      createdOn: createdOn ?? this.createdOn,
+      creator: creator ?? this.creator,
+      showComments: showComments ?? this.showComments,
+      showLikes: showLikes ?? this.showLikes,
+      comments: comments ?? this.comments,
+    );
   }
 }
 
-// UnionDefaultUser model
 class UnionDefaultUser {
   final String id;
   final String firstName;
@@ -348,38 +410,50 @@ class UnionDefaultUser {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'profile': profile.toJson(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'firstName': firstName,
+        'lastName': lastName,
+        'profile': profile.toJson(),
+      };
+
+  // Add equality comparison
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UnionDefaultUser &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
-//Profile model
 class Profile {
   final String imageURL;
 
   Profile({required this.imageURL});
 
-  // Factory constructor for creating a Profile instance from JSON
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile(
       imageURL: json['imageURL'] as String? ?? '',
     );
   }
 
-  // Method for converting Profile instance to JSON
-  Map<String, dynamic> toJson() {
-    return {
-      'imageURL': imageURL,
-    };
-  }
+  Map<String, dynamic> toJson() => {'imageURL': imageURL};
+
+  // Add equality comparison
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Profile &&
+          runtimeType == other.runtimeType &&
+          imageURL == other.imageURL;
+
+  @override
+  int get hashCode => imageURL.hashCode;
 }
 
-// Comment model
 class Comment {
   final String id;
   final String content;
@@ -401,31 +475,37 @@ class Comment {
 
   factory Comment.fromJson(Map<String, dynamic> json) {
     return Comment(
-      id: json['id'],
-      content: json['content'],
+      id: json['id'] ?? '',
+      content: json['content'] ?? '',
       createdOn:
           json['createdOn'] != null ? DateTime.parse(json['createdOn']) : null,
-      userID: json['userID'],
-      likes: List<String>.from(json['likes']),
-      dislikes: List<String>.from(json['dislikes']),
-      creator: CommentCreator.fromJson(json['creator']),
+      userID: json['userID'] ?? '',
+      likes: List<String>.from(json['likes'] ?? []),
+      dislikes: List<String>.from(json['dislikes'] ?? []),
+      creator: CommentCreator.fromJson(json['creator'] ?? {}),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'content': content,
-      'createdOn': createdOn?.toIso8601String(),
-      'userID': userID,
-      'likes': likes,
-      'dislikes': dislikes,
-      'creator': creator.toJson(),
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'content': content,
+        'createdOn': createdOn?.toIso8601String(),
+        'userID': userID,
+        'likes': likes,
+        'dislikes': dislikes,
+        'creator': creator.toJson(),
+      };
+
+  // Add equality comparison
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Comment && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
-// CommentCreator model
 class CommentCreator {
   final String id;
   final String unionID;
@@ -441,19 +521,28 @@ class CommentCreator {
 
   factory CommentCreator.fromJson(Map<String, dynamic> json) {
     return CommentCreator(
-      id: json['id'],
-      unionID: json['unionID'],
-      lastName: json['lastName'],
-      firstName: json['firstName'],
+      id: json['id'] ?? '',
+      unionID: json['unionID'] ?? '',
+      lastName: json['lastName'] ?? '',
+      firstName: json['firstName'] ?? '',
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'unionID': unionID,
-      'lastName': lastName,
-      'firstName': firstName,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'unionID': unionID,
+        'lastName': lastName,
+        'firstName': firstName,
+      };
+
+  // Add equality comparison
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CommentCreator &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }

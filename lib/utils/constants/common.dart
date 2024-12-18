@@ -6,5 +6,6 @@ late FeedProvider feedProvider;
 late UnionProvider unionProvider;
 late MessageProvider messageProvider;
 late ServicesProvider servicesProvider;
+late SettingController settingController;
 late NotificationProvider notificationProvider;
 late AuthenticationProvider authenticationProvider;

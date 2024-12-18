@@ -1,13 +1,47 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:younified/utils/exports/common_exports.dart';
+import 'dart:io';
 
-class ProfileScreen extends StatelessWidget {
+import 'package:younified/utils/exports/common_exports.dart';
+import 'package:younified/utils/image_picker.dart';
+
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // static final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  static final TextEditingController userNameController =
+      TextEditingController();
+  static final TextEditingController firstNameController =
+      TextEditingController();
+  static final TextEditingController lastNameController =
+      TextEditingController();
+  static final TextEditingController statusController = TextEditingController();
+  static final TextEditingController unitController = TextEditingController();
+  static final TextEditingController employmentStatusController =
+      TextEditingController();
+  static final TextEditingController unionPositionController =
+      TextEditingController();
+  File? selectedImage;
+
+  @override
+  void initState() {
+    userNameController.text = homeProvider.userData!.username;
+    lastNameController.text = homeProvider.userData!.lastName;
+    firstNameController.text = homeProvider.userData!.firstName;
+    statusController.text = homeProvider.userData!.status;
+    unitController.text = homeProvider.userData!.unit;
+    employmentStatusController.text = homeProvider.userData!.employmentStatus;
+    unionPositionController.text = homeProvider.userData!.unionPosition;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.backGround,
+      backgroundColor: AppColors.backGround,
       appBar: AppBar(
         title: Text(
           context.strings.profile,
@@ -24,8 +58,38 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0,
         actions: [
           InkWell(
-            // onTap: () => context.pushNamed(Routes.notificationScreen),
-            child: Text(context.strings.save, style: context.textTheme.labelSmall,),
+            onTap: () async {
+              homeProvider
+                  .updateUser(
+                      firstNameController.text,
+                      lastNameController.text,
+                      userNameController.text,
+                      statusController.text,
+                      unitController.text,
+                      employmentStatusController.text,
+                      unionPositionController.text)
+                  .then(
+                (value) {
+                  if (homeProvider.errorMessage == null) {
+                    // context.pushNamed(Routes.profileScreen);
+                    context.showAppSnackBar(
+                      title: 'Profile Updated successfully',
+                      textColor: AppColors.greenContainerbg,
+                    );
+                  } else {
+                    context.showAppSnackBar(
+                      title: homeProvider.errorMessage ?? 'Unknown error',
+                      textColor: AppColors.redText,
+                    );
+                    homeProvider.errorMessage = null;
+                  }
+                },
+              );
+            },
+            child: Text(
+              context.strings.save,
+              style: context.textTheme.labelSmall,
+            ),
           ),
           const SizedBox(width: 26),
         ],
@@ -87,38 +151,90 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 60,
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  "https://api.multiavatar.com/Binx Bond.png",
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                              imageBuilder: (context, imageProvider) =>
-                                  CircleAvatar(
-                                backgroundImage: imageProvider,
-                                radius: 60,
-                              ),
-                            ),
+                            child: selectedImage == null
+                                ? homeProvider
+                                        .userData!.profile!.imageURL.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl:
+                                            "https://api.multiavatar.com/Binx Bond.png",
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Icon(Icons.error),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                CircleAvatar(
+                                          backgroundImage: imageProvider,
+                                          radius: 60,
+                                        ),
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage(AppIcons.emptyProfile),
+                                        radius: 60,
+                                      )
+                                : CircleAvatar(
+                                    radius: 60,
+                                    child: ClipOval(
+                                      child: Image.file(
+                                        selectedImage!,
+                                        fit: BoxFit.cover,
+                                        width:
+                                            120, // Adjust the width as needed
+                                        height:
+                                            120, // Adjust the height as needed
+                                      ),
+                                    ),
+                                  ),
                           ),
                           Positioned(
                             bottom: 0,
                             right: 10,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: AppColors.backGround,
-                                  width: 1, // 1px border
+                            child: InkWell(
+                              onTap: () async {
+                                final File? img =
+                                    await ImagePickerService().getFromGallery();
+
+                                setState(() {
+                                  img.toString().toLog();
+                                  selectedImage = img;
+                                });
+                                // if (selectedImage != null) {
+                                //   await homeProvider
+                                //       .uploadProfile(selectedImage!)
+                                //       .then((value) {
+                                //     if (homeProvider.errorMessage == null) {
+                                //       context.showAppSnackBar(
+                                //         title: value!,
+                                //         textColor: AppColors.greenContainerbg,
+                                //       );
+                                //     } else {
+                                //       context.showAppSnackBar(
+                                //         title: homeProvider.errorMessage ??
+                                //             'Unknown error',
+                                //         textColor: AppColors.redText,
+                                //       );
+                                //       homeProvider.errorMessage = null;
+                                //     }
+                                //   });
+                                // }
+                              },
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.backGround,
+                                    width: 1, // 1px border
+                                  ),
                                 ),
-                              ),
-                              child: const CircleAvatar(
-                                radius: 18,
-                                backgroundColor: AppColors.iconBgColor,
-                                child: Icon(
-                                  Icons.camera_alt,
-                                  size: 20,
-                                  color: AppColors.white,
+                                child: const CircleAvatar(
+                                  radius: 18,
+                                  backgroundColor: AppColors.iconBgColor,
+                                  child: Icon(
+                                    Icons.camera_alt,
+                                    size: 20,
+                                    color: AppColors.white,
+                                  ),
                                 ),
                               ),
                             ),
@@ -131,35 +247,46 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Name',
+                            firstNameController.text,
                             style: context.textTheme.titleLarge,
                           ),
                           Text(
-                            'Surname',
+                            lastNameController.text,
                             style: context.textTheme.titleLarge,
                           ),
                           const SizedBox(height: 16),
                           // Log Out Button
-                          SizedBox(
-                            height: 40,
-                            width: 115,
-                            child: DecoratedBox(
-                              decoration: const BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                color: Color(0x265783EF),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(AppIcons.logout),
-                                  const SizedBox(width: 8.0),
-                                  Text(
-                                    context.strings.logOut,
-                                    style: context.textTheme.labelMedium,
-                                  ),
-                                ],
+                          GestureDetector(
+                            onTap: () {
+                              StorageServices.delete('token');
+                              StorageServices.delete('userId');
+                              StorageServices.delete('unionId');
+                              StorageServices.delete('imageURL');
+                              StorageServices.delete('unionName');
+                              context
+                                  .pushNamedAndRemoveUntil(Routes.loginScreen);
+                            },
+                            child: SizedBox(
+                              height: 40,
+                              width: 115,
+                              child: DecoratedBox(
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                  color: Color(0x265783EF),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SvgPicture.asset(AppIcons.logout),
+                                    const SizedBox(width: 8.0),
+                                    Text(
+                                      context.strings.logOut,
+                                      style: context.textTheme.labelMedium,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -172,7 +299,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: firstNameController,
                       style: context.textTheme.titleMedium,
                       decoration:
                           InputDecoration(hintText: context.strings.firstName),
@@ -187,7 +314,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: lastNameController,
                       style: context.textTheme.titleMedium,
                       decoration:
                           InputDecoration(hintText: context.strings.lastName),
@@ -202,7 +329,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: userNameController,
                       style: context.textTheme.titleMedium,
                       decoration:
                           InputDecoration(hintText: context.strings.username),
@@ -217,7 +344,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: statusController,
                       style: context.textTheme.titleMedium,
                       decoration:
                           InputDecoration(hintText: context.strings.status),
@@ -232,7 +359,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: unitController,
                       style: context.textTheme.titleMedium,
                       decoration:
                           InputDecoration(hintText: context.strings.unit),
@@ -247,7 +374,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: employmentStatusController,
                       style: context.textTheme.titleMedium,
                       decoration: InputDecoration(
                           hintText: context.strings.employmentStatus),
@@ -262,7 +389,7 @@ class ProfileScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
                     child: TextFormField(
-                      // controller: emailController,
+                      controller: unionPositionController,
                       style: context.textTheme.titleMedium,
                       decoration: InputDecoration(
                           hintText: context.strings.unionPosition),

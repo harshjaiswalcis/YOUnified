@@ -51,29 +51,28 @@ class SettingScreen extends StatelessWidget {
             const SizedBox(height: 18),
             settingsCard(
               context: context,
-              title: "Accessibility",
+              title: context.strings.accessibility,
               children: [
                 dropdownItem(
-                    context: context, label: "Language", value: "English"),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                textSizeItem(context: context),
+                  context: context,
+                  label: context.strings.language,
+                ),
+                // const Divider(thickness: 1, color: AppColors.commentBgColor),
+                // textSizeItem(context: context),
+                const SizedBox(height: 8),
               ],
             ),
             const SizedBox(height: 18),
             settingsCard(
               context: context,
-              title: "System settings",
+              title: context.strings.systemSettings,
               children: [
-                systemItem(context: context, label: "System notifications"),
+                systemItem(
+                    context: context,
+                    label: context.strings.systemNotifications),
                 const Divider(thickness: 1, color: AppColors.commentBgColor),
                 GestureDetector(
-                    onTap: () {
-                      StorageServices.delete('token');
-                      StorageServices.delete('userId');
-                      StorageServices.delete('unionId');
-                      StorageServices.delete('imageURL');
-                      StorageServices.delete('unionName');
-                    },
+                    onTap: () {},
                     child: systemItem(
                         context: context, label: "Version - 1.6.17")),
               ],
@@ -150,9 +149,11 @@ class SettingScreen extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: context.textTheme.labelMedium,
+            Expanded(
+              child: Text(
+                label,
+                style: context.textTheme.labelMedium,
+              ),
             ),
             const SizedBox(width: 20),
             SizedBox(
@@ -172,10 +173,7 @@ class SettingScreen extends StatelessWidget {
     );
   }
 
-  Widget dropdownItem(
-          {required BuildContext context,
-          required String label,
-          required String value}) =>
+  Widget dropdownItem({required BuildContext context, required String label}) =>
       Padding(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: Row(
@@ -187,23 +185,45 @@ class SettingScreen extends StatelessWidget {
             ),
             SizedBox(
               height: 30,
-              child: DropdownButton<String>(
-                value: value,
-                onChanged: (String? newValue) {},
-                underline: const SizedBox.shrink(),
-                icon: const Icon(Icons.keyboard_arrow_down_outlined,
-                    color: AppColors.tabTextColor),
-                items: <String>['English', 'French', 'Spanish']
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: context.textTheme.labelMedium!
-                          .copyWith(fontWeight: FontWeight.w600),
-                    ),
+              child: ValueListenableBuilder(
+                valueListenable: settingController.countryCode,
+                builder: (context, value, child) {
+                  // Find the label corresponding to the current language code
+                  String selectedLabel = settingController.languageMap.entries
+                      .firstWhere((entry) => entry.value == value,
+                          orElse: () => const MapEntry('English', 'en'))
+                      .key;
+
+                  return DropdownButton<String>(
+                    value: selectedLabel, // Show the label instead of the code
+                    onChanged: (String? newLabel) {
+                      if (newLabel != null) {
+                        // Get the language code for the selected label
+                        String newLanguageCode =
+                            settingController.languageMap[newLabel]!;
+                        settingController.countryCode.value =
+                            newLanguageCode; // Updates global ValueNotifier
+                        StorageServices.setString("lang",
+                            newLanguageCode); // Save to SharedPreferences
+                      }
+                    },
+                    dropdownColor: AppColors.white,
+                    underline: const SizedBox.shrink(),
+                    icon: const Icon(Icons.keyboard_arrow_down_outlined,
+                        color: AppColors.tabTextColor),
+                    items: settingController.countryCodeSelection
+                        .map<DropdownMenuItem<String>>((String label) {
+                      return DropdownMenuItem<String>(
+                        value: label,
+                        child: Text(
+                          label,
+                          style: context.textTheme.labelMedium!
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      );
+                    }).toList(),
                   );
-                }).toList(),
+                },
               ),
             ),
           ],
