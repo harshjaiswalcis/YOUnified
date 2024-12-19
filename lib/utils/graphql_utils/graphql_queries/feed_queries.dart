@@ -10,6 +10,11 @@ class FeedQueries {
           createdOn
           creator {
             firstName
+            profile {
+              imageURL
+            }
+            lastName
+            id
           }
           showComments
           showLikes
@@ -21,10 +26,12 @@ class FeedQueries {
             likes
             dislikes
             creator {
-              id
-              unionID
-              lastName
               firstName
+              profile {
+                imageURL
+              }
+              lastName
+              id
             }
           }
         }

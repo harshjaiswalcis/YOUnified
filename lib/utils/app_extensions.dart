@@ -307,3 +307,17 @@ extension DateFormattingExtensions on String {
     }
   }
 }
+
+extension TimeAgoExtension on DateTime {
+  /// Returns a string representing the time elapsed since the DateTime object.
+  String timeAgo() {
+    final Duration difference = DateTime.now().difference(this);
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else {
+      return '${difference.inDays} days ago';
+    }
+  }
+}

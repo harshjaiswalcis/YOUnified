@@ -66,8 +66,6 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const ExecutiveScreen());
       case Routes.grievanceScreen:
         return MaterialPageRoute(builder: (_) => const GrievanceScreen());
-      case Routes.feedDetailScreen:
-        return MaterialPageRoute(builder: (_) => const FeedDetailScreen());
       case Routes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationScreen());
       case Routes.electionStepperFirst:
@@ -80,6 +78,11 @@ class NavigationService {
         return MaterialPageRoute(builder: (_) => const ElectionStepperSecond());
       case Routes.electionSummaryScreen:
         return MaterialPageRoute(builder: (_) => const ElectionSummaryScreen());
+      case Routes.feedDetailScreen:
+        return MaterialPageRoute(
+            builder: (_) => FeedDetailScreen(
+                  feed: settings.arguments as Post,
+                ));
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

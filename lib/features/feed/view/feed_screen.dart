@@ -147,7 +147,7 @@ class PostSection extends StatelessWidget {
                                         .creator.profile.imageURL.isNotEmpty &&
                                     feed.creator.profile.imageURL != ""
                                 ? NetworkImage(feed.creator.profile.imageURL)
-                                : const AssetImage(AppIcons.home),
+                                : const AssetImage(AppIcons.emptyProfile),
                           ),
                           const SizedBox(width: 10),
                           Column(
@@ -159,7 +159,7 @@ class PostSection extends StatelessWidget {
                                     .copyWith(fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                'posted ${_timeAgo(feed.createdOn)}',
+                                'posted ${feed.createdOn.timeAgo()}',
                                 style: context.textTheme.labelLarge!.copyWith(
                                     height: 0, fontWeight: FontWeight.w200),
                               ),
@@ -199,7 +199,8 @@ class PostSection extends StatelessWidget {
             ),
             children: [
               GestureDetector(
-                onTap: () => context.pushNamed(Routes.feedDetailScreen),
+                onTap: () =>
+                    context.pushNamed(Routes.feedDetailScreen, arguments: feed),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,17 +283,5 @@ class PostSection extends StatelessWidget {
         }),
       ),
     );
-  }
-
-  // Helper function to calculate time ago
-  String _timeAgo(DateTime postedTime) {
-    final Duration difference = DateTime.now().difference(postedTime);
-    if (difference.inMinutes < 60) {
-      return '${difference.inMinutes} minutes ago';
-    } else if (difference.inHours < 24) {
-      return '${difference.inHours} hours ago';
-    } else {
-      return '${difference.inDays} days ago';
-    }
   }
 }
