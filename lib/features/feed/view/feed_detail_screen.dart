@@ -19,11 +19,6 @@ class FeedDetailScreen extends StatefulWidget {
 }
 
 class _FeedDetailScreenState extends State<FeedDetailScreen> {
-  // Messages list
-  List<Message> messages = [
-    Message(text: "Hello! Welcome to our chat.", isUser: false),
-  ];
-
   // Scroll controller for messages
   final ScrollController _scrollController = ScrollController();
 
@@ -31,43 +26,9 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFocusNode = FocusNode();
 
-  // Method to send message
-  void _sendMessage() {
-    String messageText = _messageController.text.trim();
-    if (messageText.isNotEmpty) {
-      setState(() {
-        messages.add(Message(
-            text: messageText, isUser: true, timestamp: DateTime.now()));
-        _messageController.clear();
-      });
-
-      // Scroll to bottom after sending message
-      _scrollToBottom();
-
-      // Optional: Add a response message
-      Future.delayed(Duration(seconds: 1), () {
-        setState(() {
-          messages.add(Message(
-              text: "Thanks for your message!",
-              isUser: false,
-              timestamp: DateTime.now()));
-        });
-        _scrollToBottom();
-      });
-    }
-  }
-
-  // Method to scroll to bottom of list
-  void _scrollToBottom() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
+  // Focus on TextField
+  void _focusOnTextField() {
+    FocusScope.of(context).requestFocus(_messageFocusNode);
   }
 
   @override
@@ -80,6 +41,10 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the updated Post object from the Provider
+    final updatedPost = feedProvider.newsFeedListElement.value.firstWhere(
+        (post) => post.id == widget.feed.id,
+        orElse: () => widget.feed);
     return GestureDetector(
       onTap: () {
         // Dismiss keyboard when tapping outside the input
@@ -98,83 +63,108 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
                   controller: _scrollController,
                   child: Column(
                     children: [
-                      PostSection(feed: widget.feed),
+                      PostSection(
+                        feed: updatedPost,
+                        onFocus: _focusOnTextField,
+                      ),
                       const Divider(),
-                      CommentSection(comments: widget.feed.comments),
+                      CommentSection(comments: updatedPost.comments),
                     ],
                   ),
                 ),
               ),
-              // Keyboard-aware bottom input
-              ColoredBox(
-                color: AppColors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 12),
-                      // Message input field
-                      Expanded(
-                        child: Theme(
-                          data: ThemeData(
-                            inputDecorationTheme:
-                                const InputDecorationTheme(), // Reset to default
-                          ),
-                          child: TextField(
-                            controller: _messageController,
-                            focusNode: _messageFocusNode,
-                            decoration: InputDecoration(
-                              hintText: 'Write a comment',
-                              hintStyle: context.textTheme.labelMedium!
-                                  .copyWith(color: AppColors.replyTextGround),
-                              filled: true,
-                              fillColor: Colors.grey[200],
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    25), // Custom border radius
-                                borderSide: BorderSide.none, // No border
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 10,
-                              ),
-                            ),
-                            textInputAction: TextInputAction.send,
-                            onSubmitted: (_) => _sendMessage(),
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(width: 12),
-
-                      // Send button
-                      InkWell(
-                        onTap: _sendMessage,
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: AppColors.themeColor,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(right: 2.0, top: 2.0),
-                            child: Image.asset(AppIcons.send),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              _buildCommentInput(feedProvider, updatedPost),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildCommentInput(FeedProvider feedProvider, Post updatedPost) {
+    return ColoredBox(
+      color: AppColors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            const SizedBox(width: 12),
+            // Message input field
+            Expanded(
+              child: Theme(
+                data: ThemeData(
+                  inputDecorationTheme:
+                      const InputDecorationTheme(), // Reset to default
+                ),
+                child: TextField(
+                  controller: _messageController,
+                  focusNode: _messageFocusNode,
+                  decoration: InputDecoration(
+                    hintText: 'Write a comment',
+                    hintStyle: TextStyle(color: AppColors.replyTextGround),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(25), // Custom border radius
+                      borderSide: BorderSide.none, // No border
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                  ),
+                  textInputAction: TextInputAction.send,
+                  onSubmitted: (_) => _sendComment(feedProvider, updatedPost),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Send button
+            InkWell(
+              onTap: () => _sendComment(feedProvider, updatedPost),
+              child: CircleAvatar(
+                radius: 20,
+                backgroundColor: AppColors.themeColor,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 2.0, top: 2.0),
+                  child: Image.asset(AppIcons.send),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _sendComment(FeedProvider feedProvider, Post updatedPost) async {
+    final content = _messageController.text.trim();
+
+    if (content.isEmpty) {
+      context.showAppSnackBar(title: "Comment cannot be empty");
+      return;
+    }
+
+    // Show a loading indicator or handle state
+    final newComment = await feedProvider.addComment(updatedPost.id, content);
+
+    if (newComment != null) {
+      _messageController.clear();
+      FocusScope.of(context).unfocus();
+    } else {
+      context.showAppSnackBar(
+        title: feedProvider.errorMessage ?? "Error adding comment",
+      );
+      feedProvider.errorMessage = null;
+    }
+  }
 }
 
 class PostSection extends StatelessWidget {
   final Post feed;
-  const PostSection({super.key, required this.feed});
+  final VoidCallback onFocus;
+  const PostSection({super.key, required this.feed, required this.onFocus});
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +277,10 @@ class PostSection extends StatelessWidget {
                           style: context.textTheme.labelMedium,
                         ),
                       const SizedBox(width: 20),
-                      SvgPicture.asset(AppIcons.comment),
+                      GestureDetector(
+                        onTap: onFocus,
+                        child: SvgPicture.asset(AppIcons.comment),
+                      ),
                       const SizedBox(width: 5),
                       if (currentPost.showComments)
                         Text(
@@ -307,6 +300,26 @@ class PostSection extends StatelessWidget {
   }
 }
 
+// class CommentSection extends StatelessWidget {
+//   final List<Comment>? comments;
+
+//   const CommentSection({super.key, required this.comments});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return comments != null
+//         ? ListView.builder(
+//             shrinkWrap: true,
+//             physics: const NeverScrollableScrollPhysics(),
+//             itemCount: comments!.length,
+//             itemBuilder: (context, index) {
+//               return CommentWidget(comment: comments![index]);
+//             },
+//           )
+//         : const SizedBox();
+//   }
+// }
+
 class CommentSection extends StatelessWidget {
   final List<Comment>? comments;
 
@@ -314,16 +327,27 @@ class CommentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return comments != null
-        ? ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: comments!.length,
-            itemBuilder: (context, index) {
-              return CommentWidget(comment: comments![index]);
-            },
-          )
-        : const SizedBox();
+    if (comments == null || comments!.isEmpty) {
+      return const Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: Text(
+            "No comments yet. Be the first to comment!",
+            style: TextStyle(color: Colors.grey, fontSize: 16),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: comments!.length,
+      itemBuilder: (context, index) {
+        final comment = comments![index];
+        return CommentWidget(comment: comment);
+      },
+    );
   }
 }
 

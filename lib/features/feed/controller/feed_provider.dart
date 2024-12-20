@@ -3,6 +3,28 @@ import 'package:younified/utils/exports/common_exports.dart';
 import 'package:younified/utils/graphql_utils/graphql_queries/feed_queries.dart';
 
 class FeedProvider extends ChangeNotifier {
+//FOR PAGINATION SCROLL
+  bool isInfiniteScrollLoading = false;
+
+  void setInfiniteScrollLoading(bool value) {
+    isInfiniteScrollLoading = value;
+    notifyListeners();
+  }
+
+  int currentPage = 1;
+
+  Future<void> fetchNextPage() async {
+    if (currentPage < totalPage) {
+      isInfiniteScrollLoading = true;
+      notifyListeners();
+
+      await fetchFeeds(currentPage + 1);
+      currentPage++;
+      isInfiniteScrollLoading = false;
+      notifyListeners();
+    }
+  }
+
 // For Expansion
   final Map<int, bool> _expandedStates = {};
 
@@ -26,7 +48,7 @@ class FeedProvider extends ChangeNotifier {
   void notify() => notifyListeners();
   ValueNotifier<List<Post>> newsFeedListElement = ValueNotifier([]);
   int totalPage = 0;
-  int currentPage = 0;
+  // int currentPage = 0;
 
   Future<NewsFeed?> fetchFeeds(int pageNumber) async {
     isLoading = true;
@@ -153,6 +175,77 @@ class FeedProvider extends ChangeNotifier {
     } finally {
       _loadingPosts.remove(newsId); // Remove the post from loading state
       notifyListeners();
+    }
+  }
+
+  Future<Comment?> addComment(String newsId, String content) async {
+    try {
+      QueryResult result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(FeedQueries.addComment),
+          variables: {
+            'unionId': StorageServices.getString('unionId'),
+            'newsId': newsId,
+            "comment": {
+              'content': content,
+              'userID': StorageServices.getString('userId'),
+            }
+          },
+          fetchPolicy: FetchPolicy.networkOnly,
+        ),
+      );
+
+      if (result.hasException) {
+        List<String> errorMessages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception);
+        errorMessage = errorMessages.isNotEmpty
+            ? errorMessages.first
+            : "Unknown error occurred.";
+        log(errorMessage!);
+        return null;
+      }
+
+      if (result.data != null) {
+        final newCommentData = result.data!['newComment'];
+
+        // Parse the comment from the response
+        Comment newComment = Comment.fromJson({
+          'id': newCommentData['id'],
+          'content': newCommentData['content'],
+          'createdOn': newCommentData['createdOn'],
+          'userID': StorageServices.getString('userId'),
+          'creator': newCommentData['creator'],
+        });
+
+        // Add the comment to the Post's comments list
+        _addCommentToPost(newsId, newComment);
+
+        return newComment;
+      }
+
+      return null;
+    } catch (e) {
+      errorMessage = e.toString();
+      return null;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  void _addCommentToPost(String postId, Comment newComment) {
+    try {
+      // Update the feed list immutably
+      newsFeedListElement.value = newsFeedListElement.value.map((post) {
+        if (post.id == postId) {
+          return post.copyWith(
+            comments: [newComment, ...post.comments ?? []],
+          );
+        }
+        return post;
+      }).toList();
+      notifyListeners();
+    } catch (e) {
+      log('Post with ID $postId not found.');
     }
   }
 }

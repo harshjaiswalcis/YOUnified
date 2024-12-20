@@ -22,16 +22,13 @@ class FeedQueries {
             id
             content
             createdOn
-            userID
-            likes
-            dislikes
             creator {
+              id
               firstName
+              lastName
               profile {
                 imageURL
               }
-              lastName
-              id
             }
           }
         }
@@ -44,6 +41,24 @@ class FeedQueries {
      mutation LikeNewsItem(\$unionId: UnifiedID!, \$newsId: UnifiedID!, \$userId: UnifiedID!) {
         likeNewsItem(unionID: \$unionId, newsID: \$newsId, userID: \$userId) {
           likes
+        }
+      }
+  ''';
+
+  static const String addComment = '''
+     mutation NewComment(\$unionId: UnifiedID!, \$newsId: UnifiedID!, \$comment: CommentInput!) {
+        newComment(unionID: \$unionId, newsID: \$newsId, comment: \$comment) {
+          id
+          content
+          createdOn
+          creator {
+            id
+            firstName
+            lastName
+            profile {
+              imageURL
+            }
+          }
         }
       }
   ''';

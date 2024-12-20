@@ -17,24 +17,13 @@ class _FeedScreenState extends State<FeedScreen> {
     feedProvider.notify();
   }
 
-  void _onScroll() async {
-    log("Scroll triggered");
-    final maxScroll = _scrollController.position.maxScrollExtent;
-    final currentScroll = _scrollController.position.pixels;
-    log("maxScroll: $maxScroll, currentScroll: $currentScroll");
-    if (currentScroll == maxScroll &&
-        feedProvider.currentPage < feedProvider.totalPage) {
-      log("Loading more data");
-      _setInfiniteScrollLoader = true;
-      await feedProvider.fetchFeeds(pageNumber);
-      setState(() {
-        pageNumber += 1; // Fixed increment
-      });
-      _setInfiniteScrollLoader = false;
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        !feedProvider.isInfiniteScrollLoading) {
+      feedProvider.fetchNextPage();
     }
   }
-
-  // bool get wantKeepAlive => false;
 
   @override
   void initState() {
@@ -47,8 +36,6 @@ class _FeedScreenState extends State<FeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log(feedProvider.newsFeedListElement.value.length.toString());
-    // List<Feed> feedListData = FeedProvider.feedListData;
     return Scaffold(
       backgroundColor: AppColors.cardBgColor,
       body: WillPopScope(
@@ -68,17 +55,8 @@ class _FeedScreenState extends State<FeedScreen> {
                     child: Column(
                       children: [
                         Expanded(
-                          child: ListView.builder(
-                            controller: _scrollController,
-                            itemCount: snapshot.length,
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return PostSection(
-                                feed: snapshot[index],
-                                index: index,
-                              );
-                            },
-                          ),
+                          child:
+                              FeedListView(scrollController: _scrollController),
                         ),
                         if (_infiniteScrollLoader)
                           const Padding(
@@ -91,6 +69,34 @@ class _FeedScreenState extends State<FeedScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class FeedListView extends StatelessWidget {
+  final ScrollController scrollController;
+
+  const FeedListView({required this.scrollController, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final feedProvider = Provider.of<FeedProvider>(context);
+
+    return ValueListenableBuilder<List<Post>>(
+      valueListenable: feedProvider.newsFeedListElement,
+      builder: (context, feedList, child) {
+        if (feedList.isEmpty) {
+          return const Center(child: Text("No Data is found"));
+        }
+
+        return ListView.builder(
+          controller: scrollController,
+          itemCount: feedList.length,
+          itemBuilder: (context, index) {
+            return PostSection(feed: feedList[index], index: index);
+          },
+        );
+      },
     );
   }
 }
