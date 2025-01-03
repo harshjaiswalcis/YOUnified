@@ -52,53 +52,53 @@ class FeedProvider extends ChangeNotifier {
 
   Future<NewsFeed?> fetchFeeds(int pageNumber) async {
     isLoading = true;
-    try {
-      QueryResult result = await GraphQLService.client.query(
-        QueryOptions(
-          document: gql(FeedQueries.feeds),
-          variables: {
-            'unionId': StorageServices.getString('unionId'),
-            'page': pageNumber,
-            'limit': 7,
-          },
-        ),
-      );
-      if (result.hasException) {
-        List<String> errorMessages =
-            GraphQLErrorHandler.extractErrorMessages(result.exception);
-        errorMessage = errorMessages.isNotEmpty
-            ? errorMessages.first
-            : "Unknown error occurred.";
-        log(errorMessage!);
-        return null;
-      }
-
-      if (result.data != null) {
-        final newsFeed = NewsFeed.fromJson(result.data!);
-        totalPage = newsFeed.total;
-        currentPage = pageNumber;
-
-        if (newsFeed.data != null) {
-          final updatedList = [
-            ...newsFeedListElement.value,
-            ...newsFeed.data!,
-          ];
-
-          // Remove duplicates by converting to a Set and back to List
-          newsFeedListElement.value = updatedList.toSet().toList();
-        }
-
-        return newsFeed;
-      }
-
+    // try {
+    QueryResult result = await GraphQLService.client.query(
+      QueryOptions(
+        document: gql(FeedQueries.feeds),
+        variables: {
+          'unionId': StorageServices.getString('unionId'),
+          'page': pageNumber,
+          'limit': 7,
+        },
+      ),
+    );
+    if (result.hasException) {
+      List<String> errorMessages =
+          GraphQLErrorHandler.extractErrorMessages(result.exception);
+      errorMessage = errorMessages.isNotEmpty
+          ? errorMessages.first
+          : "Unknown error occurred.";
+      log(errorMessage!);
       return null;
-    } catch (e) {
-      errorMessage = e.toString();
-      return null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
     }
+
+    if (result.data != null) {
+      final newsFeed = NewsFeed.fromJson(result.data!);
+      totalPage = newsFeed.total;
+      currentPage = pageNumber;
+
+      if (newsFeed.data != null) {
+        final updatedList = [
+          ...newsFeedListElement.value,
+          ...newsFeed.data!,
+        ];
+
+        // Remove duplicates by converting to a Set and back to List
+        newsFeedListElement.value = updatedList.toSet().toList();
+      }
+
+      return newsFeed;
+    }
+
+    return null;
+    // } catch (e) {
+    //   errorMessage = e.toString();
+    //   return null;
+    // } finally {
+    //   isLoading = false;
+    //   notifyListeners();
+    // }
   }
 
   Future<void> resetAndRefetchFeeds() async {
@@ -195,6 +195,7 @@ class FeedProvider extends ChangeNotifier {
         ),
       );
 
+      "addComment--------------> $result".toLog();
       if (result.hasException) {
         List<String> errorMessages =
             GraphQLErrorHandler.extractErrorMessages(result.exception);
@@ -206,7 +207,7 @@ class FeedProvider extends ChangeNotifier {
       }
 
       if (result.data != null) {
-        final newCommentData = result.data!['newComment'];
+        final newCommentData = result.data!['addComment'];
 
         // Parse the comment from the response
         Comment newComment = Comment.fromJson({

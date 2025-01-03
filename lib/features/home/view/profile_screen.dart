@@ -260,9 +260,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () {
                               StorageServices.delete('token');
                               StorageServices.delete('userId');
-                              StorageServices.delete('unionId');
-                              StorageServices.delete('imageURL');
-                              StorageServices.delete('unionName');
+                              // StorageServices.delete('unionId');
+                              // StorageServices.delete('imageURL');
+                              // StorageServices.delete('unionName');
                               context
                                   .pushNamedAndRemoveUntil(Routes.loginScreen);
                             },

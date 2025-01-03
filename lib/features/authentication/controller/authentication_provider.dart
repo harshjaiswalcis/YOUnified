@@ -41,13 +41,15 @@ class AuthenticationProvider extends ChangeNotifier {
         return null;
       }
 
-      final data = result.data?['login']['user'];
-      if (data != null) {
-        StorageServices.setString('userId', data['id']);
-        StorageServices.setString('token', data['token']);
+      final loginData = result.data?['login'];
+      final token = loginData?['token'];
+      final userData = loginData?['User'];
+      if (loginData != null && userData != null) {
+        StorageServices.setString('userId', userData['id']);
+        StorageServices.setString('token', token);
         isLoading = false;
         notifyListeners();
-        return data['token'];
+        return token;
       }
     } catch (e) {
       errorMessage = e.toString();
@@ -102,10 +104,9 @@ class AuthenticationProvider extends ChangeNotifier {
         return null;
       }
 
-      final data = result.data?['memberRegistration'];
+      final data = result.data?['registerUser'];
       if (data != null) {
         log(data.toString());
-        log(data['token']);
         // StorageServices.setString('userId', data['id']);
         // StorageServices.setString('token', data['token']);
         isLoading = false;

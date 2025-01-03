@@ -1,27 +1,16 @@
 class FeedQueries {
   static const String feeds = '''
-     query NewsFeed(\$unionId: UnifiedID!, \$page: Int, \$limit: Int) {
-      newsFeed(unionID: \$unionId, page:\$page, limit: \$limit) {
-        data {
-          id
-          images
-          content
-          likes
-          createdOn
-          creator {
-            firstName
-            profile {
-              imageURL
-            }
-            lastName
+     query GetAllNewsPosts(\$unionId: ObjectID!, \$page: Int!, \$limit: Int!) {
+        getAllNewsPosts(unionID:\$unionId, page: \$page, limit: \$limit) {
+          total
+          data {
             id
-          }
-          showComments
-          showLikes
-          comments {
-            id
+            images
             content
+            likes
             createdOn
+            showLikes
+            showComments
             creator {
               id
               firstName
@@ -30,15 +19,26 @@ class FeedQueries {
                 imageURL
               }
             }
+            comments {
+              id
+              content
+              createdOn
+              creator {
+                id
+                firstName
+                lastName
+                profile {
+                  imageURL
+                }
+              }
+            }
           }
         }
-        total
       }
-    }
   ''';
 
   static const String likes = '''
-     mutation LikeNewsItem(\$unionId: UnifiedID!, \$newsId: UnifiedID!, \$userId: UnifiedID!) {
+     mutation LikeNewsItem(\$unionId: ObjectID!, \$newsId: ObjectID!, \$userId: ObjectID!) {
         likeNewsItem(unionID: \$unionId, newsID: \$newsId, userID: \$userId) {
           likes
         }
@@ -46,8 +46,8 @@ class FeedQueries {
   ''';
 
   static const String addComment = '''
-     mutation NewComment(\$unionId: UnifiedID!, \$newsId: UnifiedID!, \$comment: CommentInput!) {
-        newComment(unionID: \$unionId, newsID: \$newsId, comment: \$comment) {
+     mutation AddComment(\$unionId: ObjectID!, \$newsId: ObjectID!, \$comment: CommentInput!) {
+        addComment(unionID: \$unionId, newsID: \$newsId, comment: \$comment) {
           id
           content
           createdOn

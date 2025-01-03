@@ -32,21 +32,21 @@ class HomeModulesQueries {
 
   // Profile
   static const String profile = '''
-     query LoginWithToken(\$token: String!, \$device: String) {
-      loginWithToken(token: \$token, device: \$device) {
-        user {
-          username
-          status
-          lastName
-          firstName
-          unit
-          employmentStatus
-          unionPosition
-          profile {
-            imageURL
+     query LoginWithToken(\$token: String) {
+        loginWithToken(token: \$token) {
+          User {
+            unit
+            status
+            lastName
+            username
+            firstName
+            unionPosition
+            employmentStatus
+            profile {
+              imageURL
+            }
           }
         }
       }
-    }
   ''';
 }

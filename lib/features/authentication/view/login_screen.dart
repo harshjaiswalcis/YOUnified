@@ -4,7 +4,7 @@ import 'package:younified/utils/exports/common_exports.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKeyLogin = GlobalKey<FormState>();
   static final TextEditingController usernameController =
       TextEditingController();
   static final TextEditingController passwordController =
@@ -19,10 +19,10 @@ class LoginScreen extends StatelessWidget {
         // backgroundColor: AppColors.backGround,
         body: Padding(
       padding: EdgeInsets.symmetric(horizontal: 0.07.getScreenWidth),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Column(
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: 1.0.getScreenHeight,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -53,7 +53,7 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
                 child: Form(
-                  key: _formKey,
+                  key: _formKeyLogin,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -151,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                                               .isLoading
                                           ? null // Disable button while loading
                                           : () {
-                                              if (_formKey.currentState!
+                                              if (_formKeyLogin.currentState!
                                                   .validate()) {
                                                 authenticationProvider
                                                     .login(
@@ -227,21 +227,22 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 0.1.getScreenHeight),
+              GestureDetector(
+                onTap: () => StorageServices.delete('unionId'),
+                child: Text(
+                  context.strings.changeUnion,
+                  style: context.textTheme.headlineLarge!.copyWith(
+                    decoration: TextDecoration.underline,
+                    color: AppColors.themeColor,
+                    decorationColor: AppColors.themeColor,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ],
           ),
-          GestureDetector(
-            onTap: () => StorageServices.delete('unionId'),
-            child: Text(
-              context.strings.changeUnion,
-              style: context.textTheme.headlineLarge!.copyWith(
-                decoration: TextDecoration.underline,
-                color: AppColors.themeColor,
-                decorationColor: AppColors.themeColor,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ],
+        ),
       ),
     ));
   }

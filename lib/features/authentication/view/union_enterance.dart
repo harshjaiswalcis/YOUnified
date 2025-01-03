@@ -3,7 +3,7 @@ import 'package:younified/utils/exports/common_exports.dart';
 class UnionEnterance extends StatelessWidget {
   const UnionEnterance({super.key});
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKeyUnion = GlobalKey<FormState>();
   static final TextEditingController unionController = TextEditingController();
   static final TextEditingController localNumberController =
       TextEditingController();
@@ -41,7 +41,7 @@ class UnionEnterance extends StatelessWidget {
               ],
             ),
             child: Form(
-              key: _formKey,
+              key: _formKeyUnion,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,7 +103,8 @@ class UnionEnterance extends StatelessWidget {
                                 onPressed: state.isLoading
                                     ? null // Disable button while loading
                                     : () {
-                                        if (_formKey.currentState!.validate()) {
+                                        if (_formKeyUnion.currentState!
+                                            .validate()) {
                                           state
                                               .fetchUnionByName(
                                                   unionController.text)

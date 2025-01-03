@@ -195,7 +195,6 @@ class HomeProvider extends ChangeNotifier {
           document: gql(HomeModulesQueries.profile),
           variables: {
             'token': StorageServices.getString('token'),
-            'device': 'mobile',
           },
           fetchPolicy: FetchPolicy.noCache,
         ),
@@ -214,11 +213,9 @@ class HomeProvider extends ChangeNotifier {
       }
 
       if (result.data != null) {
-        log(result.data.toString());
-        final data =
-            GenericResponse.fromJson(result.data!['loginWithToken'], 'user');
+        "profile------> ${result.data}".toLog();
+        final data = GenericResponse.fromJson(result.data!['loginWithToken']);
         userData = data.user;
-        log(userData!.firstName.toString());
         isLoading = false;
         notifyListeners();
         return userData;
@@ -251,7 +248,7 @@ class HomeProvider extends ChangeNotifier {
           document: gql(HomeMutations.updateUser),
           variables: {
             "unionId": StorageServices.getString('unionId'),
-            "modifyUserId": StorageServices.getString('userId'),
+            "updateUserId": StorageServices.getString('userId'),
             "input": {
               "firstName": firstname,
               "lastName": lastname,
@@ -265,7 +262,7 @@ class HomeProvider extends ChangeNotifier {
           fetchPolicy: FetchPolicy.noCache,
         ),
       );
-
+      "updateUser--------------> $result".toLog();
       if (result.hasException) {
         List<String> errorMessages =
             GraphQLErrorHandler.extractErrorMessages(result.exception);
@@ -280,7 +277,7 @@ class HomeProvider extends ChangeNotifier {
 
       if (result.data != null) {
         log(result.data.toString());
-        final data = UserData.fromJson(result.data!['modifyUser']);
+        final data = UserData.fromJson(result.data!['updateUser']);
         userData = data;
         log(userData!.firstName.toString());
         isLoading = false;

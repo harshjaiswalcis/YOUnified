@@ -4,7 +4,7 @@ import 'package:younified/utils/exports/common_exports.dart';
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
 
-  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKeySignUp = GlobalKey<FormState>();
   static final TextEditingController emailController = TextEditingController();
   static final TextEditingController firstNameController =
       TextEditingController();
@@ -54,7 +54,7 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
                 child: Form(
-                  key: _formKey,
+                  key: _formKeySignUp,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -258,7 +258,8 @@ class SignUpScreen extends StatelessWidget {
                               onPressed: authenticationProvider.isLoading
                                   ? null // Disable button while loading
                                   : () {
-                                      if (_formKey.currentState!.validate()) {
+                                      if (_formKeySignUp.currentState!
+                                          .validate()) {
                                         authenticationProvider
                                             .signup(
                                           emailController.text,

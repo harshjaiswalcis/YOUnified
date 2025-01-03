@@ -1,15 +1,5 @@
 import 'package:younified/utils/exports/common_exports.dart';
 
-// Message model
-class Message {
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-
-  Message({required this.text, required this.isUser, DateTime? timestamp})
-      : timestamp = timestamp ?? DateTime.now();
-}
-
 class FeedDetailScreen extends StatefulWidget {
   final Post feed;
   const FeedDetailScreen({super.key, required this.feed});
@@ -19,61 +9,36 @@ class FeedDetailScreen extends StatefulWidget {
 }
 
 class _FeedDetailScreenState extends State<FeedDetailScreen> {
-  // Scroll controller for messages
-  final ScrollController _scrollController = ScrollController();
+  final _scrollController = ScrollController();
+  final _messageController = TextEditingController();
+  final _messageFocusNode = FocusNode();
 
-  // Text controller for message input
-  final TextEditingController _messageController = TextEditingController();
-  final FocusNode _messageFocusNode = FocusNode();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _messageController.dispose();
+    _messageFocusNode.dispose();
+    super.dispose();
+  }
 
-  // Focus on TextField
   void _focusOnTextField() {
     FocusScope.of(context).requestFocus(_messageFocusNode);
   }
 
   @override
-  void dispose() {
-    _messageController.dispose();
-    _messageFocusNode.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // Get the updated Post object from the Provider
-    final updatedPost = feedProvider.newsFeedListElement.value.firstWhere(
-        (post) => post.id == widget.feed.id,
-        orElse: () => widget.feed);
+    final updatedPost = _getUpdatedPost();
     return GestureDetector(
-      onTap: () {
-        // Dismiss keyboard when tapping outside the input
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         resizeToAvoidBottomInset: true,
         backgroundColor: AppColors.backGround,
         appBar: CommonAppBar(title: context.strings.feed),
         body: SafeArea(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      PostSection(
-                        feed: updatedPost,
-                        onFocus: _focusOnTextField,
-                      ),
-                      const Divider(),
-                      CommentSection(comments: updatedPost.comments),
-                    ],
-                  ),
-                ),
-              ),
-              _buildCommentInput(feedProvider, updatedPost),
+              Expanded(child: _buildPostAndComments(updatedPost)),
+              _buildCommentInput(updatedPost),
             ],
           ),
         ),
@@ -81,78 +46,101 @@ class _FeedDetailScreenState extends State<FeedDetailScreen> {
     );
   }
 
-  Widget _buildCommentInput(FeedProvider feedProvider, Post updatedPost) {
+  Post _getUpdatedPost() {
+    return feedProvider.newsFeedListElement.value.firstWhere(
+      (post) => post.id == widget.feed.id,
+      orElse: () => widget.feed,
+    );
+  }
+
+  Widget _buildPostAndComments(Post updatedPost) {
+    return SingleChildScrollView(
+      controller: _scrollController,
+      child: Column(
+        children: [
+          PostSection(feed: updatedPost, onFocus: _focusOnTextField),
+          const Divider(),
+          CommentSection(comments: updatedPost.comments),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCommentInput(Post updatedPost) {
     return ColoredBox(
       color: AppColors.white,
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Row(
           children: [
-            const SizedBox(width: 12),
-            // Message input field
             Expanded(
-              child: Theme(
-                data: ThemeData(
-                  inputDecorationTheme:
-                      const InputDecorationTheme(), // Reset to default
-                ),
-                child: TextField(
-                  controller: _messageController,
-                  focusNode: _messageFocusNode,
-                  decoration: InputDecoration(
-                    hintText: 'Write a comment',
-                    hintStyle: TextStyle(color: AppColors.replyTextGround),
-                    filled: true,
-                    fillColor: Colors.grey[200],
-                    border: OutlineInputBorder(
-                      borderRadius:
-                          BorderRadius.circular(25), // Custom border radius
-                      borderSide: BorderSide.none, // No border
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                  ),
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (_) => _sendComment(feedProvider, updatedPost),
-                ),
-              ),
+              child: _buildMessageTextField(updatedPost),
             ),
             const SizedBox(width: 12),
-            // Send button
-            InkWell(
-              onTap: () => _sendComment(feedProvider, updatedPost),
-              child: CircleAvatar(
-                radius: 20,
-                backgroundColor: AppColors.themeColor,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 2.0, top: 2.0),
-                  child: Image.asset(AppIcons.send),
-                ),
-              ),
-            ),
+            _buildSendButton(updatedPost),
           ],
         ),
       ),
     );
   }
 
-  void _sendComment(FeedProvider feedProvider, Post updatedPost) async {
-    final content = _messageController.text.trim();
+  Widget _buildMessageTextField(Post updatedPost) {
+    return Theme(
+      data: ThemeData(
+        inputDecorationTheme: const InputDecorationTheme(), // Reset to default
+      ),
+      child: TextField(
+        controller: _messageController,
+        focusNode: _messageFocusNode,
+        decoration: InputDecoration(
+          hintText: 'Write a comment',
+          hintStyle: const TextStyle(color: AppColors.replyTextGround),
+          filled: true,
+          fillColor: Colors.grey[200],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25), // Custom border radius
+            borderSide: BorderSide.none, // No border
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 10,
+          ),
+        ),
+        textInputAction: TextInputAction.send,
+        onSubmitted: (_) => _sendComment(updatedPost),
+      ),
+    );
+  }
 
+  Widget _buildSendButton(Post updatedPost) {
+    return InkWell(
+      onTap: () => _sendComment(updatedPost),
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: AppColors.themeColor,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 2.0, top: 2.0),
+          child: Image.asset(AppIcons.send),
+        ),
+      ),
+    );
+  }
+
+  void _sendComment(Post updatedPost) async {
+    final content = _messageController.text.trim();
     if (content.isEmpty) {
       context.showAppSnackBar(title: "Comment cannot be empty");
       return;
     }
 
-    // Show a loading indicator or handle state
     final newComment = await feedProvider.addComment(updatedPost.id, content);
 
     if (newComment != null) {
       _messageController.clear();
+      if (!mounted) return;
       FocusScope.of(context).unfocus();
     } else {
+      if (!mounted) return;
       context.showAppSnackBar(
         title: feedProvider.errorMessage ?? "Error adding comment",
       );
@@ -300,26 +288,6 @@ class PostSection extends StatelessWidget {
   }
 }
 
-// class CommentSection extends StatelessWidget {
-//   final List<Comment>? comments;
-
-//   const CommentSection({super.key, required this.comments});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return comments != null
-//         ? ListView.builder(
-//             shrinkWrap: true,
-//             physics: const NeverScrollableScrollPhysics(),
-//             itemCount: comments!.length,
-//             itemBuilder: (context, index) {
-//               return CommentWidget(comment: comments![index]);
-//             },
-//           )
-//         : const SizedBox();
-//   }
-// }
-
 class CommentSection extends StatelessWidget {
   final List<Comment>? comments;
 
@@ -419,7 +387,9 @@ class CommentWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            comment.createdOn!.timeAgo(),
+                            comment.createdOn != null
+                                ? comment.createdOn!.timeAgo()
+                                : 'Unknown time',
                             style: context.textTheme.labelLarge!
                                 .copyWith(color: AppColors.replyTextGround),
                           ),

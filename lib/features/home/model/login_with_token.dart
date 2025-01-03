@@ -3,11 +3,11 @@ class GenericResponse {
 
   GenericResponse({required this.user});
 
-  factory GenericResponse.fromJson(Map<String, dynamic> json, String key) {
-    // Ensure the specified key exists in the JSON
-    final userData = json[key];
+  factory GenericResponse.fromJson(Map<String, dynamic> json) {
+    // Extract the 'User' key directly from the JSON
+    final userData = json['User'];
     if (userData == null) {
-      throw Exception('Key "$key" not found in the response JSON.');
+      throw Exception('Key "User" not found in the response JSON.');
     }
 
     return GenericResponse(

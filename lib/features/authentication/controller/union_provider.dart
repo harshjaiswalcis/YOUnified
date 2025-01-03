@@ -20,7 +20,7 @@ class UnionProvider extends ChangeNotifier {
           },
         ),
       );
-
+      "unionByName----------> $result".toLog();
       if (result.hasException) {
         // Extract GraphQL errors
         if (result.exception?.graphqlErrors.isNotEmpty ?? false) {

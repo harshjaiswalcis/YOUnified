@@ -20,11 +20,11 @@ class NewsFeedResponseData {
 
   factory NewsFeedResponseData.fromJson(Map<String, dynamic> json) {
     return NewsFeedResponseData(
-      newsFeed: NewsFeed.fromJson(json['newsFeed']),
+      newsFeed: NewsFeed.fromJson(json['getAllNewsPosts']),
     );
   }
 
-  Map<String, dynamic> toJson() => {'newsFeed': newsFeed.toJson()};
+  Map<String, dynamic> toJson() => {'getAllNewsPosts': newsFeed.toJson()};
 }
 
 class NewsFeed {
@@ -34,7 +34,7 @@ class NewsFeed {
   NewsFeed({this.data, required this.total});
 
   factory NewsFeed.fromJson(Map<String, dynamic> json) {
-    final newsFeedData = json['newsFeed'];
+    final newsFeedData = json['getAllNewsPosts'];
     final list = newsFeedData['data'] as List?;
     final postsList = list?.map((i) => Post.fromJson(i)).toList() ?? [];
 

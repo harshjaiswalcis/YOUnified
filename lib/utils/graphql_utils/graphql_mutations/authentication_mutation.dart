@@ -1,11 +1,10 @@
 class AuthenticationMutation {
   // Login
   static const String login = '''
-     mutation Login(\$input: Credential, \$device: String) {
-        login(input: \$input, device: \$device) {
-          user {
-            unionStatus
-            token
+     mutation Login(\$device: String,\$input: Credential) {
+        login(device: \$device, input:\$input) {
+          token
+          User {
             id
           }
         }
@@ -14,8 +13,9 @@ class AuthenticationMutation {
 
   // Signup
   static const String signup = '''
-     mutation MemberRegistration(\$unionId: UnifiedID, \$input: UserInput!) {
-        memberRegistration(unionID: \$unionId, input: \$input) {
+     mutation RegisterUser(\$unionId: ObjectID!, \$input: UserInput!) {
+        registerUser(unionID: \$unionId, input:\$input) {
+          id
           username
           lastName
           firstName
@@ -24,8 +24,6 @@ class AuthenticationMutation {
             email
             phone
           }
-          id
-          token
         }
       }
     ''';

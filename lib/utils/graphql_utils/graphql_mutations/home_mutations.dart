@@ -1,14 +1,14 @@
 class HomeMutations {
   static const updateUser = '''
-     mutation Mutation(\$modifyUserId: UnifiedID!, \$input: UserInput, \$unionId: UnifiedID) {
-        modifyUser(id: \$modifyUserId, input: \$input, unionID: \$unionId) {
-          firstName
-          lastName
-          username
-          status
+     mutation UpdateUser(\$updateUserId: ObjectID!, \$unionId: ObjectID!, \$input: UserUpdateInput!) {
+        updateUser(id: \$updateUserId, unionID: \$unionId, input: \$input) {
           unit
-          employmentStatus
+          status
+          username
+          lastName
+          firstName
           unionPosition
+          employmentStatus
           profile {
             imageURL
           }
