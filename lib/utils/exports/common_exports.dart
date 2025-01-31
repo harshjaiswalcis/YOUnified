@@ -28,7 +28,6 @@ export 'package:younified/features/home/model/perk_model.dart';
 export 'package:younified/features/feed/model/feed_model.dart';
 export 'package:younified/app_services/navigation_service.dart';
 export 'package:cached_network_image/cached_network_image.dart';
-export 'package:younified/features/home/model/executive_model.dart';
 export 'package:younified/features/home/model/home_list_model.dart';
 export 'package:younified/features/services/model/voting_model.dart';
 export 'package:younified/features/setting/view/setting_screen.dart';

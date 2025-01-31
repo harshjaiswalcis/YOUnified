@@ -5,82 +5,122 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            settingsCard(
-              context: context,
-              title: context.strings.contacts,
-              children: [
-                contactItem(
-                    context: context,
-                    icon: AppIcons.phone,
-                    text: "(647) 776 - 0950"),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                contactItem(
-                    context: context,
-                    icon: AppIcons.mail,
-                    text: "Contact@unionstrategiesinc.com"),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                contactItem(
-                    context: context,
-                    icon: AppIcons.location,
-                    text: "87 Caster Avenue Woodbridge,\nOntario L4L5Z2"),
-              ],
+    return FutureBuilder(
+      future: settingController.fetchPermissions(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError ||
+            settingController.errorMessage != null) {
+          // Capture the error message before clearing it
+          final errorMessage =
+              settingController.errorMessage ?? 'Failed to load data.';
+          // Clear the error message to avoid caching
+          settingController.errorMessage = null;
+
+          return Center(
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: AppColors.redText),
             ),
-            const SizedBox(height: 18),
-            settingsCard(
-              context: context,
-              title: context.strings.unionNotifications,
-              children: [
-                switchItem(label: context.strings.unionNotifications),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                switchItem(label: context.strings.allowCallDrops),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                switchItem(label: context.strings.allowTextMessages),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                switchItem(label: context.strings.allowEmails),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                switchItem(label: context.strings.allowPushNotifications),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                switchItem(label: context.strings.allowRegistrationEmails),
-              ],
-            ),
-            const SizedBox(height: 18),
-            settingsCard(
-              context: context,
-              title: context.strings.accessibility,
-              children: [
-                dropdownItem(
-                  context: context,
-                  label: context.strings.language,
-                ),
-                // const Divider(thickness: 1, color: AppColors.commentBgColor),
-                // textSizeItem(context: context),
-                const SizedBox(height: 8),
-              ],
-            ),
-            const SizedBox(height: 18),
-            settingsCard(
-              context: context,
-              title: context.strings.systemSettings,
-              children: [
-                systemItem(
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  settingsCard(
                     context: context,
-                    label: context.strings.systemNotifications),
-                const Divider(thickness: 1, color: AppColors.commentBgColor),
-                GestureDetector(
-                    onTap: () {},
-                    child: systemItem(
-                        context: context, label: "Version - 1.6.17")),
-              ],
+                    title: context.strings.contacts,
+                    children: [
+                      contactItem(
+                          context: context,
+                          icon: AppIcons.phone,
+                          text: "(647) 776 - 0950"),
+                      const Divider(
+                          thickness: 1, color: AppColors.commentBgColor),
+                      contactItem(
+                        context: context,
+                        icon: AppIcons.mail,
+                        text: "Contact@unionstrategiesinc.com",
+                      ),
+                      const Divider(
+                          thickness: 1, color: AppColors.commentBgColor),
+                      contactItem(
+                          context: context,
+                          icon: AppIcons.location,
+                          text: "87 Caster Avenue Woodbridge,\nOntario L4L5Z2"),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Consumer<SettingController>(
+                    builder: (context, controller, child) {
+                      return settingsCard(
+                        context: context,
+                        title: "Union Notifications",
+                        children: controller.permissions.keys.map((key) {
+                          return Column(
+                            children: [
+                              switchItem(
+                                key: key,
+                                context: context,
+                                permissions: controller.permissions,
+                                onPermissionChanged: (key, value) {
+                                  controller.updateBackendAndPermissions(
+                                    key,
+                                    value,
+                                    (message) =>
+                                        context.showAppSnackBar(title: message),
+                                  );
+                                },
+                              ),
+                              const Divider(
+                                  thickness: 1,
+                                  color: AppColors.commentBgColor),
+                            ],
+                          );
+                        }).toList(),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 18),
+                  settingsCard(
+                    context: context,
+                    title: context.strings.accessibility,
+                    children: [
+                      dropdownItem(
+                        context: context,
+                        label: context.strings.language,
+                      ),
+                      // const Divider(thickness: 1, color: AppColors.commentBgColor),
+                      // textSizeItem(context: context),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  settingsCard(
+                    context: context,
+                    title: context.strings.systemSettings,
+                    children: [
+                      systemItem(
+                          context: context,
+                          label: context.strings.systemNotifications),
+                      const Divider(
+                          thickness: 1, color: AppColors.commentBgColor),
+                      GestureDetector(
+                          onTap: () {},
+                          child: systemItem(
+                              context: context, label: "Version - 1.6.17")),
+                    ],
+                  ),
+                  const SizedBox(height: 60),
+                ],
+              ),
             ),
-            const SizedBox(height: 60),
-          ],
-        ),
-      ),
+          );
+        }
+      },
     );
   }
 
@@ -141,34 +181,32 @@ class SettingScreen extends StatelessWidget {
         ),
       );
 
-  Widget switchItem({required String label}) {
-    bool isSwitched = false;
-    return StatefulBuilder(
-      builder: (context, setState) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: context.textTheme.labelMedium,
-              ),
+  Widget switchItem({
+    required String key,
+    required BuildContext context,
+    required Map<String, Map<String, dynamic>> permissions,
+    required void Function(String key, bool value) onPermissionChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              permissions[key]?["label"] ?? key,
+              style: context.textTheme.labelMedium,
             ),
-            const SizedBox(width: 20),
-            SizedBox(
-              height: 30,
-              child: CustomSwitch(
-                value: isSwitched,
-                onChanged: (value) {
-                  setState(() {
-                    isSwitched = value;
-                  });
-                },
-              ),
+          ),
+          const SizedBox(width: 20),
+          SizedBox(
+            height: 30,
+            child: CustomSwitch(
+              value: permissions[key]?["value"] ?? false,
+              onChanged: (value) => onPermissionChanged(key, value),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

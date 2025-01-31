@@ -18,12 +18,12 @@ class ExecutiveScreen extends StatelessWidget {
           }
 
           if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.data != null) {
+              snapshot.data!.count != 0) {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              itemCount: snapshot.data!.executives.length,
+              itemCount: snapshot.data!.users.length,
               itemBuilder: (context, index) {
-                final executive = snapshot.data!.executives[index];
+                final executive = snapshot.data!.users[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: DecoratedBox(
@@ -50,19 +50,27 @@ class ExecutiveScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                 radius: 40,
-                                backgroundImage: NetworkImage(
-                                    executive.memberData.profile.imageURL),
+                                backgroundImage: (executive
+                                        .profile.imageURL.isNotEmpty)
+                                    ? NetworkImage(executive.profile.imageURL)
+                                    : null,
+                                child: (executive.profile.imageURL.isEmpty)
+                                    ? Text(
+                                        '${executive.firstName.isNotEmpty ? executive.firstName[0] : ''}${executive.lastName.isNotEmpty ? executive.lastName[0] : ''}',
+                                        style: const TextStyle(fontSize: 20),
+                                      )
+                                    : null,
                               ),
                               const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${executive.memberData.firstName} ${executive.memberData.lastName}',
+                                    '${executive.firstName} ${executive.lastName}',
                                     style: context.textTheme.titleLarge,
                                   ),
                                   Text(
-                                    executive.position,
+                                    executive.unionPosition,
                                     style: context.textTheme.displaySmall!
                                         .copyWith(color: AppColors.black),
                                   ),
@@ -77,7 +85,7 @@ class ExecutiveScreen extends StatelessWidget {
                               const SizedBox(height: 5),
                               if (executive.display.email) ...[
                                 Text(
-                                  executive.memberData.profile.email,
+                                  executive.profile.email,
                                   style: context.textTheme.displaySmall!
                                       .copyWith(
                                           fontWeight: FontWeight.w400,
@@ -96,14 +104,14 @@ class ExecutiveScreen extends StatelessWidget {
                                     style: context.textTheme.headlineLarge,
                                   ),
                                   // Text(
-                                  //   executive.memberData.profile.phone
+                                  //   executive.profile.phone
                                   //       ,
                                   //   style: context.textTheme.headlineLarge!
                                   //       .copyWith(fontWeight: FontWeight.w400),
                                   // ),
                                   RichText(
                                     text: TextSpan(
-                                      text: executive.memberData.profile.phone,
+                                      text: executive.profile.phone,
                                       style: context.textTheme.headlineLarge!
                                           .copyWith(
                                               fontWeight: FontWeight.w400),
@@ -128,7 +136,7 @@ class ExecutiveScreen extends StatelessWidget {
                                       style: context.textTheme.headlineLarge,
                                     ),
                                     Text(
-                                      executive.memberData.profile.phone,
+                                      executive.profile.phone,
                                       style: context.textTheme.headlineLarge!
                                           .copyWith(
                                               fontWeight: FontWeight.w400),
@@ -147,7 +155,7 @@ class ExecutiveScreen extends StatelessWidget {
             );
           }
           return const Center(
-            child: Text("Data is null"),
+            child: Text("Executive data is null"),
           );
         },
       ),

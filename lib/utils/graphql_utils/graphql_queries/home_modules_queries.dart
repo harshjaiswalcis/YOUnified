@@ -1,34 +1,30 @@
 class HomeModulesQueries {
   // Executive
   static const String executive = '''
-     query executives(\$category: String!, \$unionId: UnifiedID!) {
-        executives(category: \$category, unionID: \$unionId) {
-          id
-          position
+     query GetExecutives(\$unionId: ObjectID!, \$page: Int64!, \$limit: Int64!) {
+        getExecutives(unionID: \$unionId, page: \$page, limit: \$limit) {
+          Count
+          Users {
+            id
           display {
             email
             extension
             mobile
-            __typename
           }
           extension
-          memberData {
-            profile {
-              email
-              phone
-              mobile
-              imageURL
-              __typename
-            }
-            firstName
-            lastName
-            unionPosition
-            __typename
+          profile {
+            email
+            phone
+            mobile
+            imageURL
           }
-          __typename
+          firstName
+          lastName
+          unionPosition
+          }
         }
       }
-  ''';
+    ''';
 
   // Profile
   static const String profile = '''
@@ -45,6 +41,11 @@ class HomeModulesQueries {
             profile {
               imageURL
             }
+            callOpOut
+            emailOpOut
+            textOpOut
+            pushOpOut
+            regEmailOpOut
           }
         }
       }
