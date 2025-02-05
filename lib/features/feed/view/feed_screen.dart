@@ -10,12 +10,12 @@ class FeedScreen extends StatefulWidget {
 class _FeedScreenState extends State<FeedScreen> {
   int pageNumber = 2;
   final ScrollController _scrollController = ScrollController();
-  bool _infiniteScrollLoader = false;
+  final bool _infiniteScrollLoader = false;
 
-  set _setInfiniteScrollLoader(bool scrollLoaderValue) {
-    _infiniteScrollLoader = scrollLoaderValue;
-    feedProvider.notify();
-  }
+  // set _setInfiniteScrollLoader(bool scrollLoaderValue) {
+  //   _infiniteScrollLoader = scrollLoaderValue;
+  //   feedProvider.notify();
+  // }
 
   void _onScroll() {
     if (_scrollController.position.pixels ==
@@ -149,12 +149,25 @@ class PostSection extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius: 20,
-                            backgroundImage: feed
-                                        .creator.profile.imageURL.isNotEmpty &&
-                                    feed.creator.profile.imageURL != ""
+                            backgroundImage: (feed
+                                    .creator.profile.imageURL.isNotEmpty)
                                 ? NetworkImage(feed.creator.profile.imageURL)
-                                : const AssetImage(AppIcons.emptyProfile),
+                                : null,
+                            child: (feed.creator.profile.imageURL.isEmpty)
+                                ? Text(
+                                    '${feed.creator.firstName.isNotEmpty ? feed.creator.firstName[0] : ''}${feed.creator.lastName.isNotEmpty ? feed.creator.lastName[0] : ''}',
+                                    style: const TextStyle(fontSize: 20),
+                                  )
+                                : null,
                           ),
+                          // CircleAvatar(
+                          //   radius: 20,
+                          //   backgroundImage: feed
+                          //               .creator.profile.imageURL.isNotEmpty &&
+                          //           feed.creator.profile.imageURL != ""
+                          //       ? NetworkImage(feed.creator.profile.imageURL)
+                          //       : const AssetImage(AppIcons.emptyProfile),
+                          // ),
                           const SizedBox(width: 10),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +189,7 @@ class PostSection extends StatelessWidget {
                       const SizedBox(height: 10),
                       if (!feedProvider.isExpanded(index))
                         Text(
-                          feed.content,
+                          feed.content.parseHtmlString,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: context.textTheme.labelMedium,
@@ -214,7 +227,7 @@ class PostSection extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       child: Text(
-                        feed.content,
+                        feed.content.parseHtmlString,
                         style: context.textTheme.labelMedium,
                       ),
                     ),

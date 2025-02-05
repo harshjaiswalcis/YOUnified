@@ -1,74 +1,58 @@
-class ExecutiveResponse {
-  final ExecutiveData data;
+class ExecutivesResponse {
+  final GetExecutives getExecutives;
 
-  ExecutiveResponse({required this.data});
+  ExecutivesResponse({required this.getExecutives});
 
-  factory ExecutiveResponse.fromJson(Map<String, dynamic> json) {
-    return ExecutiveResponse(
-      data: ExecutiveData.fromJson(json['data']),
+  factory ExecutivesResponse.fromJson(Map<String, dynamic> json) {
+    return ExecutivesResponse(
+      getExecutives: GetExecutives.fromJson(json['data']['getExecutives']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'data': data.toJson(),
-    };
   }
 }
 
-class ExecutiveData {
-  final List<Executive> executives;
+class GetExecutives {
+  final int count;
+  final List<User> users;
 
-  ExecutiveData({required this.executives});
+  GetExecutives({required this.count, required this.users});
 
-  factory ExecutiveData.fromJson(Map<String, dynamic> json) {
-    return ExecutiveData(
-      executives: (json['executives'] as List)
-          .map((item) => Executive.fromJson(item))
-          .toList(),
+  factory GetExecutives.fromJson(Map<String, dynamic> json) {
+    return GetExecutives(
+      count: json['Count'] ?? 0, // Handle null by defaulting to 0
+      users: (json['Users'] as List).map((e) => User.fromJson(e)).toList(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'executives': executives.map((e) => e.toJson()).toList(),
-    };
   }
 }
 
-class Executive {
+class User {
   final String id;
-  final String position;
   final Display display;
   final String extension;
-  final MemberData memberData;
+  final Profile profile;
+  final String firstName;
+  final String lastName;
+  final String unionPosition;
 
-  Executive({
+  User({
     required this.id,
-    required this.position,
     required this.display,
     required this.extension,
-    required this.memberData,
+    required this.profile,
+    required this.firstName,
+    required this.lastName,
+    required this.unionPosition,
   });
 
-  factory Executive.fromJson(Map<String, dynamic> json) {
-    return Executive(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       id: json['id'],
-      position: json['position'],
       display: Display.fromJson(json['display']),
       extension: json['extension'],
-      memberData: MemberData.fromJson(json['memberData']),
+      profile: Profile.fromJson(json['profile']),
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      unionPosition: json['unionPosition'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'position': position,
-      'display': display.toJson(),
-      'extension': extension,
-      'memberData': memberData.toJson(),
-    };
   }
 }
 
@@ -77,11 +61,7 @@ class Display {
   final bool extension;
   final bool mobile;
 
-  Display({
-    required this.email,
-    required this.extension,
-    required this.mobile,
-  });
+  Display({required this.email, required this.extension, required this.mobile});
 
   factory Display.fromJson(Map<String, dynamic> json) {
     return Display(
@@ -90,76 +70,27 @@ class Display {
       mobile: json['mobile'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'extension': extension,
-      'mobile': mobile,
-    };
-  }
 }
 
-class MemberData {
-  final ExecutiveProfile profile;
-  final String firstName;
-  final String lastName;
-  final String unionPosition;
-
-  MemberData({
-    required this.profile,
-    required this.firstName,
-    required this.lastName,
-    required this.unionPosition,
-  });
-
-  factory MemberData.fromJson(Map<String, dynamic> json) {
-    return MemberData(
-      profile: ExecutiveProfile.fromJson(json['profile']),
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      unionPosition: json['unionPosition'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'profile': profile.toJson(),
-      'firstName': firstName,
-      'lastName': lastName,
-      'unionPosition': unionPosition,
-    };
-  }
-}
-
-class ExecutiveProfile {
+class Profile {
   final String email;
   final String phone;
   final String mobile;
   final String imageURL;
 
-  ExecutiveProfile({
+  Profile({
     required this.email,
     required this.phone,
     required this.mobile,
     required this.imageURL,
   });
 
-  factory ExecutiveProfile.fromJson(Map<String, dynamic> json) {
-    return ExecutiveProfile(
+  factory Profile.fromJson(Map<String, dynamic> json) {
+    return Profile(
       email: json['email'],
       phone: json['phone'],
       mobile: json['mobile'],
       imageURL: json['imageURL'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'phone': phone,
-      'mobile': mobile,
-      'imageURL': imageURL,
-    };
   }
 }

@@ -229,7 +229,10 @@ class LoginScreen extends StatelessWidget {
               ),
               SizedBox(height: 0.1.getScreenHeight),
               GestureDetector(
-                onTap: () => StorageServices.delete('unionId'),
+                onTap: () {
+                  StorageServices.delete('unionId');
+                  context.pushNamedAndRemoveUntil(Routes.unionEnterance);
+                },
                 child: Text(
                   context.strings.changeUnion,
                   style: context.textTheme.headlineLarge!.copyWith(

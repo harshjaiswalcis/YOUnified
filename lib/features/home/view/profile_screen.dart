@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:io';
-
+// import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:minio/minio.dart';
+import 'package:uuid/uuid.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:younified/utils/image_picker.dart';
 
@@ -36,6 +39,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
     employmentStatusController.text = homeProvider.userData!.employmentStatus;
     unionPositionController.text = homeProvider.userData!.unionPosition;
     super.initState();
+  }
+
+  //aws_s3_upload
+  // Future<void> _uploadFile() async {
+  //   var uuid = const Uuid();
+  //   final String photoUuid = uuid.v4();
+  //   print("UUID: $photoUuid");
+
+  //   if (selectedImage == null) {
+  //     print("No file selected.");
+  //     return;
+  //   }
+
+  //   const bucketName = Env.bucketName;
+  //   const region = Env.region;
+  //   const accessKey = Env.accessKey;
+  //   const secretKey = Env.secretKey;
+
+  //   final keyPath =
+  //       '${StorageServices.getString('unionId')}/users/avatar/$photoUuid.jpeg';
+  //   print("S3 Upload KeyPath: $keyPath");
+
+  //   File file = File(selectedImage!.path);
+  //   if (!file.existsSync()) {
+  //     print("File does not exist!");
+  //     return;
+  //   }
+
+  //   try {
+  //     print("Starting upload...");
+  //     String? uploadedImageUrl = await AwsS3.uploadFile(
+  //       key: keyPath,
+  //       file: file,
+  //       region: region,
+  //       bucket: bucketName,
+  //       accessKey: accessKey,
+  //       secretKey: secretKey,
+  //     );
+
+  //     if (uploadedImageUrl != null) {
+  //       print("File uploaded successfully: $uploadedImageUrl");
+  //       Future.microtask(() {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           SnackBar(
+  //               content: Text('File uploaded successfully: $uploadedImageUrl')),
+  //         );
+  //       });
+  //     } else {
+  //       print("Upload returned null.");
+  //     }
+  //   } catch (e) {
+  //     print("Upload failed: $e");
+  //     Future.microtask(() {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Upload failed: $e')),
+  //       );
+  //     });
+  //   }
+  // }
+
+  Future<void> _uploadFile() async {
+    var uuid = const Uuid();
+    final String photoUuid = uuid.v4();
+
+    if (selectedImage == null) {
+      print("No file selected.");
+      return;
+    }
+
+    final bucketName = Env.bucketName;
+    final region = Env.region; // e.g., 'us-east-1'
+    final accessKey = Env.accessKey;
+    final secretKey = Env.secretKey;
+    final keyPath =
+        '${StorageServices.getString('unionId')}/users/avatar/$photoUuid.jpeg';
+    "uuid-----> $photoUuid".toLog();
+    "keyPath-----> $keyPath".toLog();
+
+    File file = File(selectedImage!.path);
+    // Convert the stream to Stream<Uint8List>
+    final fileStream = file.openRead().map((data) => Uint8List.fromList(data));
+
+    final minio = Minio(
+      endPoint: Env.awsEndpoints,
+      accessKey: accessKey, // AWS Access Key
+      secretKey: secretKey, // AWS Secret Key
+      region: region, // AWS Region
+    );
+
+    try {
+      final data = await minio.putObject(
+        bucketName, // S3 Bucket Name
+        keyPath,
+        fileStream,
+        size: file.lengthSync(),
+        metadata: {'Content-Type': '$photoUuid/jpeg'},
+      );
+      print("File uploaded successfully. $data");
+    } catch (e) {
+      print("Error uploading file: $e");
+    }
   }
 
   @override
@@ -199,6 +303,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   img.toString().toLog();
                                   selectedImage = img;
                                 });
+
+                                _uploadFile();
                                 // if (selectedImage != null) {
                                 //   await homeProvider
                                 //       .uploadProfile(selectedImage!)

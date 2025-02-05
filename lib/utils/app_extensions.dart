@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:intl/intl.dart';
 import 'package:younified/utils/exports/common_exports.dart';
+import 'package:html/parser.dart' as htmlParser;
 
 extension ScreenSize on double {
   double get getScreenHeight =>
@@ -319,5 +319,17 @@ extension TimeAgoExtension on DateTime {
     } else {
       return '${difference.inDays} days ago';
     }
+  }
+}
+
+extension HtmlParsing on String {
+  String get parseHtmlString {
+    final document = htmlParser.parse(this);
+
+    final String parsedText = document.body != null
+        ? htmlParser.parse(document.body!.text).documentElement!.text
+        : '';
+
+    return parsedText;
   }
 }

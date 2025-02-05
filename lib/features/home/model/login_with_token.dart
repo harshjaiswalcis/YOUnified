@@ -25,9 +25,21 @@ class UserData {
   final String employmentStatus;
   final String unionPosition;
   final UserProfile? profile;
+  final bool? callOpOut;
+  final bool? emailOpOut;
+  final bool? textOpOut;
+  final bool? pushOpOut;
+  final bool? regEmailOpOut;
+  // final bool? unionOpOut;
 
   UserData({
     this.profile,
+    this.callOpOut,
+    this.emailOpOut,
+    this.textOpOut,
+    this.pushOpOut,
+    this.regEmailOpOut,
+    // this.unionOpOut,
     required this.username,
     required this.status,
     required this.lastName,
@@ -49,6 +61,12 @@ class UserData {
       profile: json['profile'] != null
           ? UserProfile.fromJson(json['profile'])
           : null,
+      callOpOut: json['callOpOut'],
+      emailOpOut: json['emailOpOut'],
+      textOpOut: json['textOpOut'],
+      pushOpOut: json['pushOpOut'],
+      regEmailOpOut: json['regEmailOpOut'],
+      // unionOpOut: json['unionOpOut'],
     );
   }
 }

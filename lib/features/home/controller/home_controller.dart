@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:younified/features/home/model/executive_model.dart';
 import 'package:younified/features/home/model/login_with_token.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:younified/utils/graphql_utils/graphql_mutations/home_mutations.dart';
@@ -143,52 +144,60 @@ class HomeProvider extends ChangeNotifier {
   String? errorMessage;
   UserData? userData;
 
-  Future<ExecutiveData?> fetchExecutive() async {
+  Future<GetExecutives?> fetchExecutive() async {
     isLoading = true;
 
     try {
-      QueryResult result = await GraphQLService.client.query(
+      final result = await GraphQLService.client.query(
         QueryOptions(
           document: gql(HomeModulesQueries.executive),
           variables: {
-            'unionId': StorageServices.getString('unionId'),
-            'category': '',
+            "unionId": StorageServices.getString('unionId'),
+            // "unionId": "5ffdac93b8f60d4d001babe1",
+            "page": 1,
+            "limit": 3
           },
         ),
       );
 
       if (result.hasException) {
-        List<String> errorMessages =
-            GraphQLErrorHandler.extractErrorMessages(result.exception);
-        errorMessage = errorMessages.isNotEmpty
-            ? errorMessages.first
-            : "Unknown error occurred.";
-
-        log(errorMessage!);
-        isLoading = false;
-        notifyListeners();
+        _handleGraphQLErrors(result.exception! as GraphQLError);
         return null;
       }
 
-      if (result.data != null) {
-        final executives = ExecutiveData.fromJson(result.data!);
-        isLoading = false;
-        notifyListeners();
-        return executives;
-      }
-    } catch (e) {
-      errorMessage = e.toString();
+      return _parseExecutiveData(result.data);
+    } catch (e, stackTrace) {
+      _handleGenericError(e, stackTrace);
+      return null;
+    } finally {
       isLoading = false;
       notifyListeners();
     }
-    notifyListeners();
-    return null;
+  }
+
+  GetExecutives? _parseExecutiveData(Map<String, dynamic>? data) {
+    final executivesData = data?['getExecutives'];
+    return executivesData != null
+        ? GetExecutives.fromJson(executivesData)
+        : null;
+  }
+
+  void _handleGraphQLErrors(GraphQLError exception) {
+    final errors = GraphQLErrorHandler.extractErrorMessages(exception);
+    errorMessage =
+        errors.isNotEmpty ? errors.first : "Unknown GraphQL error occurred";
+    log(errorMessage!);
+  }
+
+  void _handleGenericError(Object error, StackTrace stackTrace) {
+    errorMessage = error.toString();
+    log(errorMessage!, error: error, stackTrace: stackTrace);
   }
 
   Future<UserData?> fetchProfile() async {
     isLoading = true;
     notifyListeners();
-
+    StorageServices.getString('token').toLog();
     try {
       QueryResult result = await GraphQLService.client.query(
         QueryOptions(
