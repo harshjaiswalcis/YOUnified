@@ -1,6 +1,5 @@
 export 'package:http/http.dart';
 export 'dart:developer' hide Flow;
-export 'package:younified/utils/env.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter/material.dart';
 export 'package:younified/utils/routes.dart';
@@ -10,6 +9,7 @@ export 'package:younified/generated/l10n.dart';
 export 'package:hive_flutter/hive_flutter.dart';
 export 'package:younified/utils/validation.dart';
 export 'package:path_provider/path_provider.dart';
+export 'package:younified/utils/constants/env.dart';
 export 'package:younified/utils/app_extensions.dart';
 export 'package:younified/provider/app_provider.dart';
 export 'package:younified/utils/constants/common.dart';
