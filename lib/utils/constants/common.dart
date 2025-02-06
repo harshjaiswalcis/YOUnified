@@ -5,6 +5,7 @@ late HomeProvider homeProvider;
 late FeedProvider feedProvider;
 late UnionProvider unionProvider;
 late MessageProvider messageProvider;
+late DocumentProvider documentProvider;
 late ServicesProvider servicesProvider;
 late SettingController settingController;
 late NotificationProvider notificationProvider;

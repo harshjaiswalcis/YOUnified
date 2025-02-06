@@ -44,6 +44,7 @@ StatelessWidget mainApp = MultiProvider(
     ChangeNotifierProvider(create: (_) => UnionProvider()),
     ChangeNotifierProvider(create: (_) => MessageProvider()),
     ChangeNotifierProvider(create: (_) => ServicesProvider()),
+    ChangeNotifierProvider(create: (_) => DocumentProvider()),
     ChangeNotifierProvider(create: (_) => SettingController()),
     ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
     ChangeNotifierProvider(create: (context) => NotificationProvider())
