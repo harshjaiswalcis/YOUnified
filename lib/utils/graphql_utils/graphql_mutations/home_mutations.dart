@@ -1,7 +1,7 @@
 class HomeMutations {
   static const updateUser = '''
-     mutation UpdateUser(\$updateUserId: ObjectID!, \$unionId: ObjectID!, \$input: UserUpdateInput!) {
-        updateUser(id: \$updateUserId, unionID: \$unionId, input: \$input) {
+     mutation UpdateUser(\$input: UserUpdateInput!) {
+        updateUser(input: \$input) {
           unit
           status
           username

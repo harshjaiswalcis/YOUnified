@@ -6,34 +6,8 @@ class MessageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.backGround,
-      appBar: AppBar(
-        title: Text(
-          context.strings.messages,
-          style: context.textTheme.headlineLarge,
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pop(),
-          ),
-        ),
-        leadingWidth: 30,
-        elevation: 0,
-        actions: [
-          InkWell(
-            // onTap: () => context.pushNamed(Routes.notificationScreen),
-            child: SvgPicture.asset(AppIcons.bell),
-          ),
-          const SizedBox(width: 26),
-          InkWell(
-            // onTap: () => context.pushNamed(Routes.messageScreen),
-            child: SvgPicture.asset(AppIcons.notification),
-          ),
-          const SizedBox(width: 26),
-        ],
-      ),
+      backgroundColor: AppColors.backGround,
+      appBar: CommonAppBar(title: context.strings.messages),
       body: Consumer<MessageProvider>(
         builder: (context, messageProvider, child) {
           return ListView.builder(

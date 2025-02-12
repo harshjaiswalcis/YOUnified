@@ -6,7 +6,7 @@ class GrievanceTopicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _stepperData = List.generate(
+    final stepperData = List.generate(
         3,
         (index) => StepperItemData(
               id: '$index',
@@ -25,71 +25,7 @@ class GrievanceTopicScreen extends StatelessWidget {
             )).toList();
     return Scaffold(
       backgroundColor: AppColors.backGround,
-      appBar: AppBar(
-        title: Text(
-          context.strings.grievancetopic,
-          style: context.textTheme.headlineLarge,
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pop(),
-          ),
-        ),
-        leadingWidth: 30,
-        elevation: 0,
-        actions: [
-          InkWell(
-            onTap: () => context.pushNamed(Routes.notificationScreen),
-            child: Stack(
-              children: [
-                SvgPicture.asset(AppIcons.bell), // Bell Icon
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Consumer<NotificationProvider>(
-                    builder: (context, provider, child) {
-                      bool hasUnread = provider.notificationList.any(
-                        (notification) => !notification['isRead'],
-                      );
-                      return hasUnread
-                          ? Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 12,
-                                minHeight: 12,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 8,
-                                  minHeight: 8,
-                                ),
-                              ),
-                            )
-                          : const SizedBox();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 26),
-          InkWell(
-            onTap: () => context.pushNamed(Routes.messageScreen),
-            child: SvgPicture.asset(AppIcons.notification),
-          ),
-          const SizedBox(width: 26),
-        ],
-      ),
+      appBar: CommonAppBar(title: context.strings.grievancetopic),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24),
         child: SingleChildScrollView(
@@ -216,7 +152,7 @@ class GrievanceTopicScreen extends StatelessWidget {
                   // _buildUpdate(),
                   // _buildUpdate(),
                   // _buildUpdate(),
-                  SizedBox(height: 300, child: updatesStepper(_stepperData)),
+                  SizedBox(height: 300, child: updatesStepper(stepperData)),
                   const SizedBox(height: 24),
 
                   // Signatures Section
@@ -234,16 +170,16 @@ class GrievanceTopicScreen extends StatelessWidget {
     );
   }
 
-  StepperListView updatesStepper(List<StepperItemData> _stepperData) {
+  StepperListView updatesStepper(List<StepperItemData> stepperData) {
     return StepperListView(
       showStepperInLast: false,
-      stepperData: _stepperData,
+      stepperData: stepperData,
       stepAvatar: (_, data) {
         return const PreferredSize(
-          preferredSize: const Size.fromRadius(10),
+          preferredSize: Size.fromRadius(10),
           child: Padding(
             padding: EdgeInsets.fromLTRB(0.0, 12.0, 12.0, 12.0),
-            child: const Center(
+            child: Center(
               child: CircleAvatar(
                 radius: 10,
                 backgroundImage: AssetImage(

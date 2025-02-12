@@ -35,14 +35,7 @@ class DocumentScreenState extends State<DocumentScreen>
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             backgroundColor: AppColors.backGround,
-            appBar: AppBar(
-              title: Text(
-                context.strings.documents,
-                style: context.textTheme.headlineLarge,
-              ),
-              backgroundColor: AppColors.backGround,
-              elevation: 0,
-            ),
+            appBar: CommonAppBar(title: context.strings.documents),
             body: const Center(child: CircularProgressIndicator()),
           );
         }
@@ -55,14 +48,7 @@ class DocumentScreenState extends State<DocumentScreen>
               documentProvider.errorMessage ?? 'No categories available.';
           return Scaffold(
             backgroundColor: AppColors.backGround,
-            appBar: AppBar(
-              title: Text(
-                context.strings.documents,
-                style: context.textTheme.headlineLarge,
-              ),
-              backgroundColor: AppColors.backGround,
-              elevation: 0,
-            ),
+            appBar: CommonAppBar(title: context.strings.documents),
             body: Center(child: Text(errorMsg)),
           );
         }

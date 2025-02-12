@@ -19,12 +19,14 @@ class AppProvider extends ChangeNotifier with AppProviderStateMixins {
         QueryOptions(
           document: query,
           variables: variables ?? {},
+          fetchPolicy: FetchPolicy.noCache,
         ),
       );
       if (result.hasException) {
         _handleGraphQLErrors(result.exception!);
         return null;
       }
+      "fetchData------> ${result.data}".toLog();
       return parse(result.data);
     } catch (e, stackTrace) {
       _handleGenericError(e, stackTrace);

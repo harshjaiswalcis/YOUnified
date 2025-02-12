@@ -9,71 +9,7 @@ class PerkScreen extends StatelessWidget {
     List<PerkModel> perkListData = HomeProvider.perkListData;
     return Scaffold(
       backgroundColor: AppColors.backGround,
-      appBar: AppBar(
-        title: Text(
-          context.strings.perks,
-          style: context.textTheme.headlineLarge,
-        ),
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 10.0),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            onPressed: () => context.pop(),
-          ),
-        ),
-        leadingWidth: 30,
-        elevation: 0,
-        actions: [
-          InkWell(
-            onTap: () => context.pushNamed(Routes.notificationScreen),
-            child: Stack(
-              children: [
-                SvgPicture.asset(AppIcons.bell), // Bell Icon
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: Consumer<NotificationProvider>(
-                    builder: (context, provider, child) {
-                      bool hasUnread = provider.notificationList.any(
-                        (notification) => !notification['isRead'],
-                      );
-                      return hasUnread
-                          ? Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.6),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              constraints: const BoxConstraints(
-                                minWidth: 12,
-                                minHeight: 12,
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 8,
-                                  minHeight: 8,
-                                ),
-                              ),
-                            )
-                          : const SizedBox();
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 26),
-          InkWell(
-            onTap: () => context.pushNamed(Routes.messageScreen),
-            child: SvgPicture.asset(AppIcons.notification),
-          ),
-          const SizedBox(width: 26),
-        ],
-      ),
+      appBar: CommonAppBar(title: context.strings.perks),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -105,7 +41,8 @@ class PerkScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: 'Search',
                       suffixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 12.0, 18.0, 12.0),
+                        padding:
+                            const EdgeInsets.fromLTRB(0.0, 12.0, 18.0, 12.0),
                         child: SvgPicture.asset(AppIcons.search),
                       ),
                       filled: true,
@@ -113,8 +50,8 @@ class PerkScreen extends StatelessWidget {
                       border: InputBorder.none, // No border here
                       enabledBorder: InputBorder.none, // No border when enabled
                       focusedBorder: InputBorder.none, // No border when focused
-                      contentPadding:
-                          const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 24),
                     ),
                   ),
                 ),
@@ -144,19 +81,17 @@ class PerkScreen extends StatelessWidget {
             const SizedBox(height: 16),
             // Perks List
             Expanded(
-              child: 
-              ListView.builder 
-              (
+              child: ListView.builder(
                 itemCount: perkListData.length,
                 itemBuilder: (context, index) => PerkItem(
-                    imageUrl:
-                        perkListData[index].imageUrl, // Placeholder Image URL
-                    title: perkListData[index].title,
-                    subtitle: perkListData[index].subtitle,
-                    price: perkListData[index].price,
-                    duration: perkListData[index].duration,
-                    rating: perkListData[index].rating,
-                  ),
+                  imageUrl:
+                      perkListData[index].imageUrl, // Placeholder Image URL
+                  title: perkListData[index].title,
+                  subtitle: perkListData[index].subtitle,
+                  price: perkListData[index].price,
+                  duration: perkListData[index].duration,
+                  rating: perkListData[index].rating,
+                ),
               ),
             ),
           ],
@@ -268,7 +203,8 @@ class PerkItem extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: context.textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w600),
+                      style: context.textTheme.headlineLarge!
+                          .copyWith(fontWeight: FontWeight.w600),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -297,11 +233,13 @@ class PerkItem extends StatelessWidget {
                 children: [
                   Text(
                     price,
-                    style: context.textTheme.headlineLarge!.copyWith(fontWeight: FontWeight.w600),
+                    style: context.textTheme.headlineLarge!
+                        .copyWith(fontWeight: FontWeight.w600),
                   ),
                   Text(
                     duration,
-                    style: context.textTheme.headlineLarge!.copyWith(color: AppColors.greyIconColor),
+                    style: context.textTheme.headlineLarge!
+                        .copyWith(color: AppColors.greyIconColor),
                   ),
                 ],
               ),

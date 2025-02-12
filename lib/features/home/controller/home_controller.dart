@@ -39,62 +39,6 @@ class HomeProvider extends ChangeNotifier {
   static final List<HomeListModel> homeListData =
       homeList.map((mapData) => HomeListModel.fromMap(mapData)).toList();
 
-  // // EXECUTIVE LIST DATA
-  // static final List<Map<String, String>> executiveList = [
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Lina Vecchio",
-  //     "role": "Administrator",
-  //     "email": "lina.vecchio@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.879",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   },
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Fred Vecchio",
-  //     "role": "President",
-  //     "email": "fvecchio@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.874",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   },
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Leeanne Ward",
-  //     "role": "Director of Operations",
-  //     "email": "leeanne.ward@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.884",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   },
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Lina Vecchio",
-  //     "role": "Administrator",
-  //     "email": "lina.vecchio@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.879",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   },
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Fred Vecchio",
-  //     "role": "President",
-  //     "email": "fvecchio@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.874",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   },
-  //   {
-  //     "imageUrl": "https://api.multiavatar.com/Binx Bond.png",
-  //     "name": "Leeanne Ward",
-  //     "role": "Director of Operations",
-  //     "email": "leeanne.ward@unionstrategiesinc.com",
-  //     "officePhone": "(647) 776 - 0950 EXT.884",
-  //     "mobilePhone": "(416) 571 - 4706"
-  //   }
-  // ];
-
-  // // //MAPPING
-  // static final List<ExecutiveModel> executiveListData =
-  //     executiveList.map((mapData) => ExecutiveModel.fromJson(mapData)).toList();
-
   // PERK LIST DATA
   static final List<Map<String, dynamic>> perkList = [
     {
@@ -144,35 +88,18 @@ class HomeProvider extends ChangeNotifier {
   String? errorMessage;
   UserData? userData;
 
+  /// -------------------- EXECUTIVE FETCHING --------------------
   Future<GetExecutives?> fetchExecutive() async {
-    isLoading = true;
-
-    try {
-      final result = await GraphQLService.client.query(
-        QueryOptions(
-          document: gql(HomeModulesQueries.executive),
-          variables: {
-            "unionId": StorageServices.getString('unionId'),
-            // "unionId": "5ffdac93b8f60d4d001babe1",
-            "page": 1,
-            "limit": 3
-          },
-        ),
-      );
-
-      if (result.hasException) {
-        _handleGraphQLErrors(result.exception! as GraphQLError);
-        return null;
-      }
-
-      return _parseExecutiveData(result.data);
-    } catch (e, stackTrace) {
-      _handleGenericError(e, stackTrace);
-      return null;
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
+    final result = await appProvider.fetchData<GetExecutives?>(
+      query: gql(HomeModulesQueries.getExecutives),
+      variables: {
+        "unionId": StorageServices.getString('unionId'),
+        "page": 1,
+        "limit": 3
+      },
+      parse: _parseExecutiveData,
+    );
+    return result;
   }
 
   GetExecutives? _parseExecutiveData(Map<String, dynamic>? data) {
@@ -182,63 +109,28 @@ class HomeProvider extends ChangeNotifier {
         : null;
   }
 
-  void _handleGraphQLErrors(GraphQLError exception) {
-    final errors = GraphQLErrorHandler.extractErrorMessages(exception);
-    errorMessage =
-        errors.isNotEmpty ? errors.first : "Unknown GraphQL error occurred";
-    log(errorMessage!);
-  }
-
-  void _handleGenericError(Object error, StackTrace stackTrace) {
-    errorMessage = error.toString();
-    log(errorMessage!, error: error, stackTrace: stackTrace);
-  }
-
+  /// -------------------- PROFILE FETCHING --------------------
   Future<UserData?> fetchProfile() async {
-    isLoading = true;
-    notifyListeners();
     StorageServices.getString('token').toLog();
-    try {
-      QueryResult result = await GraphQLService.client.query(
-        QueryOptions(
-          document: gql(HomeModulesQueries.profile),
-          variables: {
-            'token': StorageServices.getString('token'),
-          },
-          fetchPolicy: FetchPolicy.noCache,
-        ),
-      );
-
-      if (result.hasException) {
-        List<String> errorMessages =
-            GraphQLErrorHandler.extractErrorMessages(result.exception);
-        errorMessage = errorMessages.isNotEmpty
-            ? errorMessages.first
-            : "Unknown error occurred.";
-        log(errorMessage!);
-        isLoading = false;
-        notifyListeners();
-        return null;
-      }
-
-      if (result.data != null) {
-        "profile------> ${result.data}".toLog();
-        final data = GenericResponse.fromJson(result.data!['loginWithToken']);
-        userData = data.user;
-        isLoading = false;
-        notifyListeners();
-        return userData;
-      }
-    } catch (e) {
-      errorMessage = e.toString();
-      log(errorMessage!);
-      isLoading = false;
-      notifyListeners();
+    final result = await appProvider.fetchData<UserData?>(
+      query: gql(HomeModulesQueries.profile),
+      variables: {
+        'token': StorageServices.getString('token'),
+      },
+      parse: _parseFetchProfile,
+    );
+    if (result != null) {
+      userData = result;
     }
-
-    return null;
+    return result;
   }
 
+  UserData? _parseFetchProfile(Map<String, dynamic>? data) {
+    final userDataMap = data?['loginWithToken']?['User'];
+    return userDataMap != null ? UserData.fromJson(userDataMap) : null;
+  }
+
+  /// -------------------- UPDATE USER --------------------
   Future<UserData?> updateUser(
     String firstname,
     String lastname,
@@ -248,59 +140,30 @@ class HomeProvider extends ChangeNotifier {
     String employmentStatus,
     String unionPosition,
   ) async {
-    isLoading = true;
-    notifyListeners();
-
-    try {
-      QueryResult result = await GraphQLService.client.query(
-        QueryOptions(
-          document: gql(HomeMutations.updateUser),
-          variables: {
-            "unionId": StorageServices.getString('unionId'),
-            "updateUserId": StorageServices.getString('userId'),
-            "input": {
-              "firstName": firstname,
-              "lastName": lastname,
-              "username": username,
-              "status": status,
-              "unit": unit,
-              "employmentStatus": employmentStatus,
-              "unionPosition": unionPosition,
-            },
-          },
-          fetchPolicy: FetchPolicy.noCache,
-        ),
-      );
-      "updateUser--------------> $result".toLog();
-      if (result.hasException) {
-        List<String> errorMessages =
-            GraphQLErrorHandler.extractErrorMessages(result.exception);
-        errorMessage = errorMessages.isNotEmpty
-            ? errorMessages.first
-            : "Unknown error occurred.";
-        log(errorMessage!);
-        isLoading = false;
-        notifyListeners();
-        return null;
-      }
-
-      if (result.data != null) {
-        log(result.data.toString());
-        final data = UserData.fromJson(result.data!['updateUser']);
-        userData = data;
-        log(userData!.firstName.toString());
-        isLoading = false;
-        notifyListeners();
-        return userData;
-      }
-    } catch (e) {
-      errorMessage = e.toString();
-      log(errorMessage!);
-      isLoading = false;
-      notifyListeners();
+    final result = await appProvider.fetchData<UserData?>(
+      query: gql(HomeMutations.updateUser),
+      variables: {
+        "input": {
+          "firstName": firstname,
+          "lastName": lastname,
+          "status": status,
+          "unit": unit,
+          "employmentStatus": employmentStatus,
+          "unionPosition": unionPosition,
+          "profile": {"email": username}
+        }
+      },
+      parse: _parseupdateProfile,
+    );
+    if (result != null) {
+      userData = result;
     }
+    return result;
+  }
 
-    return null;
+  UserData? _parseupdateProfile(Map<String, dynamic>? data) {
+    final userDataMap = data?['updateUser'];
+    return userDataMap != null ? UserData.fromJson(userDataMap) : null;
   }
 
   Future<String?> uploadProfile(

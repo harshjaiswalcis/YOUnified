@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       unionPositionController.text)
                   .then(
                 (value) {
-                  if (homeProvider.errorMessage == null) {
+                  if (appProvider.errorMessage == null) {
                     // context.pushNamed(Routes.profileScreen);
                     context.showAppSnackBar(
                       title: 'Profile Updated successfully',
@@ -182,10 +182,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   } else {
                     context.showAppSnackBar(
-                      title: homeProvider.errorMessage ?? 'Unknown error',
+                      title: appProvider.errorMessage ?? 'Unknown error',
                       textColor: AppColors.redText,
                     );
-                    homeProvider.errorMessage = null;
+                    appProvider.errorMessage = null;
                   }
                 },
               );

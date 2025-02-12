@@ -68,7 +68,11 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         const SizedBox(width: 26),
         InkWell(
-          onTap: () => context.pushNamed(Routes.messageScreen),
+          onTap: () {
+            if (title != context.strings.messages) {
+              context.pushNamed(Routes.messageScreen);
+            }
+          },
           child: SvgPicture.asset(AppIcons.notification),
         ),
         const SizedBox(width: 26),

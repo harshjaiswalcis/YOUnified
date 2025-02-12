@@ -1,6 +1,6 @@
 class HomeModulesQueries {
   // Executive
-  static const String executive = '''
+  static const String getExecutives = '''
      query GetExecutives(\$unionId: ObjectID!, \$page: Int64!, \$limit: Int64!) {
         getExecutives(unionID: \$unionId, page: \$page, limit: \$limit) {
           Count
