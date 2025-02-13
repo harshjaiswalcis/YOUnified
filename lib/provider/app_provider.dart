@@ -37,6 +37,35 @@ class AppProvider extends ChangeNotifier with AppProviderStateMixins {
     }
   }
 
+  Future<T?> mutateData<T>({
+    required dynamic query,
+    Map<String, dynamic>? variables,
+    required T? Function(Map<String, dynamic>? data) parse,
+  }) async {
+    isLoading = true;
+    try {
+      final result = await GraphQLService.client.mutate(
+        MutationOptions(
+          document: query,
+          variables: variables ?? {},
+          fetchPolicy: FetchPolicy.noCache,
+        ),
+      );
+      if (result.hasException) {
+        _handleGraphQLErrors(result.exception!);
+        return null;
+      }
+      "mutateData------> ${result.data}".toLog();
+      return parse(result.data);
+    } catch (e, stackTrace) {
+      _handleGenericError(e, stackTrace);
+      return null;
+    } finally {
+      isLoading = false;
+      notify();
+    }
+  }
+
   void _handleGraphQLErrors(OperationException exception) {
     List<String> errorMessages = [];
     if (exception.graphqlErrors.isNotEmpty) {

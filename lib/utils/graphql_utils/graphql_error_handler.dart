@@ -50,32 +50,3 @@ void handleQueryError(dynamic error) {
     print('Error handling GraphQL error: $e');
   }
 }
-
-// Example usage in a Query widget:
-/*
-Query(
-  options: QueryOptions(
-    document: gql(yourQueryString),
-    variables: {
-      'category': category, // Make sure this is provided!
-    },
-  ),
-  builder: (QueryResult result, { refetch, fetchMore }) {
-    if (result.hasException) {
-      GraphQLErrorHandler.logError(result.exception);
-      return Center(
-        child: Text(
-          GraphQLErrorHandler.extractErrorMessages(result.exception).first,
-        ),
-      );
-    }
-    
-    if (result.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    // Handle your successful result here
-    return YourWidget(data: result.data);
-  },
-)
-*/
