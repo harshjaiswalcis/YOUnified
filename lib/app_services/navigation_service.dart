@@ -32,18 +32,18 @@ class NavigationService {
 
   Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.app:
-        return MaterialPageRoute(builder: (_) => const Younified());
+      case Routes.loginScreen:
+        return MaterialPageRoute(builder: (_) => LoginScreen());
+      case Routes.signUpScreen:
+        return MaterialPageRoute(builder: (_) => SignUpScreen());
       case Routes.qrScreen:
         return MaterialPageRoute(builder: (_) => const QRScreen());
+      case Routes.app:
+        return MaterialPageRoute(builder: (_) => const Younified());
       case Routes.perkScreen:
         return MaterialPageRoute(builder: (_) => const PerkScreen());
-      case Routes.loginScreen:
-        return MaterialPageRoute(builder: (_) => const LoginScreen());
       case Routes.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-      case Routes.signUpScreen:
-        return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case Routes.votingScreen:
         return MaterialPageRoute(builder: (_) => const VotingScreen());
       case Routes.messageScreen:

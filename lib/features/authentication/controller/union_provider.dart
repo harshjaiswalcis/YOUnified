@@ -8,52 +8,27 @@ class UnionProvider extends ChangeNotifier {
   String? errorMessage;
 
   Future<UnionModel?> fetchUnionByName(String name) async {
-    isLoading = true;
-    notifyListeners();
+    final result = await appProvider.fetchData<UnionModel?>(
+      query: gql(Queries.unionByName),
+      variables: {
+        'name': name,
+      },
+      parse: _parseUnionByName,
+    );
 
-    try {
-      QueryResult result = await GraphQLService.client.query(
-        QueryOptions(
-          document: gql(Queries.unionByName),
-          variables: {
-            'name': name,
-          },
-        ),
-      );
-      "unionByName----------> $result".toLog();
-      if (result.hasException) {
-        // Extract GraphQL errors
-        if (result.exception?.graphqlErrors.isNotEmpty ?? false) {
-          final firstError = result.exception!.graphqlErrors.first;
-          errorMessage = firstError.message; // Get "internal system error"
-        } else {
-          // Fallback if no graphqlErrors exist
-          errorMessage = "Unknown error occurred.";
-        }
+    return result;
+  }
 
-        log(errorMessage!);
-        isLoading = false;
-        notifyListeners();
-        return null;
-      }
-
-      final data = result.data?['unionByName'];
-      if (data != null) {
-        unionData = UnionModel.fromJson(data);
-        StorageServices.setString('unionId', unionData!.id);
-        StorageServices.setString('unionName', unionData!.name);
-        StorageServices.setString(
-            'imageURL', unionData!.information!.imageURL!);
-        isLoading = false;
-        notifyListeners();
-        return unionData!;
-      }
-    } catch (e) {
-      errorMessage = e.toString();
-      isLoading = false;
-      notifyListeners();
+  UnionModel? _parseUnionByName(Map<String, dynamic>? data) {
+    final unionData = data?['unionByName'];
+    if (unionData != null) {
+      final unionModel = UnionModel.fromJson(unionData);
+      // Update storage within the parser
+      StorageServices.setString('unionId', unionModel.id);
+      StorageServices.setString('unionName', unionModel.name);
+      StorageServices.setString('imageURL', unionModel.information!.imageURL!);
+      return unionModel;
     }
-    notifyListeners();
     return null;
   }
 }

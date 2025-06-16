@@ -22,127 +22,138 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "PasswordsDoNotMatch":
-            MessageLookupByLibrary.simpleMessage("Passwords do not match"),
-        "Version": MessageLookupByLibrary.simpleMessage("Version"),
-        "accessibility": MessageLookupByLibrary.simpleMessage("Accessibility"),
-        "allDone": MessageLookupByLibrary.simpleMessage("All Done!"),
-        "allowCallDrops":
-            MessageLookupByLibrary.simpleMessage("Allow call drops"),
-        "allowEmails": MessageLookupByLibrary.simpleMessage("Allow emails"),
-        "allowPushNotifications":
-            MessageLookupByLibrary.simpleMessage("Allow push notifications"),
-        "allowRegistrationEmails":
-            MessageLookupByLibrary.simpleMessage("Allow registration emails"),
-        "allowTextMessages":
-            MessageLookupByLibrary.simpleMessage("Allow text messages"),
-        "back": MessageLookupByLibrary.simpleMessage("Back"),
-        "backToProfile":
-            MessageLookupByLibrary.simpleMessage("Back to profile"),
-        "backto": MessageLookupByLibrary.simpleMessage("Back to"),
-        "call": MessageLookupByLibrary.simpleMessage("Call:  "),
-        "cellphone": MessageLookupByLibrary.simpleMessage("Cell phone"),
-        "changeUnion": MessageLookupByLibrary.simpleMessage("Change Union"),
-        "changepassword":
-            MessageLookupByLibrary.simpleMessage("Change password"),
-        "clickToCall": MessageLookupByLibrary.simpleMessage("Click to call"),
-        "closed": MessageLookupByLibrary.simpleMessage("Closed"),
-        "contacts": MessageLookupByLibrary.simpleMessage("Contacts"),
-        "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
-        "dateofbirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
-        "days": MessageLookupByLibrary.simpleMessage("days"),
-        "documents": MessageLookupByLibrary.simpleMessage("Documents"),
-        "email": MessageLookupByLibrary.simpleMessage("Email"),
-        "employmentStatus":
-            MessageLookupByLibrary.simpleMessage("Employment status"),
-        "endsIn": MessageLookupByLibrary.simpleMessage("Ends in"),
-        "endsOn": MessageLookupByLibrary.simpleMessage("Ends on:"),
-        "enteryourEmail":
-            MessageLookupByLibrary.simpleMessage("Enter your Email"),
-        "executives": MessageLookupByLibrary.simpleMessage("Executives"),
-        "feed": MessageLookupByLibrary.simpleMessage("Feed"),
-        "findMyUnionLocal":
-            MessageLookupByLibrary.simpleMessage("Find My Union Local"),
-        "finish": MessageLookupByLibrary.simpleMessage("Finish"),
-        "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
-        "forgetPassword":
-            MessageLookupByLibrary.simpleMessage("Forget Password?"),
-        "grievances": MessageLookupByLibrary.simpleMessage("Grievances"),
-        "grievancetopic":
-            MessageLookupByLibrary.simpleMessage("Grievance topic"),
-        "here": MessageLookupByLibrary.simpleMessage("Here"),
-        "home": MessageLookupByLibrary.simpleMessage("Home"),
-        "ifyoudonthaveanaccountyoucansignup":
-            MessageLookupByLibrary.simpleMessage(
-                "If you don’t have an account you can sign up "),
-        "language": MessageLookupByLibrary.simpleMessage("Language"),
-        "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
-        "lastUpdatedOn":
-            MessageLookupByLibrary.simpleMessage("Last updated on:"),
-        "localNumber": MessageLookupByLibrary.simpleMessage("Local number"),
-        "logOut": MessageLookupByLibrary.simpleMessage("Log out"),
-        "login": MessageLookupByLibrary.simpleMessage("Login"),
-        "logintoyouraccount":
-            MessageLookupByLibrary.simpleMessage("Log into your account"),
-        "messages": MessageLookupByLibrary.simpleMessage("Messages"),
-        "mobile": MessageLookupByLibrary.simpleMessage("Mobile"),
-        "newpasword": MessageLookupByLibrary.simpleMessage("New pasword"),
-        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
-        "office": MessageLookupByLibrary.simpleMessage("Office"),
-        "open": MessageLookupByLibrary.simpleMessage("Open"),
-        "password": MessageLookupByLibrary.simpleMessage("Password"),
-        "perks": MessageLookupByLibrary.simpleMessage("Perks"),
-        "personalEmail": MessageLookupByLibrary.simpleMessage("Personal Email"),
-        "pleaseEnterConfirmPassword": MessageLookupByLibrary.simpleMessage(
-            "Please enter confirm password"),
-        "pleaseEnterEmail":
-            MessageLookupByLibrary.simpleMessage("Please enter email"),
-        "pleaseEnterFirstName":
-            MessageLookupByLibrary.simpleMessage("Please enter first name"),
-        "pleaseEnterLastName":
-            MessageLookupByLibrary.simpleMessage("Please enter last name"),
-        "pleaseEnterLocalNumber":
-            MessageLookupByLibrary.simpleMessage("Please enter local number"),
-        "pleaseEnterPassword":
-            MessageLookupByLibrary.simpleMessage("Please enter password"),
-        "pleaseEnterUnion":
-            MessageLookupByLibrary.simpleMessage("Please enter Union"),
-        "profile": MessageLookupByLibrary.simpleMessage("Profile"),
-        "qr": MessageLookupByLibrary.simpleMessage("QR"),
-        "readall": MessageLookupByLibrary.simpleMessage("Read all"),
-        "receiptID": MessageLookupByLibrary.simpleMessage("Receipt ID: "),
-        "repeatnewpassword":
-            MessageLookupByLibrary.simpleMessage("Repeat new password"),
-        "repeatpassword":
-            MessageLookupByLibrary.simpleMessage("Repeat password"),
-        "requestpasswordreset":
-            MessageLookupByLibrary.simpleMessage("Request password reset"),
-        "save": MessageLookupByLibrary.simpleMessage("Save"),
-        "scanQRCode": MessageLookupByLibrary.simpleMessage("Scan QR Code"),
-        "sendEmail": MessageLookupByLibrary.simpleMessage("Send Email"),
-        "services": MessageLookupByLibrary.simpleMessage("Services"),
-        "settings": MessageLookupByLibrary.simpleMessage("Settings"),
-        "shareAsALink": MessageLookupByLibrary.simpleMessage("Share as a link"),
-        "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
-        "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
-        "signuptojoinyourUnioncommunity": MessageLookupByLibrary.simpleMessage(
-            "Sign up to join your Union community"),
-        "startsOn": MessageLookupByLibrary.simpleMessage("Starts on:"),
-        "status": MessageLookupByLibrary.simpleMessage("Status"),
-        "submittedOn": MessageLookupByLibrary.simpleMessage("Submitted on:"),
-        "systemNotifications":
-            MessageLookupByLibrary.simpleMessage("System notifications"),
-        "systemSettings":
-            MessageLookupByLibrary.simpleMessage("System settings"),
-        "union": MessageLookupByLibrary.simpleMessage("Union"),
-        "unionNotifications":
-            MessageLookupByLibrary.simpleMessage("Union Notifications"),
-        "unionPosition": MessageLookupByLibrary.simpleMessage("Union position"),
-        "unit": MessageLookupByLibrary.simpleMessage("Unit"),
-        "username": MessageLookupByLibrary.simpleMessage("Username"),
-        "vote": MessageLookupByLibrary.simpleMessage("Vote"),
-        "voting": MessageLookupByLibrary.simpleMessage("Voting"),
-        "yourReceiptIDIs":
-            MessageLookupByLibrary.simpleMessage("Your receipt ID is:")
-      };
+    "PasswordsDoNotMatch": MessageLookupByLibrary.simpleMessage(
+      "Passwords do not match",
+    ),
+    "Version": MessageLookupByLibrary.simpleMessage("Version"),
+    "accessibility": MessageLookupByLibrary.simpleMessage("Accessibility"),
+    "allDone": MessageLookupByLibrary.simpleMessage("All Done!"),
+    "allowCallDrops": MessageLookupByLibrary.simpleMessage("Allow call drops"),
+    "allowEmails": MessageLookupByLibrary.simpleMessage("Allow emails"),
+    "allowPushNotifications": MessageLookupByLibrary.simpleMessage(
+      "Allow push notifications",
+    ),
+    "allowRegistrationEmails": MessageLookupByLibrary.simpleMessage(
+      "Allow registration emails",
+    ),
+    "allowTextMessages": MessageLookupByLibrary.simpleMessage(
+      "Allow text messages",
+    ),
+    "back": MessageLookupByLibrary.simpleMessage("Back"),
+    "backToProfile": MessageLookupByLibrary.simpleMessage("Back to profile"),
+    "backto": MessageLookupByLibrary.simpleMessage("Back to"),
+    "call": MessageLookupByLibrary.simpleMessage("Call:  "),
+    "cellphone": MessageLookupByLibrary.simpleMessage("Cell phone"),
+    "changeUnion": MessageLookupByLibrary.simpleMessage("Change Union"),
+    "changepassword": MessageLookupByLibrary.simpleMessage("Change password"),
+    "clickToCall": MessageLookupByLibrary.simpleMessage("Click to call"),
+    "closed": MessageLookupByLibrary.simpleMessage("Closed"),
+    "contacts": MessageLookupByLibrary.simpleMessage("Contacts"),
+    "continueText": MessageLookupByLibrary.simpleMessage("Continue"),
+    "dateofbirth": MessageLookupByLibrary.simpleMessage("Date of birth"),
+    "days": MessageLookupByLibrary.simpleMessage("days"),
+    "documents": MessageLookupByLibrary.simpleMessage("Documents"),
+    "email": MessageLookupByLibrary.simpleMessage("Email"),
+    "employmentStatus": MessageLookupByLibrary.simpleMessage(
+      "Employment status",
+    ),
+    "endsIn": MessageLookupByLibrary.simpleMessage("Ends in"),
+    "endsOn": MessageLookupByLibrary.simpleMessage("Ends on:"),
+    "enteryourEmail": MessageLookupByLibrary.simpleMessage("Enter your Email"),
+    "executives": MessageLookupByLibrary.simpleMessage("Executives"),
+    "feed": MessageLookupByLibrary.simpleMessage("Feed"),
+    "findMyUnionLocal": MessageLookupByLibrary.simpleMessage(
+      "Find My Union Local",
+    ),
+    "finish": MessageLookupByLibrary.simpleMessage("Finish"),
+    "firstName": MessageLookupByLibrary.simpleMessage("First Name"),
+    "forgetPassword": MessageLookupByLibrary.simpleMessage("Forget Password?"),
+    "grievances": MessageLookupByLibrary.simpleMessage("Grievances"),
+    "grievancetopic": MessageLookupByLibrary.simpleMessage("Grievance topic"),
+    "here": MessageLookupByLibrary.simpleMessage("Here"),
+    "home": MessageLookupByLibrary.simpleMessage("Home"),
+    "ifyoudonthaveanaccountyoucansignup": MessageLookupByLibrary.simpleMessage(
+      "If you don’t have an account you can sign up ",
+    ),
+    "language": MessageLookupByLibrary.simpleMessage("Language"),
+    "lastName": MessageLookupByLibrary.simpleMessage("Last Name"),
+    "lastUpdatedOn": MessageLookupByLibrary.simpleMessage("Last updated on:"),
+    "localNumber": MessageLookupByLibrary.simpleMessage("Local number"),
+    "logOut": MessageLookupByLibrary.simpleMessage("Log out"),
+    "login": MessageLookupByLibrary.simpleMessage("Login"),
+    "logintoyouraccount": MessageLookupByLibrary.simpleMessage(
+      "Log into your account",
+    ),
+    "messages": MessageLookupByLibrary.simpleMessage("Messages"),
+    "mobile": MessageLookupByLibrary.simpleMessage("Mobile"),
+    "newpasword": MessageLookupByLibrary.simpleMessage("New pasword"),
+    "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
+    "office": MessageLookupByLibrary.simpleMessage("Office"),
+    "open": MessageLookupByLibrary.simpleMessage("Open"),
+    "password": MessageLookupByLibrary.simpleMessage("Password"),
+    "perks": MessageLookupByLibrary.simpleMessage("Perks"),
+    "personalEmail": MessageLookupByLibrary.simpleMessage("Personal Email"),
+    "pleaseEnterConfirmPassword": MessageLookupByLibrary.simpleMessage(
+      "Please enter confirm password",
+    ),
+    "pleaseEnterEmail": MessageLookupByLibrary.simpleMessage(
+      "Please enter email",
+    ),
+    "pleaseEnterFirstName": MessageLookupByLibrary.simpleMessage(
+      "Please enter first name",
+    ),
+    "pleaseEnterLastName": MessageLookupByLibrary.simpleMessage(
+      "Please enter last name",
+    ),
+    "pleaseEnterLocalNumber": MessageLookupByLibrary.simpleMessage(
+      "Please enter local number",
+    ),
+    "pleaseEnterPassword": MessageLookupByLibrary.simpleMessage(
+      "Please enter password",
+    ),
+    "pleaseEnterUnion": MessageLookupByLibrary.simpleMessage(
+      "Please enter Union",
+    ),
+    "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+    "qr": MessageLookupByLibrary.simpleMessage("QR"),
+    "readall": MessageLookupByLibrary.simpleMessage("Read all"),
+    "receiptID": MessageLookupByLibrary.simpleMessage("Receipt ID: "),
+    "repeatnewpassword": MessageLookupByLibrary.simpleMessage(
+      "Repeat new password",
+    ),
+    "repeatpassword": MessageLookupByLibrary.simpleMessage("Repeat password"),
+    "requestpasswordreset": MessageLookupByLibrary.simpleMessage(
+      "Request password reset",
+    ),
+    "save": MessageLookupByLibrary.simpleMessage("Save"),
+    "scanQRCode": MessageLookupByLibrary.simpleMessage("Scan QR Code"),
+    "sendEmail": MessageLookupByLibrary.simpleMessage("Send Email"),
+    "services": MessageLookupByLibrary.simpleMessage("Services"),
+    "settings": MessageLookupByLibrary.simpleMessage("Settings"),
+    "shareAsALink": MessageLookupByLibrary.simpleMessage("Share as a link"),
+    "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
+    "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
+    "signuptojoinyourUnioncommunity": MessageLookupByLibrary.simpleMessage(
+      "Sign up to join your Union community",
+    ),
+    "startsOn": MessageLookupByLibrary.simpleMessage("Starts on:"),
+    "status": MessageLookupByLibrary.simpleMessage("Status"),
+    "submittedOn": MessageLookupByLibrary.simpleMessage("Submitted on:"),
+    "systemNotifications": MessageLookupByLibrary.simpleMessage(
+      "System notifications",
+    ),
+    "systemSettings": MessageLookupByLibrary.simpleMessage("System settings"),
+    "union": MessageLookupByLibrary.simpleMessage("Union"),
+    "unionNotifications": MessageLookupByLibrary.simpleMessage(
+      "Union Notifications",
+    ),
+    "unionPosition": MessageLookupByLibrary.simpleMessage("Union position"),
+    "unit": MessageLookupByLibrary.simpleMessage("Unit"),
+    "username": MessageLookupByLibrary.simpleMessage("Username"),
+    "vote": MessageLookupByLibrary.simpleMessage("Vote"),
+    "voting": MessageLookupByLibrary.simpleMessage("Voting"),
+    "yourReceiptIDIs": MessageLookupByLibrary.simpleMessage(
+      "Your receipt ID is:",
+    ),
+  };
 }
