@@ -1,23 +1,57 @@
-class CallingModel {
-  final String callingTitle;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String phoneNumber;
+class CallDetailsResponse {
+  final CallDetailsData data;
 
-  CallingModel({
-    required this.callingTitle,
-    required this.startDate,
+  CallDetailsResponse({required this.data});
+
+  factory CallDetailsResponse.fromJson(Map<String, dynamic> json) {
+    return CallDetailsResponse(
+      data: CallDetailsData.fromJson(json),
+    );
+  }
+}
+
+class CallDetailsData {
+  final List<CallDetail> getCallDetails;
+
+  CallDetailsData({required this.getCallDetails});
+
+  factory CallDetailsData.fromJson(Map<String, dynamic> json) {
+    return CallDetailsData(
+      getCallDetails: (json['getCallDetails'] as List)
+          .map((item) => CallDetail.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class CallDetail {
+  final String id;
+  final String startTime;
+  final String endDate;
+  final String phone;
+  final String script;
+  final String creatorID;
+  final String title;
+
+  CallDetail({
+    required this.id,
+    required this.startTime,
     required this.endDate,
-    required this.phoneNumber,
+    required this.phone,
+    required this.script,
+    required this.creatorID,
+    required this.title,
   });
 
-  // Factory constructor to create a CallingModel object from JSON
-  factory CallingModel.fromJson(Map<String, dynamic> json) {
-    return CallingModel(
-      callingTitle: json['calling_title'],
-      startDate: DateTime.parse(json['start_date']),
-      endDate: DateTime.parse(json['end_date']),
-      phoneNumber: json['phone_number'],
+  factory CallDetail.fromJson(Map<String, dynamic> json) {
+    return CallDetail(
+      id: json['id'],
+      startTime: json['startTime'],
+      endDate: json['endDate'],
+      phone: json['phone'],
+      script: json['script'],
+      creatorID: json['creatorID'],
+      title: json['title'],
     );
   }
 }

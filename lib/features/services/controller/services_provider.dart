@@ -113,9 +113,9 @@ class ServicesProvider extends ChangeNotifier {
     }
   ];
 
-//MAPPING
-  static final List<CallingModel> callingListData =
-      callingList.map((mapData) => CallingModel.fromJson(mapData)).toList();
+// //MAPPING
+//   static final List<CallingModel> callingListData =
+//       callingList.map((mapData) => CallingModel.fromJson(mapData)).toList();
 
   // DATE FORMATING
   String formatDateString(String dateString) {

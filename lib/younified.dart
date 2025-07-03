@@ -24,6 +24,7 @@ class _YounifiedState extends State<Younified> with TickerProviderStateMixin {
     servicesProvider = context.read();
     grievanceProvider = context.read();
     settingController = context.read();
+    callDetailsProvider = context.read();
     notificationProvider = context.read();
     authenticationProvider = context.read();
 

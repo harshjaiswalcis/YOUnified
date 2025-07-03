@@ -22,6 +22,9 @@ class ServicesScreen extends StatelessWidget {
                       context.pushNamed(Routes.votingScreen);
                       break;
                     case "CLICK TO CALL":
+                      callDetailsProvider.fetchCallDetails().then((_) {
+                        context.pushNamed(Routes.callingScreen);
+                      });
                       context.pushNamed(Routes.callingScreen);
                       break;
                     default:

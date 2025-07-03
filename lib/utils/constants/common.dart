@@ -9,5 +9,6 @@ late DocumentProvider documentProvider;
 late ServicesProvider servicesProvider;
 late GrievanceProvider grievanceProvider;
 late SettingController settingController;
+late CallDetailsProvider callDetailsProvider;
 late NotificationProvider notificationProvider;
 late AuthenticationProvider authenticationProvider;

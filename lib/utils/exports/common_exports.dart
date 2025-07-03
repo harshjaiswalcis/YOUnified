@@ -41,6 +41,7 @@ export 'package:younified/features/authentication/model/union_model.dart';
 export 'package:younified/utils/graphql_utils/graphql_error_handler.dart';
 export 'package:younified/features/home/controller/document_controller.dart';
 export 'package:younified/features/home/controller/grievance_controller.dart';
+export 'package:younified/features/services/controller/calling_provider.dart';
 export 'package:younified/features/setting/controller/setting_controller.dart';
 export 'package:younified/features/services/controller/services_provider.dart';
 export 'package:younified/features/authentication/controller/union_provider.dart';
