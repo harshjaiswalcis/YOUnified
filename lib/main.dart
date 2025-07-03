@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:younified/features/authentication/controller/authentication_provider.dart';
+import 'package:younified/features/home/controller/grievance_controller.dart';
 import 'package:younified/features/setting/controller/setting_controller.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -45,6 +46,7 @@ StatelessWidget mainApp = MultiProvider(
     ChangeNotifierProvider(create: (_) => MessageProvider()),
     ChangeNotifierProvider(create: (_) => ServicesProvider()),
     ChangeNotifierProvider(create: (_) => DocumentProvider()),
+    ChangeNotifierProvider(create: (_) => GrievanceProvider()),
     ChangeNotifierProvider(create: (_) => SettingController()),
     ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
     ChangeNotifierProvider(create: (context) => NotificationProvider())

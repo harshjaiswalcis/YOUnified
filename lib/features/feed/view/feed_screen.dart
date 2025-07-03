@@ -49,7 +49,7 @@ class _FeedScreenState extends State<FeedScreen> {
             valueListenable: feedProvider.newsFeedListElement,
             builder: (context, snapshot, child) => feedProvider
                     .newsFeedListElement.value.isEmpty
-                ? const Center(child: Text("Please go back, No Data is found"))
+                ? const Center(child: Text("Loading....."))
                 : SizedBox(
                     height: 0.8.getScreenHeight,
                     child: Column(

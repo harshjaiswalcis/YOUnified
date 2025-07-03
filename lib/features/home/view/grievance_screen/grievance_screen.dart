@@ -1,8 +1,23 @@
 import 'package:younified/features/home/view/grievance_screen/grievances_list.dart';
 import 'package:younified/utils/exports/common_exports.dart';
 
-class GrievanceScreen extends StatelessWidget {
+class GrievanceScreen extends StatefulWidget {
   const GrievanceScreen({super.key});
+
+  @override
+  State<GrievanceScreen> createState() => _GrievanceScreenState();
+}
+
+class _GrievanceScreenState extends State<GrievanceScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    // 👇 Trigger fetch when screen is pushed
+    Future.microtask(() {
+      context.read<GrievanceProvider>().fetchGrievances();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

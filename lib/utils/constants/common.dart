@@ -7,6 +7,7 @@ late UnionProvider unionProvider;
 late MessageProvider messageProvider;
 late DocumentProvider documentProvider;
 late ServicesProvider servicesProvider;
+late GrievanceProvider grievanceProvider;
 late SettingController settingController;
 late NotificationProvider notificationProvider;
 late AuthenticationProvider authenticationProvider;
