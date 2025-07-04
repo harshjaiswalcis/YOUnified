@@ -16,16 +16,27 @@ class ServicesScreen extends StatelessWidget {
             servicesListData.length,
             (index) => Center(
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
                   switch (servicesListData[index].title.toUpperCase()) {
                     case "VOTING":
                       context.pushNamed(Routes.votingScreen);
                       break;
                     case "CLICK TO CALL":
-                      callDetailsProvider.fetchCallDetails().then((_) {
-                        context.pushNamed(Routes.callingScreen);
+                      await callDetailsProvider.fetchCallDetails().then((_) {
+                        if (callDetailsProvider.errorMessage == null) {
+                          context.pushNamed(Routes.callingScreen);
+                        } else {
+                          context.showAppSnackBar(
+                            title: callDetailsProvider.errorMessage ??
+                                'Unknown error',
+                            textColor: AppColors.redText,
+                          );
+                          callDetailsProvider.errorMessage = null;
+                          StorageServices.delete('token');
+                          StorageServices.delete('userId');
+                          context.pushNamed(Routes.loginScreen);
+                        }
                       });
-                      context.pushNamed(Routes.callingScreen);
                       break;
                     default:
                       // Handle default case

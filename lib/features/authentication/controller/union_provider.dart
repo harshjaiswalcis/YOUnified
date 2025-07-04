@@ -8,27 +8,46 @@ class UnionProvider extends ChangeNotifier {
   String? errorMessage;
 
   Future<UnionModel?> fetchUnionByName(String name) async {
-    final result = await appProvider.fetchData<UnionModel?>(
-      query: gql(Queries.unionByName),
-      variables: {
-        'name': name,
-      },
-      parse: _parseUnionByName,
-    );
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
 
-    return result;
+    try {
+      final result = await appProvider.fetchData<UnionModel?>(
+        query: gql(Queries.unionByName),
+        variables: {'name': name},
+        parse: _parseUnionByName,
+      );
+
+      if (result == null) {
+        errorMessage = 'Union not found';
+      }
+
+      return result;
+    } catch (e) {
+      errorMessage = e.toString();
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   UnionModel? _parseUnionByName(Map<String, dynamic>? data) {
     final unionData = data?['unionByName'];
     if (unionData != null) {
       final unionModel = UnionModel.fromJson(unionData);
-      // Update storage within the parser
       StorageServices.setString('unionId', unionModel.id);
       StorageServices.setString('unionName', unionModel.name);
-      StorageServices.setString('imageURL', unionModel.information!.imageURL!);
+      StorageServices.setString(
+          'imageURL', unionModel.information?.imageURL ?? '');
       return unionModel;
     }
     return null;
+  }
+
+  void clearError() {
+    errorMessage = null;
+    notifyListeners();
   }
 }

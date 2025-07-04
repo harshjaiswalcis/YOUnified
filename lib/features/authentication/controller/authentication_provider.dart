@@ -8,19 +8,36 @@ class AuthenticationProvider extends ChangeNotifier {
 
   /// -------------------- login --------------------
   Future<String?> login(String username, String password) async {
-    final result = await appProvider.fetchData<String?>(
-      query: gql(AuthenticationMutation.login),
-      variables: {
-        "input": {
-          "unionID": StorageServices.getString('unionId'),
-          "username": username,
-          "password": password,
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    try {
+      final result = await appProvider.fetchData<String?>(
+        query: gql(AuthenticationMutation.login),
+        variables: {
+          "input": {
+            "unionID": StorageServices.getString('unionId'),
+            "username": username,
+            "password": password,
+          },
+          "device": "mobile",
         },
-        "device": "mobile",
-      },
-      parse: _parseLogin,
-    );
-    return result;
+        parse: _parseLogin,
+      );
+
+      if (result == null) {
+        errorMessage = 'Invalid credentials';
+      }
+
+      return result;
+    } catch (e) {
+      errorMessage = e.toString();
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   String? _parseLogin(Map<String, dynamic>? data) {
@@ -44,28 +61,38 @@ class AuthenticationProvider extends ChangeNotifier {
     String phone,
     String dob,
   ) async {
-    final result = await appProvider.fetchData<String?>(
-      query: gql(AuthenticationMutation.signup),
-      variables: {
-        "unionId": StorageServices.getString('unionId'),
-        "input": {
-          "firstName": firstname,
-          "lastName": lastname,
-          "password": password,
-          "username": email,
-          "profile": {
-            "email": email,
-            "mobile": phone,
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      final result = await appProvider.fetchData<String?>(
+        query: gql(AuthenticationMutation.signup),
+        variables: {
+          "unionId": StorageServices.getString('unionId'),
+          "input": {
+            "firstName": firstname,
+            "lastName": lastname,
+            "password": password,
+            "username": email,
+            "profile": {
+              "email": email,
+              "mobile": phone,
+            },
+            "dateOfBirth": dob,
           },
-          "dateOfBirth": dob,
         },
-      },
-      parse: _parseSignup,
-    );
-    return result;
+        parse: _parseSignup,
+      );
+      return result;
+    } catch (e) {
+      errorMessage = e.toString();
+      return null;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
-  /// -------------------- DATE PICKER --------------------
   String? _parseSignup(Map<String, dynamic>? data) {
     final signupData = data?['registerUser'];
     return signupData != null ? signupData['id'] as String? : null;
@@ -88,5 +115,10 @@ class AuthenticationProvider extends ChangeNotifier {
 
   static String _formatDate(DateTime date) {
     return "${date.toLocal()}".split(' ')[0]; // Formats date as YYYY-MM-DD
+  }
+
+  void clearError() {
+    errorMessage = null;
+    notifyListeners();
   }
 }
