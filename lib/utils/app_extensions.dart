@@ -333,3 +333,25 @@ extension HtmlParsing on String {
     return parsedText;
   }
 }
+
+extension DateTimeFormatting on String {
+  /// Formats ISO string to desired format.
+  String toFormattedDate({String pattern = 'MMM dd, yyyy'}) {
+    try {
+      final dateTime = DateTime.parse(this).toLocal();
+      return DateFormat(pattern).format(dateTime);
+    } catch (_) {
+      return this;
+    }
+  }
+
+  String toFormattedDateTime() {
+    try {
+      final dateTime = DateTime.tryParse(this);
+      if (dateTime == null) return this;
+      return DateFormat('MMM dd, yyyy, hh:mm a').format(dateTime);
+    } catch (_) {
+      return this;
+    }
+  }
+}

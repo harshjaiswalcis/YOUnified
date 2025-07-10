@@ -2,31 +2,65 @@ import 'package:younified/utils/exports/common_exports.dart';
 import 'package:stepper_list_view/stepper_list_view.dart';
 
 class GrievanceTopicScreen extends StatelessWidget {
-  const GrievanceTopicScreen({super.key});
+  final String grievanceId;
 
+  const GrievanceTopicScreen({super.key, required this.grievanceId});
   @override
   Widget build(BuildContext context) {
-    final stepperData = List.generate(
-        3,
-        (index) => StepperItemData(
-              id: '$index',
-              content: ({
-                'name': 'Subhash Chandra Shukla',
-                'occupation': 'Flutter Development',
-                'mobileNumber': '7318459902',
-                'email': 'subhashchandras7318@gmail.com',
-                'born_date': '12\nAug',
-                "contact_list": {
-                  "LinkedIn": "https://www.linkedin.com/in/subhashcs/",
-                  "Portfolio": "https://subhashdev121.github.io/subhash/#/",
-                }
-              }),
-              avatar: 'https://avatars.githubusercontent.com/u/70679949?v=4',
-            )).toList();
+    log('GrievanceTopicScreen: grievanceId = $grievanceId');
+    // final stepperData = List.generate(
+    //     3,
+    //     (index) => StepperItemData(
+    //           id: '$index',
+    //           content: ({
+    //             'name': 'Subhash Chandra Shukla',
+    //             'occupation': 'Flutter Development',
+    //             'mobileNumber': '7318459902',
+    //             'email': 'subhashchandras7318@gmail.com',
+    //             'born_date': '12\nAug',
+    //             "contact_list": {
+    //               "LinkedIn": "https://www.linkedin.com/in/subhashcs/",
+    //               "Portfolio": "https://subhashdev121.github.io/subhash/#/",
+    //             }
+    //           }),
+    //           avatar: 'https://avatars.githubusercontent.com/u/70679949?v=4',
+    //         )).toList();
     return Scaffold(
       backgroundColor: AppColors.backGround,
       appBar: CommonAppBar(title: context.strings.grievancetopic),
-      body: Padding(
+      body: FutureBuilder<GrievanceDetail?>(
+        future: context.read<GrievanceProvider>().getGrievanceById(grievanceId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError || !snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text("Failed to load grievance details."));
+          }
+
+          final grievance = snapshot.data!;
+
+          return _buildGrievanceDetail(context, grievance);
+        },
+      ),
+    );
+  }
+
+   Widget _buildGrievanceDetail(BuildContext context, GrievanceDetail grievance) {
+    final stepperData = grievance.updates?.map((update) {
+  return StepperItemData(
+    id: update.updateID,
+    content: {
+      'name': '${update.updatedBy.firstName} ${update.updatedBy.lastName}',
+      'content': update.content,
+      'updatedAt': update.updatedAt,
+    },
+    avatar: update.updatedBy.profile.imageURL, 
+  );
+}).toList() ?? [];
+
+    return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24),
         child: SingleChildScrollView(
           child: DecoratedBox(
@@ -51,22 +85,24 @@ class GrievanceTopicScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('23/2/2023-131-CQ',
-                              style: context.textTheme.bodyMedium),
-                          const SizedBox(height: 4),
-                          // Title
-                          Text('Grievance topic',
-                              style: context.textTheme.labelMedium!
-                                  .copyWith(fontWeight: FontWeight.w700)),
-                        ],
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(grievance.caseNumber,
+                                style: context.textTheme.bodyMedium),
+                            const SizedBox(height: 4),
+                            // Title
+                            Text(grievance.title,
+                                style: context.textTheme.labelMedium!
+                                    .copyWith(fontWeight: FontWeight.w700)),
+                          ],
+                        ),
                       ),
                       DecoratedBox(
                         decoration: BoxDecoration(
-                          color: AppColors.yellowContainerbg,
+                          color: grievance.status != "closed"  ?  AppColors.yellowContainerbg : AppColors.greenContainerbg,
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Padding(
@@ -75,10 +111,10 @@ class GrievanceTopicScreen extends StatelessWidget {
                             vertical: 8,
                           ),
                           child: Text(
-                            'Stage 2',
+                            grievance.status,
                             style: context.textTheme.titleMedium!.copyWith(
                                 fontWeight: FontWeight.w400,
-                                color: AppColors.yellowTextColor),
+                                color: grievance.status != "closed" ?  AppColors.yellowTextColor : AppColors.white),
                           ),
                         ),
                       ),
@@ -92,18 +128,22 @@ class GrievanceTopicScreen extends StatelessWidget {
                     runSpacing: 16,
                     children: [
                       _buildDetailItem(
-                          context, 'Submitted on:', 'Jul 10, 2023'),
+                          context, 'Submitted on:', grievance.createdAt.toFormattedDate()),
                       _buildDetailItem(
-                          context, 'Last updated on:', 'Jul 15, 2023'),
-                      _buildDetailItem(context, 'Steward:', 'Fred Vecchio'),
-                      _buildDetailItem(context, 'SubSteward:', 'Lina Vecchio'),
-                      _buildDetailItem(context, 'Members:', 'Frankie Ward'),
-                      _buildDetailItem(context, 'Union:', 'Union Strategies'),
+                          context, 'Last updated on:', grievance.lastUpdatedAt.toFormattedDate()),
+                      _buildDetailItem(context, 'Steward:', "${grievance.steward?.firstName} ${grievance.steward?.lastName}"),
+                      _buildDetailItem(context, 'SubSteward:', "${grievance.subSteward?.firstName} ${grievance.subSteward?.lastName}"),
+
+                      if (grievance.members != null)
+                      ...List.generate(grievance.members!.length, (index) => _buildDetailItem(context, 'Members:', "${grievance.members![index].firstName} ${grievance.members![index].lastName}"),),
+                      
+                      _buildDetailItem(context, 'Union:', StorageServices.getString("unionName") ?? 'N/A'),
                       _buildDetailItem(context, 'Result:',
-                          'Frankie was let go for barking on the job'),
+                          grievance.claim ?? 'N/A'),
                       _buildDetailItem(context, 'Request:',
-                          'The employer re-instates the employee immediately'),
-                      _buildDetailItem(context, 'Favour of Employee:', 'NO'),
+                          grievance.request ?? 'N/A'),
+                      _buildDetailItem(context, 'Favour of Employee:', 
+                          grievance.favourOfSettlement ? 'Yes' : 'No'),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -166,39 +206,39 @@ class GrievanceTopicScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
+      );
+   }
 
   StepperListView updatesStepper(List<StepperItemData> stepperData) {
-    return StepperListView(
-      showStepperInLast: false,
-      stepperData: stepperData,
-      stepAvatar: (_, data) {
-        return const PreferredSize(
-          preferredSize: Size.fromRadius(10),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(0.0, 12.0, 12.0, 12.0),
-            child: Center(
-              child: CircleAvatar(
-                radius: 10,
-                backgroundImage: AssetImage(
-                  AppIcons.stepper,
+  return StepperListView(
+    showStepperInLast: false,
+    stepperData: stepperData,
+    stepAvatar: (_, data) {
+      return const PreferredSize(
+        preferredSize: Size.fromRadius(10),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 12.0, 12.0, 12.0),
+          child: Center(
+            child: CircleAvatar(
+              radius: 10,
+              backgroundImage:  AssetImage(
+                  AppIcons.stepper
                 ),
-              ),
             ),
           ),
-        );
-      },
-      stepContentWidget: (_, data) {
-        return _buildUpdate();
-      },
-      stepperThemeData: const StepperThemeData(
-        lineColor: Color(0x335884F0),
-        lineWidth: 1,
-      ),
-    );
-  }
+        ),
+      );
+    },
+    stepContentWidget: (_, data) {
+      return _buildUpdate(data);
+    },
+    stepperThemeData: const StepperThemeData(
+      lineColor: Color(0x335884F0),
+      lineWidth: 1,
+    ),
+  );
+}
+
 
   Widget _buildDetailItem(BuildContext context, String label, String value) {
     return SizedBox(
@@ -221,44 +261,45 @@ class GrievanceTopicScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUpdate() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage('https://via.placeholder.com/40'),
+  Widget _buildUpdate(StepperItemData data) {
+  final name = data.content['name'] ?? '';
+  final content = data.content['content'] ?? '';
+  final updatedAt = data.content['updatedAt'] ?? '';
+  final avatar = data.avatar;
+
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 16),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundImage: avatar!.isNotEmpty
+              ? NetworkImage(avatar)
+              : const AssetImage(AppIcons.emptyProfile)
+                  as ImageProvider,
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
+              const SizedBox(height: 4),
+              Text(
+                updatedAt.toString().toFormattedDateTime(),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+              ),
+              const SizedBox(height: 8),
+              Text(content),
+            ],
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Name Surname',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Jul 21, 2023, 12:26 AM',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  'Lorem ipsum dolor sit amet consectetur adipiscing elit',
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildSignature(BuildContext context, String title) {
     return Column(

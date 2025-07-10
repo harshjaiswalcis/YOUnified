@@ -228,7 +228,7 @@ class GrievancesList extends StatelessWidget {
           itemBuilder: (context, index) {
             final grievance = filteredGrievances[index];
             return InkWell(
-              onTap: () => context.pushNamed(Routes.grievanceDetailScreen),
+              onTap: () => context.pushNamed(Routes.grievanceDetailScreen, arguments: grievance.id),
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
                 child: DecoratedBox(

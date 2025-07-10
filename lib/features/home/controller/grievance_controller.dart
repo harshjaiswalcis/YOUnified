@@ -26,6 +26,7 @@ class GrievanceProvider extends ChangeNotifier {
         _errorMessage = result.exception.toString();
         debugPrint('[GrievanceProvider] GraphQL Error: $_errorMessage');
       } else if (result.data != null) {
+        debugPrint('[GrievanceProvider] GraphQL Data: ${result.data}');
         final response = GrievanceListResponse.fromJson(result.data!);
         _grievances = response.data.getAllGrievance;
         _errorMessage = null; // Clear error on success
@@ -39,6 +40,34 @@ class GrievanceProvider extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<GrievanceDetail?> getGrievanceById(String id) async {
+    try {
+      final result = await GraphQLService.client.query(
+        QueryOptions(
+          document: gql(GrievanceQueries.getGrievanceById),
+          variables: {'id': id},
+        ),
+      );
+
+      if (result.hasException) {
+        debugPrint('[getGrievanceById] GraphQL Error: ${result.exception}');
+        return null;
+      }
+
+      if (result.data != null) {
+        debugPrint('[getGrievanceById] GraphQL Success: ${result.data}');
+        final data = result.data!['getGrievanceById'];
+        return GrievanceDetail.fromJson(data);
+      } else {
+        debugPrint('[getGrievanceById] No data received.');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('[getGrievanceById] Exception: $e');
+      return null;
     }
   }
 }

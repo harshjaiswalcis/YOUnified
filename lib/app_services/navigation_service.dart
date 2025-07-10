@@ -73,7 +73,7 @@ class NavigationService {
       case Routes.electionStepperThird:
         return MaterialPageRoute(builder: (_) => const ElectionStepperThird());
       case Routes.grievanceDetailScreen:
-        return MaterialPageRoute(builder: (_) => const GrievanceTopicScreen());
+        return MaterialPageRoute(builder: (_) =>  GrievanceTopicScreen( grievanceId: settings.arguments as String,));
       case Routes.electionStepperSecond:
         return MaterialPageRoute(builder: (_) => const ElectionStepperSecond());
       case Routes.electionSummaryScreen:
