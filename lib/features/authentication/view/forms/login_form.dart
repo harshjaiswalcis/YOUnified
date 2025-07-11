@@ -102,6 +102,8 @@ class _LoginFormState extends State<LoginForm> {
                                         'Unknown error',
                                     textColor: AppColors.redText,
                                   );
+
+                                  authProvider.errorMessage = null;
                                   authProvider.clearError();
                                 }
                               });

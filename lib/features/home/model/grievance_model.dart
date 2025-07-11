@@ -83,6 +83,10 @@ class GrievanceDetail {
   final List<UserSummary>? members; // adjust type if you know it
   final List<Doc>? documents; // adjust type if you know it
 
+  final SignatureInfo? grievor;
+  final SignatureInfo? unionRep;
+  final SignatureInfo? unionOfficer;
+
   GrievanceDetail({
     required this.id,
     required this.title,
@@ -111,6 +115,9 @@ class GrievanceDetail {
     this.updates,
     this.members,
     this.documents,
+    this.grievor,
+    this.unionRep,
+    this.unionOfficer,
   });
 
   factory GrievanceDetail.fromJson(Map<String, dynamic> json) {
@@ -137,17 +144,32 @@ class GrievanceDetail {
       createdByID: json['createdByID'],
       lastUpdatedByID: json['lastUpdatedByID'],
       assignedToID: json['assignedToID'],
-      steward: json['steward'] != null ? UserSummary.fromJson(json['steward']) : null,
-      subSteward: json['subSteward'] != null ? UserSummary.fromJson(json['subSteward']) : null,
+      steward: json['steward'] != null
+          ? UserSummary.fromJson(json['steward'])
+          : null,
+      subSteward: json['subSteward'] != null
+          ? UserSummary.fromJson(json['subSteward'])
+          : null,
       updates: json['updates'] != null
           ? (json['updates'] as List).map((e) => Update.fromJson(e)).toList()
           : null,
       members: json['members'] != null
-          ? (json['members'] as List).map((e) => UserSummary.fromJson(e)).toList()
-          : null, 
+          ? (json['members'] as List)
+              .map((e) => UserSummary.fromJson(e))
+              .toList()
+          : null,
       documents: json['documents'] != null
           ? (json['documents'] as List).map((e) => Doc.fromJson(e)).toList()
-          : null, 
+          : null,
+      grievor: json['grievor'] != null
+          ? SignatureInfo.fromJson(json['grievor'])
+          : null,
+      unionRep: json['unionRep'] != null
+          ? SignatureInfo.fromJson(json['unionRep'])
+          : null,
+      unionOfficer: json['unionOfficer'] != null
+          ? SignatureInfo.fromJson(json['unionOfficer'])
+          : null,
     );
   }
 }
@@ -262,3 +284,19 @@ class GrievanceResponse {
   }
 }
 
+class SignatureInfo {
+  final String userId;
+  final String sign; // base64 image string
+
+  SignatureInfo({
+    required this.userId,
+    required this.sign,
+  });
+
+  factory SignatureInfo.fromJson(Map<String, dynamic> json) {
+    return SignatureInfo(
+      userId: json['userId'] ?? '',
+      sign: json['sign'] ?? '',
+    );
+  }
+}

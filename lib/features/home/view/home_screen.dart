@@ -28,18 +28,18 @@ class HomeScreen extends StatelessWidget {
                           break;
                         case "PROFILE":
                           await homeProvider.fetchProfile().then((value) {
-                            if (appProvider.errorMessage == null) {
+                            if (homeProvider.errorMessage == null) {
                               context.pushNamed(Routes.profileScreen);
                             } else {
                               context.showAppSnackBar(
                                 title:
-                                    appProvider.errorMessage ?? 'Unknown error',
+                                    homeProvider.errorMessage ?? 'Unknown error',
                                 textColor: AppColors.redText,
                               );
-                              appProvider.errorMessage = null;
+                              homeProvider.errorMessage = null;
                               StorageServices.delete('token');
                               StorageServices.delete('userId');
-                              context.pushNamed(Routes.loginScreen);
+                              context.pushNamedAndRemoveUntil(Routes.loginScreen);
                             }
                           });
                           break;

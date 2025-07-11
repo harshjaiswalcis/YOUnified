@@ -66,6 +66,18 @@ class GrievanceQueries {
                     }
                 }
             }
+            grievor {
+                sign
+                userId
+            }
+            unionRep {
+                userId
+                sign
+            }
+            unionOfficer {
+                userId
+                sign
+            }
           }
       }
   ''';

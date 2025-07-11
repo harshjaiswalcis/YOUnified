@@ -13,7 +13,7 @@ class GrievanceProvider extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetchGrievances() async {
+  Future<void> fetchGrievances(BuildContext context) async {
     _isLoading = true;
     notifyListeners();
 
@@ -23,13 +23,22 @@ class GrievanceProvider extends ChangeNotifier {
       );
 
       if (result.hasException) {
-        _errorMessage = result.exception.toString();
-        debugPrint('[GrievanceProvider] GraphQL Error: $_errorMessage');
+        final messages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception!);
+        _errorMessage = messages.join('\n');
+        GraphQLErrorHandler.logError(result.exception);
+
+        GraphQLErrorHandler.handleTokenExpiry(context, result.exception!);
+
+        context.showAppSnackBar(
+          title: _errorMessage ?? 'Unknown error',
+          textColor: AppColors.redText,
+        );
       } else if (result.data != null) {
         debugPrint('[GrievanceProvider] GraphQL Data: ${result.data}');
         final response = GrievanceListResponse.fromJson(result.data!);
         _grievances = response.data.getAllGrievance;
-        _errorMessage = null; // Clear error on success
+        _errorMessage = null;
       } else {
         _errorMessage = 'No data received from server.';
         debugPrint('[GrievanceProvider] No data received.');
@@ -43,7 +52,8 @@ class GrievanceProvider extends ChangeNotifier {
     }
   }
 
-  Future<GrievanceDetail?> getGrievanceById(String id) async {
+  Future<GrievanceDetail?> getGrievanceById(
+      BuildContext context, String id) async {
     try {
       final result = await GraphQLService.client.query(
         QueryOptions(
@@ -53,7 +63,19 @@ class GrievanceProvider extends ChangeNotifier {
       );
 
       if (result.hasException) {
-        debugPrint('[getGrievanceById] GraphQL Error: ${result.exception}');
+        final messages =
+            GraphQLErrorHandler.extractErrorMessages(result.exception!);
+        final errorMessage = messages.join('\n');
+        GraphQLErrorHandler.logError(result.exception);
+
+        GraphQLErrorHandler.handleTokenExpiry(context, result.exception!);
+
+        context.showAppSnackBar(
+          title: errorMessage.isNotEmpty ? errorMessage : 'Unknown error',
+          textColor: AppColors.redText,
+        );
+
+        debugPrint('[getGrievanceById] GraphQL Error: $errorMessage');
         return null;
       }
 
@@ -67,6 +89,10 @@ class GrievanceProvider extends ChangeNotifier {
       }
     } catch (e) {
       debugPrint('[getGrievanceById] Exception: $e');
+      context.showAppSnackBar(
+        title: e.toString(),
+        textColor: AppColors.redText,
+      );
       return null;
     }
   }

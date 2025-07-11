@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:younified/utils/exports/common_exports.dart';
 
 class GraphQLErrorHandler {
   static List<String> extractErrorMessages(dynamic error) {
@@ -38,6 +39,29 @@ class GraphQLErrorHandler {
     for (final message in messages) {
       print(
           'GraphQL Error: $message'); // Replace with your preferred logging method
+    }
+  }
+
+  //TOKEN EXPIRED
+  static void handleTokenExpiry(BuildContext context, dynamic error) {
+    final messages = extractErrorMessages(error);
+
+    for (final message in messages) {
+      if (message.toLowerCase().contains('token has expired')) {
+        context.showAppSnackBar(
+          title: 'Session expired. Please login again.',
+          textColor: AppColors.redText,
+        );
+
+        // clear session
+        StorageServices.delete('token');
+        StorageServices.delete('userId');
+
+        // navigate to login
+        context.pushNamedAndRemoveUntil(Routes.loginScreen);
+
+        return; // stop after handling
+      }
     }
   }
 }

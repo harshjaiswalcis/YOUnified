@@ -15,7 +15,7 @@ class _GrievanceScreenState extends State<GrievanceScreen> {
 
     // 👇 Trigger fetch when screen is pushed
     Future.microtask(() {
-      context.read<GrievanceProvider>().fetchGrievances();
+      context.read<GrievanceProvider>().fetchGrievances(context);
     });
   }
 
